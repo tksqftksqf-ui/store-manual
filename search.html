@@ -372,6 +372,64 @@ const EDU_DISCOUNT = {
   '267449': 3000
 };
 const ACTIVITY_PROMO = {
+  // 原廠配件活動折扣（2026-07-10~07-20，0710-0720會招操盤.pdf「原廠配件」區）
+  '234826':{d:615,g:null,m:null},
+  '243982':{d:188,g:null,m:null},
+  '248675':{d:307,g:null,m:null},
+  '248676':{d:692,g:null,m:null},
+  '248677':{d:692,g:null,m:null},
+  '248678':{d:818,g:null,m:null},
+  '248679':{d:818,g:null,m:null},
+  '248681':{d:181,g:null,m:null},
+  '248682':{d:181,g:null,m:null},
+  '248683':{d:181,g:null,m:null},
+  '248684':{d:230,g:null,m:null},
+  '248685':{d:230,g:null,m:null},
+  '248686':{d:230,g:null,m:null},
+  '248687':{d:230,g:null,m:null},
+  '248688':{d:181,g:null,m:null},
+  '248690':{d:181,g:null,m:null},
+  '248691':{d:230,g:null,m:null},
+  '248693':{d:230,g:null,m:null},
+  '253491':{d:209,g:null,m:null},
+  '253492':{d:160,g:null,m:null},
+  '253493':{d:307,g:null,m:null},
+  '253494':{d:265,g:null,m:null},
+  '253495':{d:209,g:null,m:null},
+  '253496':{d:412,g:null,m:null},
+  '253497':{d:370,g:null,m:null},
+  '253498':{d:307,g:null,m:null},
+  '254434':{d:41,g:null,m:null},
+  '255999':{d:265,g:null,m:null},
+  '256000':{d:307,g:null,m:null},
+  '256001':{d:230,g:null,m:null},
+  '256236':{d:991,g:null,m:null},
+  '256580':{d:664,g:null,m:null},
+  '256581':{d:692,g:null,m:null},
+  '256582':{d:181,g:null,m:null},
+  '256583':{d:181,g:null,m:null},
+  '256584':{d:181,g:null,m:null},
+  '262384':{d:223,g:null,m:null},
+  '262386':{d:223,g:null,m:null},
+  '262387':{d:223,g:null,m:null},
+  '262390':{d:223,g:null,m:null},
+  '262393':{d:194,g:null,m:null},
+  '262394':{d:194,g:null,m:null},
+  '262406':{d:223,g:null,m:null},
+  '262407':{d:223,g:null,m:null},
+  '262410':{d:223,g:null,m:null},
+  '262411':{d:223,g:null,m:null},
+  '262412':{d:223,g:null,m:null},
+  '262414':{d:283,g:null,m:null},
+  '262415':{d:283,g:null,m:null},
+  '262418':{d:223,g:null,m:null},
+  '262419':{d:223,g:null,m:null},
+  '262422':{d:223,g:null,m:null},
+  '262424':{d:223,g:null,m:null},
+  '262425':{d:283,g:null,m:null},
+  '262429':{d:283,g:null,m:null},
+  '263679':{d:664,g:null,m:null},
+  '263680':{d:692,g:null,m:null},
   '256229':{d:920,g:null,m:null},
   '256230':{d:920,g:null,m:null},
   '267282':{d:1314,g:null,m:null},
@@ -743,7 +801,7 @@ function updateSearchResults(){
       prevSpec = null;
       specToggle = 0;
       rows += `<tr class="search-group-row" style="background:#eef1f5;border-top:2px solid #c8d4e0;border-bottom:1px solid #c8d4e0">
-        <td colspan="7" style="padding:8px 14px;font-size:13px;font-weight:700">
+        <td colspan="8" style="padding:8px 14px;font-size:13px;font-weight:700">
           <span class="badge ${catCls(p.cat)}" style="margin-right:8px">${p.cat}</span>${p.name}
         </td>
       </tr>`;
@@ -757,30 +815,33 @@ function updateSearchResults(){
     const act = ACTIVITY_PROMO[p.pid];
     const actStyle = act?.d ? 'color:var(--green)' : act?.m==='暫無交期' ? 'color:var(--red)' : act?.m ? 'color:var(--orange)' : 'color:var(--border)';
     const actVal = act?.d ? '-$'+act.d.toLocaleString() : act?.m || '—';
+    const promo = act?.d ? p.price - act.d : null;
     rows += `<tr class="search-row" style="border-bottom:1px solid var(--border);background:${bg}" onmouseover="this.style.background='var(--blue-bg)'" onmouseout="this.style.background='${bg}'">
       <td data-label="貨號" style="padding:10px 8px;font-family:ui-monospace,monospace;font-weight:700;color:var(--blue);font-size:16px;white-space:nowrap">${p.pid}</td>
       <td data-label="顏色" style="padding:10px 8px;white-space:nowrap">${p.color||'—'}</td>
       <td data-label="規格" style="padding:10px 8px;white-space:nowrap;color:var(--gray);font-size:13px">${p.spec}</td>
-      <td data-label="售價" style="padding:10px 8px;text-align:right;font-weight:600;white-space:nowrap">$${p.price.toLocaleString()}</td>
-      <td data-label="教育折抵" style="padding:10px 8px;text-align:right;font-weight:700;white-space:nowrap;${edu?'color:var(--red)':'color:var(--border)'}">${edu?'-$'+edu.toLocaleString():'—'}</td>
-      <td data-label="活動折扣" style="padding:10px 8px;text-align:right;font-weight:700;white-space:nowrap;${actStyle}">${actVal}</td>
+      <td data-label="售價" style="padding:10px 8px;text-align:left;font-weight:600;white-space:nowrap">$${p.price.toLocaleString()}</td>
+      <td data-label="活動折扣" style="padding:10px 4px 10px 8px;text-align:left;font-weight:700;width:90px;max-width:90px;white-space:normal;${actStyle}">${actVal}</td>
+      <td data-label="促銷價(未含教育折扣)" style="padding:10px 8px 10px 4px;text-align:left;white-space:nowrap">${promo!=null?`<span style="display:inline-block;padding:3px 9px;border-radius:6px;background:var(--green-bg);color:var(--green);font-weight:700;font-size:14px">$${promo.toLocaleString()}</span>`:'<span style="color:var(--border)">—</span>'}</td>
       <td data-label="贈品" style="padding:10px 8px;font-size:13px;color:var(--text)">${act?.g||'—'}</td>
+      <td data-label="教育折抵" style="padding:10px 8px;text-align:left;font-weight:700;white-space:nowrap;${edu?'color:var(--red)':'color:var(--border)'}">${edu?'-$'+edu.toLocaleString():'—'}</td>
     </tr>`;
   }
 
   el.innerHTML = `
     <div style="padding:12px 16px;background:var(--light);border-bottom:1px solid var(--border);font-size:12px;color:var(--gray);font-weight:600">找到 <span style="color:var(--text)">${filtered.length}</span> 筆結果</div>
-    <div style="overflow:auto;max-height:70vh">
+    <div style="overflow-x:auto">
       <table class="search-table" style="width:auto;min-width:100%;border-collapse:collapse;font-size:15px">
         <thead>
           <tr style="background:var(--light);border-bottom:1px solid var(--border)">
             <th class="search-thead-th" style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">貨號</th>
             <th class="search-thead-th" style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">顏色</th>
             <th class="search-thead-th" style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px">規格</th>
-            <th class="search-thead-th" style="padding:10px 8px;text-align:right;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">售價</th>
-            <th class="search-thead-th" style="padding:10px 8px;text-align:right;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">教育折抵</th>
-            <th class="search-thead-th" style="padding:10px 8px;text-align:right;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">活動折扣</th>
+            <th class="search-thead-th" style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">售價</th>
+            <th class="search-thead-th" style="padding:10px 4px 10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap;width:90px;max-width:90px">活動折扣</th>
+            <th class="search-thead-th" style="padding:10px 8px 10px 4px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">促銷價<br><span style="font-size:9px;font-weight:400;text-transform:none;letter-spacing:0;color:var(--gray)">未含教育折扣</span></th>
             <th class="search-thead-th" style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">贈品</th>
+            <th class="search-thead-th" style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">教育折抵</th>
           </tr>
         </thead>
         <tbody>${rows}</tbody>
