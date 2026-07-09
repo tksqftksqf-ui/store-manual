@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>燦坤新光華 · 優惠活動</title>
+<link rel="stylesheet" href="shared/style.css">
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-left">
+    <span class="hdr-logo"></span>
+    <div>
+      <div class="hdr-title">燦坤新光華 · 優惠活動</div>
+      <div class="hdr-sub">Apple Specialist Store · Three Table Shop</div>
+    </div>
+  </div>
+  <a href="index.html" class="hdr-date" style="text-decoration:none">← 工具箱首頁</a>
+</div>
+
+<div class="main" id="mc"></div>
+
+<script>
+let activityQuery = '';
+let activityCat = 'all';
+
+const ACTIVITY_ITEMS = [
+  // iPhone
+  {cat:'iPhone', series:'iPhone 16e',        type:'現折',        discount:920,  pct:null, giftAmt:null, gift:null,               desc:'現折920',                                note:null},
+  {cat:'iPhone', series:'iPhone 17e',        type:'現折',        discount:1314, pct:null, giftAmt:null, gift:null,               desc:'現折1314起',                             note:null},
+  {cat:'iPhone', series:'iPhone 16',         type:'現折',        discount:1424, pct:null, giftAmt:null, gift:null,               desc:'現折1424起',                             note:'256G皆現有庫存售完為止'},
+  {cat:'iPhone', series:'iPhone 17',         type:'現折+贈品',   discount:1803, pct:null, giftAmt:null, gift:'市價550鏡頭貼',     desc:'現折1803起再送市價550鏡頭貼',            note:null},
+  {cat:'iPhone', series:'iPhone Air',        type:'現折',        discount:2952, pct:null, giftAmt:null, gift:null,               desc:'現折2952起',                             note:'皆現有庫存售完為止'},
+  {cat:'iPhone', series:'iPhone 17 Pro',     type:'滿萬送配件金', discount:null, pct:null, giftAmt:500, gift:null,               desc:'滿萬送500配件金',                        note:null},
+  {cat:'iPhone', series:'iPhone 17 Pro Max', type:'現折+贈品',   discount:1120, pct:null, giftAmt:null, gift:'市價1580 UAG保護殼', desc:'現折1120起再送市價1580 UAG保護殼',       note:null},
+  // Mac
+  {cat:'Mac', series:'MacBook Neo 13',        type:'滿萬送配件金', discount:null, pct:null, giftAmt:500, gift:null, desc:'滿萬送500配件金', note:null},
+  {cat:'Mac', series:'MacBook Air 13 M5',     type:'現折+贈品',    discount:1000, pct:null, giftAmt:null, gift:'市價3090 Office365', desc:'現折1000再送市價3090 Office365', note:'限量200'},
+  {cat:'Mac', series:'MacBook Air 15 M5',     type:'現折+贈品',    discount:1000, pct:null, giftAmt:null, gift:'市價3090 Office365', desc:'現折1000再送市價3090 Office365', note:null},
+  {cat:'Mac', series:'MacBook Pro 14 M5',     type:'現折',         discount:3245, pct:null, giftAmt:null, gift:null, desc:'現折3245起',      note:null},
+  {cat:'Mac', series:'MacBook Pro 16 M5 Pro', type:'現折',         discount:3996, pct:null, giftAmt:null, gift:null, desc:'現折3996起',      note:null},
+  {cat:'Mac', series:'iMac M4',               type:'折扣%',        discount:null, pct:'5%', giftAmt:null, gift:null, desc:'現折5%',          note:null},
+  {cat:'Mac', series:'Mac mini M4',           type:'暫無交期',     discount:null, pct:null, giftAmt:null, gift:null, desc:'貨況不穩、原價',  note:null},
+  {cat:'Mac', series:'Mac Studio',            type:'暫無交期',     discount:null, pct:null, giftAmt:null, gift:null, desc:'暫無交期',        note:null},
+  {cat:'Mac', series:'Studio Display',        type:'現折',         discount:3174, pct:null, giftAmt:null, gift:null, desc:'現折3174起',      note:null},
+  // iPad
+  {cat:'iPad', series:'iPad mini 7th',      type:'現折',       discount:1194, pct:null, giftAmt:null, gift:null,          desc:'現折1194起',                    note:null},
+  {cat:'iPad', series:'iPad 11吋',          type:'現折+贈品',  discount:901,  pct:null, giftAmt:null, gift:'市價790保護貼', desc:'現折901起再送市價790保護貼',    note:null},
+  {cat:'iPad', series:'iPad Air 11吋 M3',   type:'無活動',     discount:null, pct:null, giftAmt:null, gift:null,          desc:'皆現有庫存售完為止',            note:'庫存售完為止'},
+  {cat:'iPad', series:'iPad Air 13吋 M3',   type:'無活動',     discount:null, pct:null, giftAmt:null, gift:null,          desc:'皆現有庫存售完為止',            note:'庫存售完為止'},
+  {cat:'iPad', series:'iPad Air 11吋 M4',   type:'現折',       discount:1743, pct:null, giftAmt:null, gift:null,          desc:'現折1743起',                    note:null},
+  {cat:'iPad', series:'iPad Air 13吋 M4',   type:'現折',       discount:2233, pct:null, giftAmt:null, gift:null,          desc:'現折2233起',                    note:null},
+  {cat:'iPad', series:'iPad Pro 11吋 M5',   type:'現折+贈品',  discount:1995, pct:null, giftAmt:null, gift:'市價3090 Office365', desc:'現折1995起再送市價3090 Office365', note:null},
+  {cat:'iPad', series:'iPad Pro 13吋 M5',   type:'現折+贈品',  discount:2545, pct:null, giftAmt:null, gift:'市價3090 Office365', desc:'現折2545起再送市價3090 Office365', note:null},
+  // 原廠配件
+  {cat:'原廠配件', series:'原廠配件（全系列）', type:'主機加購折扣', discount:null, pct:'5%', giftAmt:null, gift:null, desc:'主機加購可享5%優惠', note:null},
+  // Apple Watch
+  {cat:'Apple Watch', series:'Apple Watch SE 3',    type:'現折', discount:632,  pct:null, giftAmt:null, gift:null, desc:'現折632起',  note:null},
+  {cat:'Apple Watch', series:'Apple Watch S11',     type:'現折', discount:1032, pct:null, giftAmt:null, gift:null, desc:'現折1032起', note:null},
+  {cat:'Apple Watch', series:'Apple Watch Ultra 3', type:'現折', discount:2421, pct:null, giftAmt:null, gift:null, desc:'現折2421起', note:null},
+  // 耳機
+  {cat:'耳機', series:'AirPods Pro 3',   type:'現折',  discount:824,  pct:null, giftAmt:null, gift:null, desc:'現折824',  note:'限量300'},
+  {cat:'耳機', series:'AirPods 4',       type:'現折',  discount:510,  pct:null, giftAmt:null, gift:null, desc:'現折510',  note:'限量300'},
+  {cat:'耳機', series:'AirPods 4 降噪',  type:'現折',  discount:700,  pct:null, giftAmt:null, gift:null, desc:'現折700',  note:'限量300'},
+  {cat:'耳機', series:'AirPods Max',     type:'現折',  discount:2991, pct:null, giftAmt:null, gift:null, desc:'現折2991', note:'現有庫存售完為止'},
+  {cat:'耳機', series:'AirPods Max 2',   type:'現折',  discount:900,  pct:null, giftAmt:null, gift:null, desc:'現折900',  note:null},
+  // 配件
+  {cat:'配件', series:'AirTag',      type:'現折', discount:211, pct:null, giftAmt:null, gift:null, desc:'現折211起（1件裝211／4件裝746）', note:null},
+  {cat:'配件', series:'AirTag 2',    type:'現折', discount:99,  pct:null, giftAmt:null, gift:null, desc:'現折99起（4件裝339）', note:'Surpass卡限定1件裝另享現折191(促銷價799)'},
+  {cat:'配件', series:'Apple TV 4K', type:'現折', discount:483, pct:null, giftAmt:null, gift:null, desc:'現折483起', note:null},
+  {cat:'配件', series:'HomePod',     type:'現折', discount:769, pct:null, giftAmt:null, gift:null, desc:'現折769', note:null},
+];
+function updateActivityResults(){
+  const q = activityQuery.toLowerCase();
+  const filtered = ACTIVITY_ITEMS.filter(a => {
+    if(activityCat !== 'all' && a.cat !== activityCat) return false;
+    if(!q) return true;
+    return [a.cat, a.series, a.type, a.desc, a.note||'', a.gift||''].some(v => v.toLowerCase().includes(q));
+  });
+  const catBadge = {
+    'iPhone':'badge-green','Mac':'badge-blue','iPad':'badge-orange',
+    'Apple Watch':'badge-gray','耳機':'badge-gray','配件':'badge-gray','原廠配件':'badge-gray'
+  };
+  const typeStyle = t => {
+    if(t==='暫無交期') return 'color:var(--red);font-weight:700';
+    if(t==='無活動')   return 'color:var(--gray)';
+    if(t==='現折'||t==='現折+贈品') return 'color:var(--green);font-weight:700';
+    if(t.startsWith('折扣%')||t==='主機加購折扣') return 'color:var(--blue);font-weight:700';
+    if(t==='滿萬送配件金') return 'color:var(--orange);font-weight:700';
+    return '';
+  };
+  const rows = filtered.map((a,i)=>`
+    <tr style="border-bottom:1px solid var(--border);background:${i%2===0?'var(--white)':'#fafbfc'}" onmouseover="this.style.background='var(--blue-bg)'" onmouseout="this.style.background='${i%2===0?'var(--white)':'#fafbfc'}'">
+      <td style="padding:10px 8px;white-space:nowrap"><span class="badge ${catBadge[a.cat]||'badge-gray'}">${a.cat}</span></td>
+      <td style="padding:10px 8px;font-weight:500">${a.series}</td>
+      <td style="padding:10px 14px;${typeStyle(a.type)}">${a.type}</td>
+      <td style="padding:10px 8px;text-align:right;font-weight:700;color:var(--red);white-space:nowrap">${a.discount?'-$'+a.discount.toLocaleString():'—'}</td>
+      <td style="padding:10px 14px;color:var(--blue);text-align:center">${a.pct||(a.giftAmt?'送$'+a.giftAmt:'—')}</td>
+      <td style="padding:10px 8px;font-size:13px;color:var(--text)">${a.gift||'—'}</td>
+      <td style="padding:10px 14px;color:var(--text)">${a.desc}</td>
+      <td style="padding:10px 14px;font-size:12px;color:var(--gray)">${a.note||''}</td>
+    </tr>`).join('');
+  const el = document.getElementById('activity-results');
+  if(!el) return;
+  el.innerHTML = filtered.length===0
+    ? '<div class="empty">無符合條件的活動</div>'
+    : `<div style="padding:12px 16px;background:var(--light);border-bottom:1px solid var(--border);font-size:12px;color:var(--gray);font-weight:600">找到 <span style="color:var(--text)">${filtered.length}</span> 筆活動</div>
+    <div style="overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;font-size:15px">
+        <thead>
+          <tr style="background:var(--light);border-bottom:1px solid var(--border)">
+            <th style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">類別</th>
+            <th style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px">產品系列</th>
+            <th style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">活動類型</th>
+            <th style="padding:10px 8px;text-align:right;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">現折金額</th>
+            <th style="padding:10px 14px;text-align:center;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">折扣/加購</th>
+            <th style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px">贈品</th>
+            <th style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px">活動說明</th>
+            <th style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px">備註</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+}
+
+function renderActivity(){
+  const cats = ['all','iPhone','Mac','iPad','Apple Watch','耳機','配件','原廠配件'];
+  document.getElementById('mc').innerHTML = `
+    <div class="sec-hdr"><div>
+      <div class="sec-title">優惠活動</div>
+      <div class="sec-sub">活動檔期：0710–0720（2026/07/10 – 07/20）· 共 ${ACTIVITY_ITEMS.length} 筆</div>
+    </div></div>
+    <div class="card" style="padding:16px 20px">
+      <input id="act-search" type="text" placeholder="搜尋關鍵字…（如 iPhone、現折、保護貼）"
+        style="width:100%;max-width:480px;padding:.45em .8em;border:1px solid var(--border);border-radius:6px;font-size:.95em;box-sizing:border-box;outline:none"
+        value="${activityQuery}"
+        oninput="activityQuery=this.value;updateActivityResults()">
+      <div style="margin-top:.6em;display:flex;flex-wrap:wrap;gap:.4em">
+        ${cats.map(c=>`<button
+          onclick="activityCat='${c}';document.querySelectorAll('.act-cat-btn').forEach(b=>{b.style.borderColor='var(--border)';b.style.background='var(--white)';b.style.color='var(--gray)'});this.style.borderColor='var(--blue)';this.style.background='var(--blue)';this.style.color='#fff';updateActivityResults()"
+          class="act-cat-btn"
+          style="padding:.3em .75em;font-size:.8em;border:1px solid ${c===activityCat?'var(--blue)':'var(--border)'};border-radius:20px;background:${c===activityCat?'var(--blue)':'var(--white)'};color:${c===activityCat?'#fff':'var(--gray)'};cursor:pointer;white-space:nowrap">
+          ${c==='all'?'全部類別':c}
+        </button>`).join('')}
+      </div>
+    </div>
+    <div id="activity-results"></div>`;
+  updateActivityResults();
+}
+
+
+
+renderActivity();
+</script>
+</body>
+</html>

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>燦坤新光華 · 近期到貨</title>
+<link rel="stylesheet" href="shared/style.css">
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-left">
+    <span class="hdr-logo"></span>
+    <div>
+      <div class="hdr-title">燦坤新光華 · 近期到貨</div>
+      <div class="hdr-sub">Apple Specialist Store · Three Table Shop</div>
+    </div>
+  </div>
+  <a href="index.html" class="hdr-date" style="text-decoration:none">← 工具箱首頁</a>
+</div>
+
+<div class="main" id="mc"></div>
+
+<script src="shared/products.js"></script>
+<script>
+let arrivalQuery = '';
+let arrivalCat = 'all';
+
+const ARRIVAL_WEEKS = ['7/2–7/8', '7/9–7/15'];
+const ARRIVALS = [
+  // Mac
+  {cat:'Mac',pid:'252141',mpn:'MXP63TA/A',name:'AirPods 4',qty:[350,0]},
+  {cat:'Mac',pid:'252142',mpn:'MXP93TA/A',name:'AirPods 4 主動降噪',qty:[250,0]},
+  {cat:'Mac',pid:'253474',mpn:'MWUC3TA/A',name:'iMac 24" M4',qty:[2,0]},
+  {cat:'Mac',pid:'253475',mpn:'MWUF3TA/A',name:'iMac 24" M4',qty:[5,5]},
+  {cat:'Mac',pid:'253478',mpn:'MWUU3TA/A',name:'iMac 24" M4',qty:[1,0]},
+  {cat:'Mac',pid:'253479',mpn:'MWV13TA/A',name:'iMac 24" M4',qty:[2,0]},
+  {cat:'Mac',pid:'253545',mpn:'MU9E3TA/A',name:'Mac mini M4',qty:[10,9]},
+  {cat:'Mac',pid:'253547',mpn:'MCX44TA/A',name:'Mac mini M4 Pro',qty:[0,2]},
+  {cat:'Mac',pid:'262379',mpn:'MFHP4TA/A',name:'AirPods Pro 3',qty:[1030,110]},
+  {cat:'Mac',pid:'263628',mpn:'MDE54TA/A',name:'MacBook Pro 14" M5',qty:[10,0]},
+  {cat:'Mac',pid:'263629',mpn:'MDE34TA/A',name:'MacBook Pro 14" M5',qty:[18,0]},
+  {cat:'Mac',pid:'263630',mpn:'MDE64TA/A',name:'MacBook Pro 14" M5',qty:[8,0]},
+  {cat:'Mac',pid:'267369',mpn:'MDHE4TA/A',name:'MacBook Air 13.6" M5 2026',qty:[35,0]},
+  {cat:'Mac',pid:'267370',mpn:'MDH74TA/A',name:'MacBook Air 13.6" M5 2026',qty:[16,0]},
+  {cat:'Mac',pid:'267371',mpn:'MDHH4TA/A',name:'MacBook Air 13.6" M5 2026',qty:[180,0]},
+  {cat:'Mac',pid:'267372',mpn:'MDHA4TA/A',name:'MacBook Air 13.6" M5 2026',qty:[45,0]},
+  {cat:'Mac',pid:'267373',mpn:'MDHF4TA/A',name:'MacBook Air 13.6" M5 2026',qty:[4,0]},
+  {cat:'Mac',pid:'267374',mpn:'MDH84TA/A',name:'MacBook Air 13.6" M5 2026',qty:[18,0]},
+  {cat:'Mac',pid:'267375',mpn:'MDHJ4TA/A',name:'MacBook Air 13.6" M5 2026',qty:[23,0]},
+  {cat:'Mac',pid:'267376',mpn:'MDHC4TA/A',name:'MacBook Air 13.6" M5 2026',qty:[1,0]},
+  {cat:'Mac',pid:'267377',mpn:'MDHG4TA/A',name:'MacBook Air 13.6" M5 2026',qty:[1,0]},
+  {cat:'Mac',pid:'267381',mpn:'MDVH4TA/A',name:'MacBook Air 15.3" M5 2026',qty:[10,0]},
+  {cat:'Mac',pid:'267382',mpn:'MDV94TA/A',name:'MacBook Air 15.3" M5 2026',qty:[11,0]},
+  {cat:'Mac',pid:'267383',mpn:'MDVQ4TA/A',name:'MacBook Air 15.3" M5 2026',qty:[50,0]},
+  {cat:'Mac',pid:'267384',mpn:'MDVD4TA/A',name:'MacBook Air 15.3" M5 2026',qty:[21,0]},
+  {cat:'Mac',pid:'267385',mpn:'MDVK4TA/A',name:'MacBook Air 15.3" M5 2026',qty:[7,0]},
+  {cat:'Mac',pid:'267386',mpn:'MDVA4TA/A',name:'MacBook Air 15.3" M5 2026',qty:[1,0]},
+  {cat:'Mac',pid:'267387',mpn:'MDVT4TA/A',name:'MacBook Air 15.3" M5 2026',qty:[22,0]},
+  {cat:'Mac',pid:'267393',mpn:'MJ3E4TA/A',name:'MacBook Pro 14.2" M5 2026',qty:[12,0]},
+  {cat:'Mac',pid:'267394',mpn:'MJ3D4TA/A',name:'MacBook Pro 14.2" M5 2026',qty:[27,0]},
+  {cat:'Mac',pid:'267395',mpn:'MGDN4TA/A',name:'MacBook Pro 14.2" M5 2026',qty:[9,0]},
+  {cat:'Mac',pid:'267396',mpn:'MGDR4TA/A',name:'MacBook Pro 14.2" M5 2026',qty:[8,0]},
+  {cat:'Mac',pid:'267399',mpn:'MGDP4TA/A',name:'MacBook Pro 14.2" M5 2026',qty:[1,0]},
+  {cat:'Mac',pid:'267402',mpn:'MGDU4TA/A',name:'MacBook Pro 14.2" M5 2026',qty:[2,0]},
+  {cat:'Mac',pid:'267403',mpn:'MGE44TA/A',name:'MacBook Pro 14.2" M5 2026',qty:[3,0]},
+  {cat:'Mac',pid:'267404',mpn:'MGEA4TA/A',name:'MacBook Pro 16.2" M5 2026',qty:[8,0]},
+  {cat:'Mac',pid:'267405',mpn:'MGE64TA/A',name:'MacBook Pro 16.2" M5 2026',qty:[3,0]},
+  {cat:'Mac',pid:'267411',mpn:'MFEX4TA/A',name:'Studio Display',qty:[2,0]},
+  {cat:'Mac',pid:'267412',mpn:'MFEW4TA/A',name:'Studio Display',qty:[3,0]},
+  {cat:'Mac',pid:'267442',mpn:'MHFH4TA/A',name:'MacBook Neo 13"',qty:[60,0]},
+  {cat:'Mac',pid:'267443',mpn:'MHFD4TA/A',name:'MacBook Neo 13"',qty:[50,0]},
+  {cat:'Mac',pid:'267444',mpn:'MHFF4TA/A',name:'MacBook Neo 13"',qty:[20,0]},
+  {cat:'Mac',pid:'267445',mpn:'MHFA4TA/A',name:'MacBook Neo 13"',qty:[35,0]},
+  {cat:'Mac',pid:'267447',mpn:'MHFE4TA/A',name:'MacBook Neo 13"',qty:[50,0]},
+  {cat:'Mac',pid:'267448',mpn:'MHFG4TA/A',name:'MacBook Neo 13"',qty:[70,0]},
+  // iPad
+  {cat:'iPad',pid:'253162',mpn:'MXN63TA/A',name:'iPad mini 7th',qty:[130,0]},
+  {cat:'iPad',pid:'253165',mpn:'MXNE3TA/A',name:'iPad mini 7th',qty:[5,0]},
+  {cat:'iPad',pid:'256491',mpn:'MD3Y4TA/A',name:'iPad 11吋',qty:[5,0]},
+  {cat:'iPad',pid:'256493',mpn:'MD4A4TA/A',name:'iPad 11吋',qty:[185,0]},
+  {cat:'iPad',pid:'256494',mpn:'MD4D4TA/A',name:'iPad 11吋',qty:[10,0]},
+  {cat:'iPad',pid:'256495',mpn:'MD4E4TA/A',name:'iPad 11吋',qty:[100,0]},
+  {cat:'iPad',pid:'256496',mpn:'MD4G4TA/A',name:'iPad 11吋',qty:[200,0]},
+  {cat:'iPad',pid:'256497',mpn:'MD4H4TA/A',name:'iPad 11吋',qty:[170,0]},
+  {cat:'iPad',pid:'256499',mpn:'MD4P4TA/A',name:'iPad 11吋',qty:[5,0]},
+  {cat:'iPad',pid:'263633',mpn:'MDWM4TA/A',name:'iPad Air 11吋 M4',qty:[5,0]},
+  {cat:'iPad',pid:'263655',mpn:'MDYJ4TA/A',name:'iPad Air 13吋 M4',qty:[5,0]},
+  {cat:'iPad',pid:'263658',mpn:'MDYM4TA/A',name:'iPad Air 13吋 M4',qty:[3,0]},
+  {cat:'iPad',pid:'263659',mpn:'MDYN4TA/A',name:'iPad Air 13吋 M4',qty:[1,0]},
+  {cat:'iPad',pid:'267292',mpn:'MH354TA/A',name:'iPad Air 11吋 M4',qty:[180,0]},
+  {cat:'iPad',pid:'267293',mpn:'MH364TA/A',name:'iPad Air 11吋 M4',qty:[95,0]},
+  {cat:'iPad',pid:'267294',mpn:'MH374TA/A',name:'iPad Air 11吋 M4',qty:[75,0]},
+  {cat:'iPad',pid:'267295',mpn:'MH394TA/A',name:'iPad Air 11吋 M4',qty:[85,0]},
+  {cat:'iPad',pid:'267296',mpn:'MH3A4TA/A',name:'iPad Air 11吋 M4',qty:[5,0]},
+  {cat:'iPad',pid:'267299',mpn:'MH3E4TA/A',name:'iPad Air 13吋 M4',qty:[5,0]},
+  {cat:'iPad',pid:'267300',mpn:'MH3G4TA/A',name:'iPad Air 13吋 M4',qty:[1,0]},
+  {cat:'iPad',pid:'267301',mpn:'MH3H4TA/A',name:'iPad Air 13吋 M4',qty:[1,0]},
+  {cat:'iPad',pid:'267320',mpn:'MH5N4TA/A',name:'iPad Pro 11吋 M5',qty:[35,0]},
+  {cat:'iPad',pid:'267321',mpn:'MH5P4TA/A',name:'iPad Pro 11吋 M5',qty:[34,0]},
+  {cat:'iPad',pid:'267323',mpn:'MH5T4TA/A',name:'iPad Pro 13吋 M5',qty:[40,0]},
+  {cat:'iPad',pid:'267324',mpn:'MH5U4TA/A',name:'iPad Pro 13吋 M5',qty:[20,0]},
+  {cat:'iPad',pid:'267327',mpn:'MH5X4TA/A',name:'iPad Pro 13吋 M5',qty:[5,0]},
+  {cat:'iPad',pid:'267328',mpn:'MH5Y4TA/A',name:'iPad Pro 13吋 M5',qty:[3,0]},
+  {cat:'iPad',pid:'267330',mpn:'MH614TA/A',name:'iPad Pro 13吋 M5',qty:[2,0]},
+  // Watch
+  {cat:'Watch',pid:'262292',mpn:'MEH34TA/A',name:'Apple Watch SE3',qty:[84,0]},
+  {cat:'Watch',pid:'262293',mpn:'MEH54TA/A',name:'Apple Watch SE3',qty:[12,0]},
+  {cat:'Watch',pid:'262295',mpn:'MEHC4TA/A',name:'Apple Watch SE3',qty:[0,0]},
+  {cat:'Watch',pid:'262296',mpn:'MEHG4TA/A',name:'Apple Watch SE3',qty:[24,42]},
+  {cat:'Watch',pid:'262297',mpn:'MEHJ4TA/A',name:'Apple Watch SE3',qty:[18,12]},
+  {cat:'Watch',pid:'262298',mpn:'MEHN4TA/A',name:'Apple Watch SE3',qty:[30,12]},
+  {cat:'Watch',pid:'262299',mpn:'MEHQ4TA/A',name:'Apple Watch SE3',qty:[36,30]},
+  {cat:'Watch',pid:'262300',mpn:'MEP64TA/A',name:'Apple Watch S11',qty:[6,0]},
+  {cat:'Watch',pid:'262308',mpn:'MEQT4TA/A',name:'Apple Watch S11',qty:[6,6]},
+  {cat:'Watch',pid:'262310',mpn:'MEQW4TA/A',name:'Apple Watch S11',qty:[6,12]},
+  {cat:'Watch',pid:'262312',mpn:'MEU04TA/A',name:'Apple Watch S11',qty:[30,30]},
+  {cat:'Watch',pid:'262314',mpn:'MEU64TA/A',name:'Apple Watch S11',qty:[0,12]},
+  {cat:'Watch',pid:'262316',mpn:'MEUW4TA/A',name:'Apple Watch S11',qty:[0,0]},
+  {cat:'Watch',pid:'262317',mpn:'MEUX4TA/A',name:'Apple Watch S11',qty:[96,18]},
+  {cat:'Watch',pid:'262318',mpn:'MEV04TA/A',name:'Apple Watch S11',qty:[6,0]},
+  {cat:'Watch',pid:'262319',mpn:'MEV44TA/A',name:'Apple Watch S11',qty:[60,30]},
+  {cat:'Watch',pid:'262320',mpn:'MEV64TA/A',name:'Apple Watch S11',qty:[42,0]},
+  {cat:'Watch',pid:'262321',mpn:'MEV74TA/A',name:'Apple Watch S11',qty:[12,6]},
+  {cat:'Watch',pid:'262322',mpn:'MEV94TA/A',name:'Apple Watch S11',qty:[6,6]},
+  {cat:'Watch',pid:'262361',mpn:'MEWH4TA/A',name:'Apple Watch Ultra 3',qty:[12,12]},
+  {cat:'Watch',pid:'262362',mpn:'MF0J4TA/A',name:'Apple Watch Ultra 3',qty:[30,0]},
+  {cat:'Watch',pid:'262365',mpn:'MF0X4TA/A',name:'Apple Watch Ultra 3',qty:[6,0]},
+  {cat:'Watch',pid:'262372',mpn:'MF1H4TA/A',name:'Apple Watch Ultra 3',qty:[12,0]},
+  {cat:'Watch',pid:'262378',mpn:'MF1T4TA/A',name:'Apple Watch Ultra 3',qty:[12,0]},
+  // iPhone
+  {cat:'iPhone',pid:'262271',mpn:'MG8G4ZP/A',name:'iPhone 17 Pro Max',qty:[290,150]},
+  {cat:'iPhone',pid:'262272',mpn:'MG8H4ZP/A',name:'iPhone 17 Pro Max',qty:[250,80]},
+  {cat:'iPhone',pid:'262273',mpn:'MG8J4ZP/A',name:'iPhone 17 Pro Max',qty:[140,170]},
+  {cat:'iPhone',pid:'262274',mpn:'MG8K4ZP/A',name:'iPhone 17 Pro Max',qty:[20,0]},
+  {cat:'iPhone',pid:'262275',mpn:'MG8M4ZP/A',name:'iPhone 17 Pro Max',qty:[60,10]},
+  {cat:'iPhone',pid:'262276',mpn:'MG8N4ZP/A',name:'iPhone 17 Pro Max',qty:[90,0]},
+  {cat:'iPhone',pid:'262280',mpn:'MFYM4ZP/A',name:'iPhone 17 Pro',qty:[190,0]},
+  {cat:'iPhone',pid:'262281',mpn:'MFYN4ZP/A',name:'iPhone 17 Pro',qty:[90,20]},
+  {cat:'iPhone',pid:'262282',mpn:'MFYP4ZP/A',name:'iPhone 17 Pro',qty:[100,400]},
+  {cat:'iPhone',pid:'262283',mpn:'MFYQ4ZP/A',name:'iPhone 17 Pro',qty:[100,0]},
+  {cat:'iPhone',pid:'262284',mpn:'MFYT4ZP/A',name:'iPhone 17 Pro',qty:[70,0]},
+  {cat:'iPhone',pid:'262285',mpn:'MFYU4ZP/A',name:'iPhone 17 Pro',qty:[10,0]},
+  {cat:'iPhone',pid:'267283',mpn:'MHRW4ZP/A',name:'iPhone 17e',qty:[0,10]},
+];
+function renderArrivals(){
+  document.getElementById('mc').innerHTML = `
+    <div class="sec-hdr"><div>
+      <div class="sec-title">近期到貨 <span style="font-size:15px;font-weight:700;color:var(--blue);background:var(--blue-bg);padding:2px 10px;border-radius:8px;margin-left:8px">0703</span></div>
+      <div class="sec-sub">共 ${ARRIVALS.length} 筆 &nbsp;·&nbsp; <span style="color:var(--green);font-weight:700">●</span> 有到貨 &nbsp;<span style="color:var(--orange);font-weight:700">●</span> 少量</div>
+    </div></div>
+    <div class="card" style="padding:16px 20px">
+      <input id="arr-search" type="text" placeholder="搜尋關鍵字…（如 iPhone、MacBook Air、267371）"
+        style="width:100%;max-width:480px;padding:.45em .8em;border:1px solid var(--border);border-radius:6px;font-size:.95em;box-sizing:border-box;outline:none"
+        value="${arrivalQuery}"
+        oninput="arrivalQuery=this.value;updateArrivalResults()">
+      <div style="margin-top:.6em;display:flex;flex-wrap:wrap;gap:.4em">
+        ${['all','Mac','iPad','Watch','iPhone'].map(c=>`<button
+          onclick="arrivalCat='${c}';document.querySelectorAll('.arr-cat-btn').forEach(b=>{b.style.borderColor='var(--border)';b.style.background='var(--white)';b.style.color='var(--gray)'});this.style.borderColor='var(--blue)';this.style.background='var(--blue)';this.style.color='#fff';updateArrivalResults()"
+          class="arr-cat-btn"
+          style="padding:.3em .75em;font-size:.8em;border:1px solid ${c===arrivalCat?'var(--blue)':'var(--border)'};border-radius:20px;background:${c===arrivalCat?'var(--blue)':'var(--white)'};color:${c===arrivalCat?'#fff':'var(--gray)'};cursor:pointer;white-space:nowrap">
+          ${c==='all'?'全部類別':c}
+        </button>`).join('')}
+      </div>
+    </div>
+    <div id="arrival-results"></div>`;
+  updateArrivalResults();
+}
+
+function updateArrivalResults(){
+  const filtered = ARRIVALS.filter(a => {
+    if(arrivalCat !== 'all' && a.cat !== arrivalCat) return false;
+    if(!arrivalQuery) return true;
+    const q = arrivalQuery.toLowerCase();
+    const prod = PRODUCTS.find(x => x.pid === a.pid);
+    const name = prod ? `${prod.name} ${prod.color||''} ${prod.spec||''}` : a.name;
+    return [a.pid, a.mpn, name, a.cat].some(v => v.toLowerCase().includes(q));
+  });
+
+  const el = document.getElementById('arrival-results');
+  if(!el) return;
+
+  if(filtered.length === 0){
+    el.innerHTML = `<div style="padding:12px 16px;background:var(--light);border-bottom:1px solid var(--border);font-size:12px;color:var(--gray);font-weight:600">找到 <span style="color:var(--text)">0</span> 筆結果</div><div class="empty">找不到符合的商品</div>`;
+    return;
+  }
+
+  const catCls = c => c==='Mac'?'badge-blue':c==='iPad'?'badge-orange':c==='iPhone'?'badge-green':'badge-gray';
+  function qtyCell(n){
+    if(!n) return `<td style="padding:10px 14px;text-align:center;color:var(--border)">—</td>`;
+    const s = n>=50?'color:var(--green);font-weight:800':n>=10?'color:var(--green);font-weight:700':'color:var(--orange);font-weight:700';
+    return `<td style="padding:10px 14px;text-align:center;font-size:15px;${s}">${n.toLocaleString()}</td>`;
+  }
+
+  let rows = '';
+  let prevGroup = null;
+  for(const a of filtered){
+    const prod = PRODUCTS.find(x => x.pid === a.pid);
+    const groupName = prod ? prod.name : a.name;
+    const detail = prod
+      ? [prod.color, prod.spec].filter(Boolean).join(' · ')
+      : a.mpn;
+    if(groupName !== prevGroup){
+      prevGroup = groupName;
+      rows += `<tr style="background:#eef1f5;border-top:2px solid #c8d4e0;border-bottom:1px solid #c8d4e0">
+        <td colspan="4" style="padding:8px 14px;font-size:13px;font-weight:700">
+          <span class="badge ${catCls(a.cat)}" style="margin-right:8px">${a.cat}</span>${groupName}
+        </td>
+      </tr>`;
+    }
+    rows += `<tr style="border-bottom:1px solid var(--border)" onmouseover="this.style.background='var(--blue-bg)'" onmouseout="this.style.background=''">
+      <td style="padding:10px 8px;font-family:ui-monospace,monospace;font-weight:700;color:var(--blue);font-size:16px;white-space:nowrap">${a.pid}</td>
+      <td style="padding:10px 8px;color:var(--gray);font-size:13px;white-space:nowrap">${detail}</td>
+      ${qtyCell(a.qty[0])}
+      ${qtyCell(a.qty[1])}
+    </tr>`;
+  }
+
+  el.innerHTML = `
+    <div style="padding:12px 16px;background:var(--light);border-bottom:1px solid var(--border);font-size:12px;color:var(--gray);font-weight:600">找到 <span style="color:var(--text)">${filtered.length}</span> 筆結果</div>
+    <div style="overflow-x:auto">
+      <table style="width:auto;min-width:100%;border-collapse:collapse;font-size:15px">
+        <thead>
+          <tr style="background:var(--light);border-bottom:1px solid var(--border)">
+            <th style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">貨號</th>
+            <th style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px">顏色 / 規格</th>
+            <th style="padding:10px 14px;text-align:center;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">${ARRIVAL_WEEKS[0]}</th>
+            <th style="padding:10px 14px;text-align:center;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">${ARRIVAL_WEEKS[1]}</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+}
+
+
+renderArrivals();
+</script>
+</body>
+</html>

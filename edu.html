@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>燦坤新光華 · 教育優惠</title>
+<link rel="stylesheet" href="shared/style.css">
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-left">
+    <span class="hdr-logo"></span>
+    <div>
+      <div class="hdr-title">燦坤新光華 · 教育優惠</div>
+      <div class="hdr-sub">Apple Specialist Store · Three Table Shop</div>
+    </div>
+  </div>
+  <a href="index.html" class="hdr-date" style="text-decoration:none">← 工具箱首頁</a>
+</div>
+
+<div class="main" id="mc"></div>
+
+<script>
+let eduQuery = '';
+let eduCat = 'all';
+
+const EDU_ITEMS = [
+  {cat:'Mac', name:'MacBook Air 13.6"', spec:'M5 全系列', discount:3310, code:'267540'},
+  {cat:'Mac', name:'MacBook Air 15.3"', spec:'M5 全系列', discount:3310, code:'267540'},
+  {cat:'Mac', name:'MacBook Pro 14.2"', spec:'M5 基本款 10CPU', discount:3210, code:'267539'},
+  {cat:'Mac', name:'MacBook Pro 14.2"', spec:'M5 Pro 15CPU / 1TB', discount:5110, code:'267541'},
+  {cat:'Mac', name:'MacBook Pro 14.2"', spec:'M5 Pro 15CPU / 2TB', discount:6860, code:'270810'},
+  {cat:'Mac', name:'MacBook Pro 14.2"', spec:'M5 Pro 18CPU / 2TB', discount:6910, code:'267544'},
+  {cat:'Mac', name:'MacBook Pro 14.2"', spec:'M5 Max 18CPU / 36G', discount:10210, code:'270812'},
+  {cat:'Mac', name:'MacBook Pro 16.2"', spec:'M5 Pro 全系列', discount:6710, code:'267543'},
+  {cat:'Mac', name:'MacBook Pro 16.2"', spec:'M5 Max 18CPU / 40CPU', discount:9910, code:'270811'},
+  {cat:'Mac', name:'MacBook Neo 13"', spec:'A18 Pro 全系列', discount:3000, code:'200056'},
+  {cat:'Mac', name:'Mac mini', spec:'M4 / M4 Pro 全系列', discount:3410, code:'270807'},
+  {cat:'Mac', name:'iMac 24"', spec:'M4 8CPU', discount:1710, code:'270806'},
+  {cat:'Mac', name:'iMac 24"', spec:'M4 10CPU 全系列', discount:3410, code:'270807'},
+  {cat:'Mac', name:'Mac Studio', spec:'M4 Max', discount:6810, code:'270808'},
+  {cat:'Mac', name:'Mac Studio', spec:'M3 Ultra', discount:14010, code:'270809'},
+  {cat:'Mac', name:'Studio Display', spec:'標準玻璃 可調整斜度 / VESA', discount:3300, code:'240067'},
+  {cat:'Mac', name:'Studio Display', spec:'標準玻璃 可調整高斜度', discount:3200, code:'185269'},
+  {cat:'Mac', name:'Studio Display', spec:'Nano texture 可調整斜度 / VESA', discount:3300, code:'240067'},
+  {cat:'Mac', name:'Pro Display XDR', spec:'標準玻璃 (CTO)', discount:3300, code:'240067'},
+  {cat:'iPad', name:'iPad mini 7th', spec:'Wi-Fi / Wi-Fi+LTE 全系列', discount:1700, code:'194188'},
+  {cat:'iPad', name:'iPad 11吋 A16', spec:'Wi-Fi / Wi-Fi+LTE 全系列', discount:700, code:'187533'},
+  {cat:'iPad', name:'iPad Air 11吋 M4', spec:'Wi-Fi / Wi-Fi+LTE 全系列', discount:1700, code:'194188'},
+  {cat:'iPad', name:'iPad Air 13吋 M4', spec:'Wi-Fi / Wi-Fi+LTE 全系列', discount:1700, code:'194188'},
+  {cat:'iPad', name:'iPad Pro 11吋 M5', spec:'Wi-Fi / Wi-Fi+LTE 全系列', discount:3300, code:'240067'},
+  {cat:'iPad', name:'iPad Pro 13吋 M5', spec:'Wi-Fi / Wi-Fi+LTE 全系列', discount:3400, code:'244394'},
+  {cat:'Watch', name:'Apple Watch SE3', spec:'GPS 全系列', discount:600, code:'270813'},
+  {cat:'Watch', name:'Apple Watch SE3', spec:'LTE 全系列', discount:1000, code:'269618'},
+  {cat:'Watch', name:'Apple Watch S11', spec:'GPS 鋁金屬', discount:1300, code:'270814'},
+  {cat:'Watch', name:'Apple Watch S11', spec:'LTE 鋁金屬', discount:1500, code:'269619'},
+  {cat:'Watch', name:'Apple Watch S11', spec:'LTE 鈦金屬 / 不鏽鋼', discount:2500, code:'269620'},
+  {cat:'Watch', name:'Apple Watch Ultra 3', spec:'全系列', discount:2700, code:'270815'},
+  {cat:'配件', name:'Apple Pencil 第一代', spec:'附轉接器', discount:370, code:'234807'},
+  {cat:'配件', name:'Apple Pencil 第二代', spec:'', discount:390, code:'248825'},
+  {cat:'配件', name:'Apple Pencil Pro', spec:'', discount:390, code:'248825'},
+  {cat:'配件', name:'Apple Pencil USB-C', spec:'', discount:350, code:'244993'},
+  {cat:'配件', name:'iPad Air 11" / Pro 11" 巧控鍵盤', spec:'中文 M4', discount:690, code:'208188'},
+  {cat:'配件', name:'iPad Air 13" / Pro 12.9" 巧控鍵盤', spec:'中文 M4/第五代', discount:590, code:'208186'},
+  {cat:'配件', name:'iPad 10.2" 聰穎鍵盤', spec:'中文', discount:360, code:'234811'},
+  {cat:'配件', name:'iPad 10.9" 巧控鍵盤雙面夾', spec:'中文', discount:711, code:'235141'},
+  {cat:'配件', name:'iPad Pro 11" 鍵盤式聰穎雙面夾', spec:'中文', discount:780, code:'234808'},
+  {cat:'配件', name:'iPad Pro 12.9" 鍵盤式聰穎雙面夾', spec:'中文', discount:770, code:'234809'},
+  {cat:'配件', name:'Studio Display 標準玻璃', spec:'可調整斜度 / VESA 吊架', discount:3300, code:'240067'},
+  {cat:'配件', name:'Studio Display 標準玻璃', spec:'可調整高斜度', discount:3200, code:'185269'},
+  {cat:'配件', name:'Studio Display Nano texture', spec:'可調整斜度 / VESA', discount:3300, code:'240067'},
+  {cat:'配件', name:'Pro Stand', spec:'CTO', discount:3200, code:'185269'},
+  {cat:'配件', name:'VESA 吊架連接器', spec:'CTO', discount:700, code:'185267'},
+];
+function updateEduResults(){
+  const filtered = EDU_ITEMS.filter(p => {
+    const matchCat = eduCat === 'all' || p.cat === eduCat;
+    if(!matchCat) return false;
+    if(!eduQuery) return true;
+    const q = eduQuery.toLowerCase();
+    return [p.name, p.spec, p.code, String(p.discount)].some(v => v.toLowerCase().includes(q));
+  });
+  document.querySelectorAll('.edu-cat-btn').forEach(btn => {
+    const c = btn.dataset.cat;
+    const on = c === eduCat;
+    btn.style.borderColor = on ? 'var(--blue)' : 'var(--border)';
+    btn.style.background  = on ? 'var(--blue)' : 'var(--white)';
+    btn.style.color       = on ? '#fff' : 'var(--gray)';
+  });
+  const el = document.getElementById('edu-results');
+  if(!el) return;
+  const badgeCls = c => c==='Mac'?'badge-blue':c==='iPad'?'badge-orange':'badge-gray';
+  el.innerHTML = `
+    <div style="padding:12px 16px;background:var(--light);border-bottom:1px solid var(--border);font-size:12px;color:var(--gray);font-weight:600">找到 <span style="color:var(--text)">${filtered.length}</span> 筆結果</div>
+    ${filtered.length === 0 ? `<div class="empty">找不到符合的商品</div>` : `
+    <div style="overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;font-size:15px">
+        <thead>
+          <tr style="background:var(--light);border-bottom:1px solid var(--border)">
+            <th style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">類別</th>
+            <th style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px">商品名稱</th>
+            <th style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px">規格</th>
+            <th style="padding:10px 8px;text-align:right;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">折抵金額</th>
+            <th style="padding:10px 14px;text-align:center;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">優惠代碼</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${filtered.map((p,i)=>`
+            <tr style="border-bottom:1px solid var(--border);background:${i%2===0?'var(--white)':'#fafbfc'}" onmouseover="this.style.background='var(--blue-bg)'" onmouseout="this.style.background='${i%2===0?'var(--white)':'#fafbfc'}'">
+              <td style="padding:10px 8px;white-space:nowrap"><span class="badge ${badgeCls(p.cat)}">${p.cat}</span></td>
+              <td style="padding:10px 8px;font-weight:500">${p.name}</td>
+              <td style="padding:10px 14px;color:var(--gray);font-size:13px">${p.spec}</td>
+              <td style="padding:10px 8px;text-align:right;font-weight:700;color:var(--red);white-space:nowrap">-$${p.discount.toLocaleString()}</td>
+              <td style="padding:10px 14px;text-align:center;font-family:ui-monospace,monospace;font-weight:700;color:var(--blue);font-size:16px;white-space:nowrap">${p.code}</td>
+            </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>`}`;
+}
+
+function renderEdu(){
+  const cats = ['all','Mac','iPad','Watch','配件'];
+  const catLabels = {all:'全部', Mac:'Mac', iPad:'iPad', Watch:'Watch', 配件:'配件'};
+  document.getElementById('mc').innerHTML = `
+    <div class="sec-hdr"><div><div class="sec-title">教育優惠操作手冊</div><div class="sec-sub">來源：大專院校優惠操作手冊 ver 8.9 · 2026/06/26 · 現役商品 ${EDU_ITEMS.length} 筆</div></div></div>
+    <div class="card" style="padding:16px 20px">
+      <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center">
+        <input id="eq" type="search" value="${eduQuery.replace(/"/g,'&quot;')}" placeholder="搜尋商品名稱 / 規格 / 優惠代碼 / 折抵金額…" autocomplete="off"
+          style="flex:1;min-width:200px;padding:10px 14px;border-radius:10px;border:1.5px solid var(--border);font-size:14px;font-family:inherit;outline:none;background:var(--light)"
+          oninput="eduQuery=this.value;updateEduResults()" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--border)'">
+        <button onclick="eduQuery='';document.getElementById('eq').value='';updateEduResults()" style="padding:8px 14px;border-radius:10px;border:1.5px solid var(--border);background:var(--white);font-size:13px;cursor:pointer;font-family:inherit;color:var(--gray)">清除</button>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        ${cats.map(c=>`<button class="edu-cat-btn" data-cat="${c}" onclick="eduCat='${c}';updateEduResults()" style="padding:5px 14px;border-radius:20px;border:1.5px solid ${eduCat===c?'var(--blue)':'var(--border)'};background:${eduCat===c?'var(--blue)':'var(--white)'};color:${eduCat===c?'#fff':'var(--gray)'};font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .13s">${catLabels[c]}</button>`).join('')}
+      </div>
+    </div>
+    <div id="edu-results" class="card" style="padding:0;overflow:hidden"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:0">
+      <div class="card">
+        <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border)">每年度購買數量限制</div>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:14px">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--light);border-radius:8px"><span>iMac 全系列 + Mac Studio</span><span class="badge badge-blue">各 1 台</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--light);border-radius:8px"><span>Mac mini</span><span class="badge badge-blue">1 台</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--light);border-radius:8px"><span>MacBook 系列</span><span class="badge badge-blue">1 台</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--light);border-radius:8px"><span>iPad 全系列</span><span class="badge badge-orange">2 台</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--light);border-radius:8px"><span>Apple Watch</span><span class="badge badge-gray">1 台</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--light);border-radius:8px"><span style="font-size:12px">配件 (Pencil / iPad 鍵盤 / Studio Display / Pro Display XDR)</span><span class="badge badge-gray" style="white-space:nowrap">各 2 個</span></div>
+        </div>
+        <div style="margin-top:12px;padding:10px 12px;background:var(--orange-bg);border-radius:8px;font-size:12px;color:var(--orange);font-weight:500;line-height:1.6">
+          ⚠ 同一張發票僅能適用一人 · CTO 不符資格 · 限購清單須於原廠系統確認
+        </div>
+      </div>
+      <div class="card">
+        <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border)">受理資格說明</div>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:13px">
+          <div style="padding:10px 12px;border-radius:8px;border:1px solid var(--border)">
+            <div style="font-weight:700;margin-bottom:4px">大學新生</div>
+            <div style="color:var(--gray)">入學通知書 或 在學證明書（擇一紙本），需學號</div>
+          </div>
+          <div style="padding:10px 12px;border-radius:8px;border:1px solid var(--border)">
+            <div style="font-weight:700;margin-bottom:4px">大學生</div>
+            <div style="color:var(--gray)">有正確學期<strong>註冊章</strong>的學生證 或 在學證明書（擇一），需學號</div>
+          </div>
+          <div style="padding:10px 12px;border-radius:8px;border:1px solid var(--border)">
+            <div style="font-weight:700;margin-bottom:4px">大學教師及職員</div>
+            <div style="color:var(--gray)">教職員證，需員工證號（職員 = 非教職直接聘用亦可受理）</div>
+          </div>
+          <div style="padding:10px 12px;border-radius:8px;background:var(--red-bg)">
+            <div style="font-weight:700;color:var(--red);margin-bottom:4px">不受理</div>
+            <div style="color:var(--red);font-size:12px">高中職以下全部不可 · 國際學生證不可 · 不受理條碼掃描</div>
+          </div>
+        </div>
+        <div style="margin-top:10px;padding:10px 12px;background:var(--blue-bg);border-radius:8px;font-size:12px;color:var(--blue);font-weight:500;line-height:1.6">
+          2026.03.16 起為 114年下學期 · 學生證需蓋當學年度註冊章
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:0">
+      <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border)">POS 結帳流程</div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;font-size:13px">
+        <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--light);border-radius:8px;flex:1;min-width:150px"><span style="font-weight:700;color:var(--blue);font-size:18px;line-height:1">①</span><span>Key 主機品項，選<strong>原價</strong></span></div>
+        <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--light);border-radius:8px;flex:1;min-width:150px"><span style="font-weight:700;color:var(--blue);font-size:18px;line-height:1">②</span><span>Key 上方查到的<strong>優惠代碼</strong></span></div>
+        <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--light);border-radius:8px;flex:1;min-width:150px"><span style="font-weight:700;color:var(--blue);font-size:18px;line-height:1">③</span><span>小計後輸入<strong>折抵金額</strong>數字</span></div>
+        <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--light);border-radius:8px;flex:1;min-width:150px"><span style="font-weight:700;color:var(--blue);font-size:18px;line-height:1">④</span><span>選<strong>他店提貨券</strong>，輸入 <code style="font-family:ui-monospace,monospace;font-weight:700;font-size:14px;color:var(--blue);background:var(--blue-bg);padding:1px 5px;border-radius:4px">02494</code></span></div>
+        <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--light);border-radius:8px;flex:1;min-width:150px"><span style="font-weight:700;color:var(--blue);font-size:18px;line-height:1">⑤</span><span>確認後依平常付款方式<strong>結帳</strong></span></div>
+      </div>
+    </div>`;
+  updateEduResults();
+}
+
+
+renderEdu();
+</script>
+</body>
+</html>

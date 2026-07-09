@@ -1,0 +1,81 @@
+:root {
+  --bg: #f5f7fa;
+  --white: #ffffff;
+  --text: #1e293b;
+  --gray: #64748b;
+  --border: #dde3ed;
+  --light: #f1f5f9;
+  --blue: #0071e3;
+  --blue-bg: #e8f2ff;
+  --green: #059669;
+  --green-bg: #d1fae5;
+  --red: #e11d48;
+  --red-bg: #ffe4e6;
+  --orange: #d97706;
+  --orange-bg: #fef3c7;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.6}
+
+/* Header */
+.hdr{background:rgba(255,255,255,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.hdr-left{display:flex;align-items:center;gap:12px}
+.hdr-logo{font-size:22px;line-height:1}
+.hdr-title{font-size:17px;font-weight:700;letter-spacing:-.3px}
+.hdr-sub{font-size:12px;color:var(--gray);margin-top:1px}
+.hdr-date{font-size:12px;color:var(--gray)}
+
+/* Main */
+.main{max-width:1600px;margin:0 auto;padding:24px 24px 60px}
+
+/* Section header */
+.sec-hdr{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.sec-title{font-size:18px;font-weight:700}
+.sec-sub{font-size:13px;color:var(--gray)}
+
+/* Cards */
+.card{background:var(--white);border-radius:14px;padding:20px 22px;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:14px}
+.card-title{font-size:14px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.card-title-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+
+/* Badge */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:6px;font-size:12px;font-weight:600}
+.badge-green{background:var(--green-bg);color:var(--green)}
+.badge-red{background:var(--red-bg);color:var(--red)}
+.badge-blue{background:var(--blue-bg);color:var(--blue)}
+.badge-orange{background:var(--orange-bg);color:var(--orange)}
+.badge-gray{background:var(--light);color:var(--gray)}
+
+/* File card (used by security.html Google Drive link) */
+.file-card{display:flex;align-items:center;gap:14px;padding:14px 18px;background:var(--white);border-radius:12px;border:1.5px solid var(--border);margin-bottom:10px;text-decoration:none;color:var(--text);transition:border-color .13s}
+.file-card:hover{border-color:var(--blue)}
+.file-icon{font-size:28px;flex-shrink:0}
+.file-info{flex:1}
+.file-name{font-size:14px;font-weight:600}
+.file-desc{font-size:12px;color:var(--gray);margin-top:2px}
+.file-size{font-size:11px;color:var(--gray);flex-shrink:0}
+
+/* Planogram / expandable image cards */
+.plan-card{background:var(--white);border-radius:14px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:10px}
+.plan-hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;cursor:pointer;user-select:none;border-bottom:1px solid var(--border)}
+.plan-hdr:hover{background:var(--light)}
+.plan-label{font-size:14px;font-weight:700}
+.plan-toggle{font-size:12px;color:var(--gray)}
+.plan-body{padding:0}
+.plan-img{width:100%;display:block;image-rendering:auto}
+.plan-ctrl{display:flex;gap:8px;margin-bottom:14px}
+.btn-sm{padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);background:var(--white);color:var(--text);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .13s}
+.btn-sm:hover{background:var(--light)}
+
+.empty{text-align:center;padding:40px;color:var(--gray);font-size:14px}
+.search-thead-th{position:sticky;top:0;z-index:5;background:var(--light)}
+
+/* Entry page (toolbox home) */
+.entry-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.entry-card{display:block;background:var(--white);border-radius:16px;padding:22px;box-shadow:0 1px 4px rgba(0,0,0,.06);text-decoration:none;color:var(--text);border:1.5px solid transparent;transition:all .15s}
+.entry-card:hover{border-color:var(--blue);transform:translateY(-2px)}
+.entry-icon{font-size:30px;margin-bottom:12px}
+.entry-title{font-size:16px;font-weight:700;margin-bottom:6px}
+.entry-desc{font-size:13px;color:var(--gray);line-height:1.5}
+
+@media(max-width:768px){.main{padding:14px 12px 60px}.hdr{padding:12px 14px}}
