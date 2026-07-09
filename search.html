@@ -742,7 +742,7 @@ function updateSearchResults(){
       prevName = p.name;
       prevSpec = null;
       specToggle = 0;
-      rows += `<tr style="background:#eef1f5;border-top:2px solid #c8d4e0;border-bottom:1px solid #c8d4e0">
+      rows += `<tr class="search-group-row" style="background:#eef1f5;border-top:2px solid #c8d4e0;border-bottom:1px solid #c8d4e0">
         <td colspan="7" style="padding:8px 14px;font-size:13px;font-weight:700">
           <span class="badge ${catCls(p.cat)}" style="margin-right:8px">${p.cat}</span>${p.name}
         </td>
@@ -757,21 +757,21 @@ function updateSearchResults(){
     const act = ACTIVITY_PROMO[p.pid];
     const actStyle = act?.d ? 'color:var(--green)' : act?.m==='暫無交期' ? 'color:var(--red)' : act?.m ? 'color:var(--orange)' : 'color:var(--border)';
     const actVal = act?.d ? '-$'+act.d.toLocaleString() : act?.m || '—';
-    rows += `<tr style="border-bottom:1px solid var(--border);background:${bg}" onmouseover="this.style.background='var(--blue-bg)'" onmouseout="this.style.background='${bg}'">
-      <td style="padding:10px 8px;font-family:ui-monospace,monospace;font-weight:700;color:var(--blue);font-size:16px;white-space:nowrap">${p.pid}</td>
-      <td style="padding:10px 8px;white-space:nowrap">${p.color||'—'}</td>
-      <td style="padding:10px 8px;white-space:nowrap;color:var(--gray);font-size:13px">${p.spec}</td>
-      <td style="padding:10px 8px;text-align:right;font-weight:600;white-space:nowrap">$${p.price.toLocaleString()}</td>
-      <td style="padding:10px 8px;text-align:right;font-weight:700;white-space:nowrap;${edu?'color:var(--red)':'color:var(--border)'}">${edu?'-$'+edu.toLocaleString():'—'}</td>
-      <td style="padding:10px 8px;text-align:right;font-weight:700;white-space:nowrap;${actStyle}">${actVal}</td>
-      <td style="padding:10px 8px;font-size:13px;color:var(--text)">${act?.g||'—'}</td>
+    rows += `<tr class="search-row" style="border-bottom:1px solid var(--border);background:${bg}" onmouseover="this.style.background='var(--blue-bg)'" onmouseout="this.style.background='${bg}'">
+      <td data-label="貨號" style="padding:10px 8px;font-family:ui-monospace,monospace;font-weight:700;color:var(--blue);font-size:16px;white-space:nowrap">${p.pid}</td>
+      <td data-label="顏色" style="padding:10px 8px;white-space:nowrap">${p.color||'—'}</td>
+      <td data-label="規格" style="padding:10px 8px;white-space:nowrap;color:var(--gray);font-size:13px">${p.spec}</td>
+      <td data-label="售價" style="padding:10px 8px;text-align:right;font-weight:600;white-space:nowrap">$${p.price.toLocaleString()}</td>
+      <td data-label="教育折抵" style="padding:10px 8px;text-align:right;font-weight:700;white-space:nowrap;${edu?'color:var(--red)':'color:var(--border)'}">${edu?'-$'+edu.toLocaleString():'—'}</td>
+      <td data-label="活動折扣" style="padding:10px 8px;text-align:right;font-weight:700;white-space:nowrap;${actStyle}">${actVal}</td>
+      <td data-label="贈品" style="padding:10px 8px;font-size:13px;color:var(--text)">${act?.g||'—'}</td>
     </tr>`;
   }
 
   el.innerHTML = `
     <div style="padding:12px 16px;background:var(--light);border-bottom:1px solid var(--border);font-size:12px;color:var(--gray);font-weight:600">找到 <span style="color:var(--text)">${filtered.length}</span> 筆結果</div>
     <div style="overflow:auto;max-height:70vh">
-      <table style="width:auto;min-width:100%;border-collapse:collapse;font-size:15px">
+      <table class="search-table" style="width:auto;min-width:100%;border-collapse:collapse;font-size:15px">
         <thead>
           <tr style="background:var(--light);border-bottom:1px solid var(--border)">
             <th class="search-thead-th" style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">貨號</th>
@@ -797,7 +797,7 @@ function renderSearch(){
     <div class="card" style="padding:16px 20px">
       <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center">
         <input id="sq" type="search" value="${searchQuery.replace(/"/g,'&quot;')}" placeholder="輸入關鍵字：貨號 / 型號 / 品名 / 規格 / 顏色 / 價格…" autocomplete="off"
-          style="flex:1;min-width:200px;padding:10px 14px;border-radius:10px;border:1.5px solid var(--border);font-size:14px;font-family:inherit;outline:none;background:var(--light)"
+          style="flex:1;min-width:200px;padding:10px 14px;border-radius:10px;border:1.5px solid var(--border);font-size:16px;font-family:inherit;outline:none;background:var(--light)"
           oninput="searchQuery=this.value;updateSearchResults()" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--border)'">
         <button onclick="searchQuery='';document.getElementById('sq').value='';updateSearchResults()" style="padding:8px 14px;border-radius:10px;border:1.5px solid var(--border);background:var(--white);font-size:13px;cursor:pointer;font-family:inherit;color:var(--gray)">清除</button>
       </div>
