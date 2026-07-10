@@ -25,7 +25,47 @@
 <script>
 let searchQuery = '';
 let searchCat = 'all';
+let searchSeries = 'all';
 let searchSub = 'all';
+
+const SERIES_ORDER = {
+  'Mac': ['MacBook Air','MacBook Pro','Mac mini','iMac','Mac Studio','MacBook Neo'],
+  'iPad': ['iPad mini','iPad A16','iPad Air','iPad Pro'],
+  'iPhone': ['iPhone 17e','iPhone 17','iPhone Air','iPhone 17 Pro','iPhone 17 Pro Max','iPhone 16e','iPhone 16','iPhone 16 Plus'],
+  'Watch': ['Apple Watch SE3','Apple Watch S11','Apple Watch Ultra 3'],
+};
+function getSeries(cat, name){
+  if(cat==='Mac'){
+    if(name.startsWith('MacBook Air')) return 'MacBook Air';
+    if(name.startsWith('MacBook Pro')) return 'MacBook Pro';
+    if(name.startsWith('MacBook Neo')) return 'MacBook Neo';
+    if(name.startsWith('Mac Mini')) return 'Mac mini';
+    if(name.startsWith('Mac Studio')) return 'Mac Studio';
+    if(name.startsWith('iMac')) return 'iMac';
+  }
+  if(cat==='iPad'){
+    if(name.startsWith('iPad mini')) return 'iPad mini';
+    if(name.startsWith('iPad A16')) return 'iPad A16';
+    if(name.startsWith('iPad Pro')) return 'iPad Pro';
+    if(name.startsWith('iPad Air')) return 'iPad Air';
+  }
+  if(cat==='iPhone'){
+    if(name.startsWith('iPhone 17e')) return 'iPhone 17e';
+    if(name.startsWith('iPhone 17 Pro Max')) return 'iPhone 17 Pro Max';
+    if(name.startsWith('iPhone 17 Pro')) return 'iPhone 17 Pro';
+    if(name.startsWith('iPhone 17')) return 'iPhone 17';
+    if(name.startsWith('iPhone Air')) return 'iPhone Air';
+    if(name.startsWith('iPhone 16e')) return 'iPhone 16e';
+    if(name.startsWith('iPhone 16 Plus')) return 'iPhone 16 Plus';
+    if(name.startsWith('iPhone 16')) return 'iPhone 16';
+  }
+  if(cat==='Watch'){
+    if(name.includes('SE3')) return 'Apple Watch SE3';
+    if(name.includes('Ultra 3')) return 'Apple Watch Ultra 3';
+    if(name.includes('S11')) return 'Apple Watch S11';
+  }
+  return null;
+}
 
 const ACCESSORY_GROUP_ORDER = ['滑鼠鍵盤','Studio Display','耳機轉接/連接線','Apple TV/週邊','充電器/電源','Apple Pencil','AirPods/耳機','HomePod','AirTag','iPad鍵盤/保護','iPhone保護殼/卡套'];
 const ACCESSORY_GROUP = {
@@ -45,10 +85,18 @@ function getSubOptions(cat){
   if(cat==='配件') return ACCESSORY_GROUP_ORDER;
   if(cat==='Mac'||cat==='iPad'||cat==='iPhone'||cat==='Watch'){
     const seen = new Set(), out = [];
-    for(const p of PRODUCTS){ if(p.cat===cat && !seen.has(p.name)){ seen.add(p.name); out.push(p.name); } }
+    for(const p of PRODUCTS){
+      if(p.cat!==cat) continue;
+      if(searchSeries!=='all' && getSeries(p.cat,p.name)!==searchSeries) continue;
+      if(!seen.has(p.name)){ seen.add(p.name); out.push(p.name); }
+    }
     return out;
   }
   return null;
+}
+function matchesSeries(p){
+  if(searchSeries==='all') return true;
+  return getSeries(p.cat, p.name) === searchSeries;
 }
 function matchesSub(p){
   if(searchSub==='all') return true;
@@ -57,7 +105,16 @@ function matchesSub(p){
 }
 function selectCat(c){
   searchCat = c;
+  searchSeries = 'all';
   searchSub = 'all';
+  renderSeriesMenu();
+  renderSubMenu();
+  updateSearchResults();
+}
+function selectSeries(s){
+  searchSeries = s;
+  searchSub = 'all';
+  renderSeriesMenu();
   renderSubMenu();
   updateSearchResults();
 }
@@ -65,6 +122,24 @@ function selectSub(s){
   searchSub = s;
   renderSubMenu();
   updateSearchResults();
+}
+function renderSeriesMenu(){
+  const el = document.getElementById('series-row');
+  if(!el) return;
+  const list = SERIES_ORDER[searchCat];
+  el.innerHTML = '';
+  if(!list){ el.style.display = 'none'; return; }
+  el.style.display = 'flex';
+  const opts = ['all', ...list];
+  for(const s of opts){
+    const btn = document.createElement('button');
+    btn.className = 'series-btn';
+    btn.textContent = s === 'all' ? '全部系列' : s;
+    const on = s === searchSeries;
+    btn.style.cssText = `padding:4px 12px;border-radius:16px;border:1.5px solid ${on?'var(--blue)':'var(--border)'};background:${on?'var(--blue-bg)':'var(--white)'};color:${on?'var(--blue)':'var(--gray)'};font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .13s`;
+    btn.addEventListener('click', () => selectSeries(s));
+    el.appendChild(btn);
+  }
 }
 function renderSubMenu(){
   const el = document.getElementById('sub-cat-row');
@@ -829,6 +904,7 @@ function updateSearchResults(){
   const filtered = PRODUCTS.filter(p => {
     const matchCat = searchCat === 'all' || p.cat === searchCat;
     if(!matchCat) return false;
+    if(!matchesSeries(p)) return false;
     if(!matchesSub(p)) return false;
     if(!searchQuery) return true;
     const q = searchQuery.toLowerCase();
@@ -925,10 +1001,12 @@ function renderSearch(){
       <div style="display:flex;gap:6px;flex-wrap:wrap">
         ${cats.map(c=>`<button class="cat-btn" data-cat="${c}" onclick="selectCat('${c}')" style="padding:5px 14px;border-radius:20px;border:1.5px solid ${searchCat===c?'var(--blue)':'var(--border)'};background:${searchCat===c?'var(--blue)':'var(--white)'};color:${searchCat===c?'#fff':'var(--gray)'};font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .13s">${catLabels[c]}</button>`).join('')}
       </div>
+      <div id="series-row" style="display:none;gap:6px;flex-wrap:wrap;margin-top:8px;padding-top:8px;border-top:1px dashed var(--border)"></div>
       <div id="sub-cat-row" style="display:none;gap:6px;flex-wrap:wrap;margin-top:8px;padding-top:8px;border-top:1px dashed var(--border)"></div>
     </div>
     <div id="search-results" class="card" style="padding:0;overflow:hidden"></div>`;
 
+  renderSeriesMenu();
   renderSubMenu();
   updateSearchResults();
 }
