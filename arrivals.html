@@ -29,15 +29,15 @@ let arrivalCat = 'all';
 const ARRIVAL_WEEKS = ['7/2–7/8', '7/9–7/15'];
 const ARRIVALS = [
   // Mac
-  {cat:'Mac',pid:'252141',mpn:'MXP63TA/A',name:'AirPods 4',qty:[350,50]},
-  {cat:'Mac',pid:'252142',mpn:'MXP93TA/A',name:'AirPods 4 主動式降噪',qty:[250,0]},
+  {cat:'配件',pid:'252141',mpn:'MXP63TA/A',name:'AirPods 4',qty:[350,50]},
+  {cat:'配件',pid:'252142',mpn:'MXP93TA/A',name:'AirPods 4 主動式降噪',qty:[250,0]},
   {cat:'Mac',pid:'253474',mpn:'MWUC3TA/A',name:'iMac 24" M4 2024',qty:[2,0]},
   {cat:'Mac',pid:'253475',mpn:'MWUF3TA/A',name:'iMac 24" M4 2024',qty:[5,7]},
   {cat:'Mac',pid:'253478',mpn:'MWUU3TA/A',name:'iMac 24" M4 2024',qty:[1,0]},
   {cat:'Mac',pid:'253479',mpn:'MWV13TA/A',name:'iMac 24" M4 2024',qty:[2,0]},
   {cat:'Mac',pid:'253545',mpn:'MU9E3TA/A',name:'Mac Mini 2024',qty:[10,21]},
   {cat:'Mac',pid:'253547',mpn:'MCX44TA/A',name:'Mac Mini 2024',qty:[0,16]},
-  {cat:'Mac',pid:'262379',mpn:'MFHP4TA/A',name:'AirPods Pro 第三代',qty:[1030,110]},
+  {cat:'配件',pid:'262379',mpn:'MFHP4TA/A',name:'AirPods Pro 第三代',qty:[1030,110]},
   {cat:'Mac',pid:'263628',mpn:'MDE54TA/A',name:'MacBook Pro 14.2" M5 2025/2026',qty:[10,0]},
   {cat:'Mac',pid:'263629',mpn:'MDE34TA/A',name:'MacBook Pro 14.2" M5 2025/2026',qty:[18,0]},
   {cat:'Mac',pid:'263630',mpn:'MDE64TA/A',name:'MacBook Pro 14.2" M5 2025/2026',qty:[8,0]},
@@ -177,7 +177,7 @@ function renderArrivals(){
         value="${arrivalQuery}"
         oninput="arrivalQuery=this.value;updateArrivalResults()">
       <div style="margin-top:.6em;display:flex;flex-wrap:wrap;gap:.4em">
-        ${['all','Mac','iPad','Watch','iPhone'].map(c=>`<button
+        ${['all','Mac','iPad','Watch','iPhone','配件'].map(c=>`<button
           onclick="arrivalCat='${c}';document.querySelectorAll('.arr-cat-btn').forEach(b=>{b.style.borderColor='var(--border)';b.style.background='var(--white)';b.style.color='var(--gray)'});this.style.borderColor='var(--blue)';this.style.background='var(--blue)';this.style.color='#fff';updateArrivalResults()"
           class="arr-cat-btn"
           style="padding:.3em .75em;font-size:.8em;border:1px solid ${c===arrivalCat?'var(--blue)':'var(--border)'};border-radius:20px;background:${c===arrivalCat?'var(--blue)':'var(--white)'};color:${c===arrivalCat?'#fff':'var(--gray)'};cursor:pointer;white-space:nowrap">
