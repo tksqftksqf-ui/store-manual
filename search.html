@@ -25,6 +25,65 @@
 <script>
 let searchQuery = '';
 let searchCat = 'all';
+let searchSub = 'all';
+
+const ACCESSORY_GROUP_ORDER = ['滑鼠鍵盤','Studio Display','耳機轉接/連接線','Apple TV/週邊','充電器/電源','Apple Pencil','AirPods/耳機','HomePod','AirTag','iPad鍵盤/保護','iPhone保護殼/卡套'];
+const ACCESSORY_GROUP = {
+  'Apple Magic Mouse':'滑鼠鍵盤','Magic Trackpad':'滑鼠鍵盤','Magic Keyboard 繁中':'滑鼠鍵盤','Magic Keyboard 繁中 含數字鍵':'滑鼠鍵盤','Magic Keyboard 含TouchID與數字鍵盤 繁中':'滑鼠鍵盤','Magic Keyboard 含Touch ID 繁中':'滑鼠鍵盤',
+  'Studio Display 標準玻璃 可調斜度支架':'Studio Display','Studio Display 標準玻璃 可調斜度高度支架':'Studio Display','Studio Display 標準玻璃 VESA吊架':'Studio Display','Studio Display Nano texture 可調斜度支架 CTO':'Studio Display','Studio Display Nano texture 可調斜度高度支架 CTO':'Studio Display','Studio Display Nano texture VESA吊架 CTO':'Studio Display','Studio Display XDR 標準玻璃 可調斜度高度支架 CTO':'Studio Display','Studio Display XDR 標準玻璃 VESA吊架 CTO':'Studio Display',
+  'EarPods (3.5mm耳機接頭)':'耳機轉接/連接線','EarPods (Lightning 連接器)':'耳機轉接/連接線','EarPods (USB-C)':'耳機轉接/連接線','Lightning 對 USB 連接線 (1m)':'耳機轉接/連接線','Lightning 數位 AV 轉接器':'耳機轉接/連接線','Lightning 對 USB 3 相機轉接器':'耳機轉接/連接線','USB-C 對 3.5mm耳機插孔轉接器':'耳機轉接/連接線','USB-C 對 3.5mm 音訊連接線 (1.2m)':'耳機轉接/連接線','USB-C 對 USB 轉接器':'耳機轉接/連接線','USB-C 對 SD 卡讀卡機':'耳機轉接/連接線','USB-C Digital AV 多埠轉接器':'耳機轉接/連接線','Thunderbolt 4 Pro連接線 (3m)':'耳機轉接/連接線','Thunderbolt 5 Pro連接線 (1m)':'耳機轉接/連接線',
+  'Apple TV 4K 64GB (2022)':'Apple TV/週邊','Apple TV 4K 128GB (2022)':'Apple TV/週邊','Siri Remote':'Apple TV/週邊',
+  '磁性充電器對 USB-C線 (1m)':'充電器/電源','60W USB-C 充電連接線 (1m)':'充電器/電源','240W USB-C 充電連接線 (2m)':'充電器/電源','USB-C 對 Lightning 線 (1m)':'充電器/電源','USB-C 對 Lightning 線 (2m)':'充電器/電源','iPhone Air MagSafe電池':'充電器/電源','MagSafe 充電器 (1m)':'充電器/電源','MagSafe 充電器 (2m)':'充電器/電源','85W MagSafe 2 電源轉換器':'充電器/電源','USB-C對MagSafe 3 連接線 (2m)':'充電器/電源','20W USB-C 電源轉接器':'充電器/電源','35W 雙 USB-C 埠小型電源轉接器':'充電器/電源','35W 雙 USB-C 埠電源轉接器':'充電器/電源','40W 動態電源轉接器':'充電器/電源','70W USB-C 電源轉接器':'充電器/電源','96W USB-C 電源轉接器':'充電器/電源','140W USB-C 電源轉接器':'充電器/電源',
+  'Apple Pencil 筆尖4件裝':'Apple Pencil','Apple Pencil (USB-C)':'Apple Pencil','Apple Pencil 第一代':'Apple Pencil','Apple Pencil 第二代':'Apple Pencil','Apple Pencil Pro':'Apple Pencil',
+  'AirPods 4':'AirPods/耳機','AirPods 4 主動式降噪':'AirPods/耳機','AirPods Pro 第三代':'AirPods/耳機','AirPods Max':'AirPods/耳機','AirPods Max 2':'AirPods/耳機','PowerBeats Pro 2':'AirPods/耳機',
+  'HomePod mini':'HomePod','HomePod (2023)':'HomePod','HomePod':'HomePod',
+  'AirTag 1件裝':'AirTag','AirTag 4件裝':'AirTag','AirTag 2 1件裝':'AirTag','AirTag 2 4件裝':'AirTag',
+  'iPad mini 聰穎雙面夾':'iPad鍵盤/保護','iPad A16 聰穎雙面夾':'iPad鍵盤/保護','iPad A16 巧控鍵盤雙面夾':'iPad鍵盤/保護','iPad Air 11吋 M3 巧控鍵盤':'iPad鍵盤/保護','iPad Air 13吋 M3 巧控鍵盤':'iPad鍵盤/保護','iPad Pro 11吋 M4 巧控鍵盤':'iPad鍵盤/保護','iPad Pro 13吋 M4 巧控鍵盤':'iPad鍵盤/保護','iPad Air 13吋 M2 聰穎雙面夾':'iPad鍵盤/保護','iPad Pro 11吋 M4 聰穎雙面夾':'iPad鍵盤/保護','iPad Pro 13吋 M4 聰穎雙面夾':'iPad鍵盤/保護',
+  'iPhone 16e 矽膠保護殼':'iPhone保護殼/卡套','iPhone 16e MagSafe 透明保護殼':'iPhone保護殼/卡套','iPhone 17e 矽膠保護殼':'iPhone保護殼/卡套','iPhone Air MagSafe保護殼':'iPhone保護殼/卡套','iPhone Air 防護邊框':'iPhone保護殼/卡套','iPhone 17 MagSafe 透明保護殼':'iPhone保護殼/卡套','iPhone 17 MagSafe 矽膠保護殼':'iPhone保護殼/卡套','iPhone 17 Pro MagSafe 透明保護殼':'iPhone保護殼/卡套','iPhone 17 Pro MagSafe 矽膠保護殼':'iPhone保護殼/卡套','iPhone 17 Pro MagSafe 科技織紋':'iPhone保護殼/卡套','iPhone 17 Pro Max MagSafe 透明保護殼':'iPhone保護殼/卡套','iPhone 17 Pro Max MagSafe 矽膠保護殼':'iPhone保護殼/卡套','iPhone 17 Pro Max MagSafe 科技織紋':'iPhone保護殼/卡套','精細織紋卡套':'iPhone保護殼/卡套',
+};
+function getSubOptions(cat){
+  if(cat==='配件') return ACCESSORY_GROUP_ORDER;
+  if(cat==='Mac'||cat==='iPad'||cat==='iPhone'||cat==='Watch'){
+    const seen = new Set(), out = [];
+    for(const p of PRODUCTS){ if(p.cat===cat && !seen.has(p.name)){ seen.add(p.name); out.push(p.name); } }
+    return out;
+  }
+  return null;
+}
+function matchesSub(p){
+  if(searchSub==='all') return true;
+  if(p.cat==='配件') return (ACCESSORY_GROUP[p.name]||'其他') === searchSub;
+  return p.name === searchSub;
+}
+function selectCat(c){
+  searchCat = c;
+  searchSub = 'all';
+  renderSubMenu();
+  updateSearchResults();
+}
+function selectSub(s){
+  searchSub = s;
+  renderSubMenu();
+  updateSearchResults();
+}
+function renderSubMenu(){
+  const el = document.getElementById('sub-cat-row');
+  if(!el) return;
+  const subs = getSubOptions(searchCat);
+  el.innerHTML = '';
+  if(!subs){ el.style.display = 'none'; return; }
+  el.style.display = 'flex';
+  const opts = ['all', ...subs];
+  for(const s of opts){
+    const btn = document.createElement('button');
+    btn.className = 'sub-cat-btn';
+    btn.textContent = s === 'all' ? '全部' : s;
+    const on = s === searchSub;
+    btn.style.cssText = `padding:4px 12px;border-radius:16px;border:1.5px solid ${on?'var(--green)':'var(--border)'};background:${on?'var(--green-bg)':'var(--white)'};color:${on?'var(--green)':'var(--gray)'};font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .13s`;
+    btn.addEventListener('click', () => selectSub(s));
+    el.appendChild(btn);
+  }
+}
 
 const EDU_DISCOUNT = {
   '234826': 711,
@@ -441,16 +500,16 @@ const ACTIVITY_PROMO = {
   '252083':{d:1424,g:null,m:null},
   '252084':{d:1424,g:null,m:null},
   '252085':{d:1424,g:null,m:null},
-  '262249':{d:1803,g:'市價550鏡頭貼',m:null},
-  '262250':{d:1803,g:'市價550鏡頭貼',m:null},
-  '262251':{d:1803,g:'市價550鏡頭貼',m:null},
-  '262252':{d:1803,g:'市價550鏡頭貼',m:null},
-  '262253':{d:1803,g:'市價550鏡頭貼',m:null},
-  '262254':{d:2293,g:'市價550鏡頭貼',m:null},
-  '262255':{d:2293,g:'市價550鏡頭貼',m:null},
-  '262256':{d:2293,g:'市價550鏡頭貼',m:null},
-  '262257':{d:2293,g:'市價550鏡頭貼',m:null},
-  '262258':{d:2293,g:'市價550鏡頭貼',m:null},
+  '262249':{d:1803,g:'市價550鏡頭貼（貨號262113/262114，拆290）',m:null},
+  '262250':{d:1803,g:'市價550鏡頭貼（貨號262113/262114，拆290）',m:null},
+  '262251':{d:1803,g:'市價550鏡頭貼（貨號262113/262114，拆290）',m:null},
+  '262252':{d:1803,g:'市價550鏡頭貼（貨號262113/262114，拆290）',m:null},
+  '262253':{d:1803,g:'市價550鏡頭貼（貨號262113/262114，拆290）',m:null},
+  '262254':{d:2293,g:'市價550鏡頭貼（貨號262113/262114，拆290）',m:null},
+  '262255':{d:2293,g:'市價550鏡頭貼（貨號262113/262114，拆290）',m:null},
+  '262256':{d:2293,g:'市價550鏡頭貼（貨號262113/262114，拆290）',m:null},
+  '262257':{d:2293,g:'市價550鏡頭貼（貨號262113/262114，拆290）',m:null},
+  '262258':{d:2293,g:'市價550鏡頭貼（貨號262113/262114，拆290）',m:null},
   '262259':{d:2952,g:null,m:'現有庫存售完為止'},
   '262262':{d:2952,g:null,m:'現有庫存售完為止'},
   '262264':{d:3512,g:null,m:'現有庫存售完為止'},
@@ -464,18 +523,18 @@ const ACTIVITY_PROMO = {
   '262277':{d:null,g:'滿萬送500配件金',m:null},
   '262278':{d:null,g:'滿萬送500配件金',m:null},
   '262279':{d:null,g:'滿萬送500配件金',m:null},
-  '262280':{d:1120,g:'市價1580 UAG保護殼',m:null},
-  '262281':{d:1120,g:'市價1580 UAG保護殼',m:null},
-  '262282':{d:1120,g:'市價1580 UAG保護殼',m:null},
-  '262283':{d:1435,g:'市價1580 UAG保護殼',m:null},
-  '262284':{d:1435,g:'市價1580 UAG保護殼',m:null},
-  '262285':{d:1435,g:'市價1580 UAG保護殼',m:null},
-  '262286':{d:1750,g:'市價1580 UAG保護殼',m:null},
-  '262287':{d:1750,g:'市價1580 UAG保護殼',m:null},
-  '262288':{d:1750,g:'市價1580 UAG保護殼',m:null},
-  '262289':{d:2380,g:'市價1580 UAG保護殼',m:null},
-  '262290':{d:2380,g:'市價1580 UAG保護殼',m:null},
-  '262291':{d:2380,g:'市價1580 UAG保護殼',m:null},
+  '262280':{d:1120,g:'市價1580 UAG保護殼（貨號261982，拆900）',m:null},
+  '262281':{d:1120,g:'市價1580 UAG保護殼（貨號261982，拆900）',m:null},
+  '262282':{d:1120,g:'市價1580 UAG保護殼（貨號261982，拆900）',m:null},
+  '262283':{d:1435,g:'市價1580 UAG保護殼（貨號261982，拆900）',m:null},
+  '262284':{d:1435,g:'市價1580 UAG保護殼（貨號261982，拆900）',m:null},
+  '262285':{d:1435,g:'市價1580 UAG保護殼（貨號261982，拆900）',m:null},
+  '262286':{d:1750,g:'市價1580 UAG保護殼（貨號261982，拆900）',m:null},
+  '262287':{d:1750,g:'市價1580 UAG保護殼（貨號261982，拆900）',m:null},
+  '262288':{d:1750,g:'市價1580 UAG保護殼（貨號261982，拆900）',m:null},
+  '262289':{d:2380,g:'市價1580 UAG保護殼（貨號261982，拆900）',m:null},
+  '262290':{d:2380,g:'市價1580 UAG保護殼（貨號261982，拆900）',m:null},
+  '262291':{d:2380,g:'市價1580 UAG保護殼（貨號261982，拆900）',m:null},
   '267442':{d:null,g:'滿萬送500配件金',m:null},
   '267443':{d:null,g:'滿萬送500配件金',m:null},
   '267444':{d:null,g:'滿萬送500配件金',m:null},
@@ -484,30 +543,30 @@ const ACTIVITY_PROMO = {
   '267447':{d:null,g:'滿萬送500配件金',m:null},
   '267448':{d:null,g:'滿萬送500配件金',m:null},
   '267449':{d:null,g:'滿萬送500配件金',m:null},
-  '267369':{d:1000,g:'市價3090 Office365',m:'限量200'},
-  '267370':{d:1000,g:'市價3090 Office365',m:'限量200'},
-  '267371':{d:1000,g:'市價3090 Office365',m:'限量200'},
-  '267372':{d:1000,g:'市價3090 Office365',m:'限量200'},
-  '267373':{d:1000,g:'市價3090 Office365',m:'限量200'},
-  '267374':{d:1000,g:'市價3090 Office365',m:'限量200'},
-  '267375':{d:1000,g:'市價3090 Office365',m:'限量200'},
-  '267376':{d:1000,g:'市價3090 Office365',m:'限量200'},
-  '267377':{d:1000,g:'市價3090 Office365',m:'限量200'},
-  '267378':{d:1000,g:'市價3090 Office365',m:'限量200'},
-  '267379':{d:1000,g:'市價3090 Office365',m:'限量200'},
-  '267380':{d:1000,g:'市價3090 Office365',m:'限量200'},
-  '267381':{d:1000,g:'市價3090 Office365',m:null},
-  '267382':{d:1000,g:'市價3090 Office365',m:null},
-  '267383':{d:1000,g:'市價3090 Office365',m:null},
-  '267384':{d:1000,g:'市價3090 Office365',m:null},
-  '267385':{d:1000,g:'市價3090 Office365',m:null},
-  '267386':{d:1000,g:'市價3090 Office365',m:null},
-  '267387':{d:1000,g:'市價3090 Office365',m:null},
-  '267388':{d:1000,g:'市價3090 Office365',m:null},
-  '267389':{d:1000,g:'市價3090 Office365',m:null},
-  '267390':{d:1000,g:'市價3090 Office365',m:null},
-  '267391':{d:1000,g:'市價3090 Office365',m:null},
-  '267392':{d:1000,g:'市價3090 Office365',m:null},
+  '267369':{d:1000,g:'市價3090 Office365（貨號257407，拆1750）',m:'限量200'},
+  '267370':{d:1000,g:'市價3090 Office365（貨號257407，拆1750）',m:'限量200'},
+  '267371':{d:1000,g:'市價3090 Office365（貨號257407，拆1750）',m:'限量200'},
+  '267372':{d:1000,g:'市價3090 Office365（貨號257407，拆1750）',m:'限量200'},
+  '267373':{d:1000,g:'市價3090 Office365（貨號257407，拆1750）',m:'限量200'},
+  '267374':{d:1000,g:'市價3090 Office365（貨號257407，拆1750）',m:'限量200'},
+  '267375':{d:1000,g:'市價3090 Office365（貨號257407，拆1750）',m:'限量200'},
+  '267376':{d:1000,g:'市價3090 Office365（貨號257407，拆1750）',m:'限量200'},
+  '267377':{d:1000,g:'市價3090 Office365（貨號257407，拆1750）',m:'限量200'},
+  '267378':{d:1000,g:'市價3090 Office365（貨號257407，拆1750）',m:'限量200'},
+  '267379':{d:1000,g:'市價3090 Office365（貨號257407，拆1750）',m:'限量200'},
+  '267380':{d:1000,g:'市價3090 Office365（貨號257407，拆1750）',m:'限量200'},
+  '267381':{d:1000,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '267382':{d:1000,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '267383':{d:1000,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '267384':{d:1000,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '267385':{d:1000,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '267386':{d:1000,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '267387':{d:1000,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '267388':{d:1000,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '267389':{d:1000,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '267390':{d:1000,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '267391':{d:1000,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '267392':{d:1000,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
   '253474':{d:2495,g:null,m:null},
   '253475':{d:2495,g:null,m:null},
   '253476':{d:2495,g:null,m:null},
@@ -577,30 +636,30 @@ const ACTIVITY_PROMO = {
   '253181':{d:2124,g:null,m:null},
   '253182':{d:2124,g:null,m:null},
   '253183':{d:2124,g:null,m:null},
-  '256491':{d:901,g:'市價790保護貼',m:null},
-  '256493':{d:901,g:'市價790保護貼',m:null},
-  '256494':{d:901,g:'市價790保護貼',m:null},
-  '256495':{d:901,g:'市價790保護貼',m:null},
-  '256496':{d:1132,g:'市價790保護貼',m:null},
-  '256497':{d:1132,g:'市價790保護貼',m:null},
-  '256498':{d:1132,g:'市價790保護貼',m:null},
-  '256499':{d:1132,g:'市價790保護貼',m:null},
-  '256500':{d:1692,g:'市價790保護貼',m:null},
-  '256501':{d:1692,g:'市價790保護貼',m:null},
-  '256502':{d:1692,g:'市價790保護貼',m:null},
-  '256503':{d:1692,g:'市價790保護貼',m:null},
-  '256504':{d:1252,g:'市價790保護貼',m:null},
-  '256505':{d:1252,g:'市價790保護貼',m:null},
-  '256506':{d:1252,g:'市價790保護貼',m:null},
-  '256507':{d:1252,g:'市價790保護貼',m:null},
-  '256508':{d:1532,g:'市價790保護貼',m:null},
-  '256509':{d:1532,g:'市價790保護貼',m:null},
-  '256510':{d:1532,g:'市價790保護貼',m:null},
-  '256511':{d:1532,g:'市價790保護貼',m:null},
-  '256512':{d:2092,g:'市價790保護貼',m:null},
-  '256513':{d:2092,g:'市價790保護貼',m:null},
-  '256514':{d:2092,g:'市價790保護貼',m:null},
-  '256515':{d:2092,g:'市價790保護貼',m:null},
+  '256491':{d:901,g:'市價790保護貼（貨號235836，拆340）',m:null},
+  '256493':{d:901,g:'市價790保護貼（貨號235836，拆340）',m:null},
+  '256494':{d:901,g:'市價790保護貼（貨號235836，拆340）',m:null},
+  '256495':{d:901,g:'市價790保護貼（貨號235836，拆340）',m:null},
+  '256496':{d:1132,g:'市價790保護貼（貨號235836，拆340）',m:null},
+  '256497':{d:1132,g:'市價790保護貼（貨號235836，拆340）',m:null},
+  '256498':{d:1132,g:'市價790保護貼（貨號235836，拆340）',m:null},
+  '256499':{d:1132,g:'市價790保護貼（貨號235836，拆340）',m:null},
+  '256500':{d:1692,g:'市價790保護貼（貨號235836，拆340）',m:null},
+  '256501':{d:1692,g:'市價790保護貼（貨號235836，拆340）',m:null},
+  '256502':{d:1692,g:'市價790保護貼（貨號235836，拆340）',m:null},
+  '256503':{d:1692,g:'市價790保護貼（貨號235836，拆340）',m:null},
+  '256504':{d:1252,g:'市價790保護貼（貨號235836，拆340）',m:null},
+  '256505':{d:1252,g:'市價790保護貼（貨號235836，拆340）',m:null},
+  '256506':{d:1252,g:'市價790保護貼（貨號235836，拆340）',m:null},
+  '256507':{d:1252,g:'市價790保護貼（貨號235836，拆340）',m:null},
+  '256508':{d:1532,g:'市價790保護貼（貨號235836，拆340）',m:null},
+  '256509':{d:1532,g:'市價790保護貼（貨號235836，拆340）',m:null},
+  '256510':{d:1532,g:'市價790保護貼（貨號235836，拆340）',m:null},
+  '256511':{d:1532,g:'市價790保護貼（貨號235836，拆340）',m:null},
+  '256512':{d:2092,g:'市價790保護貼（貨號235836，拆340）',m:null},
+  '256513':{d:2092,g:'市價790保護貼（貨號235836，拆340）',m:null},
+  '256514':{d:2092,g:'市價790保護貼（貨號235836，拆340）',m:null},
+  '256515':{d:2092,g:'市價790保護貼（貨號235836，拆340）',m:null},
   '267288':{d:1743,g:null,m:null},
   '267289':{d:1743,g:null,m:null},
   '267290':{d:1743,g:null,m:null},
@@ -665,54 +724,54 @@ const ACTIVITY_PROMO = {
   '267349':{d:4053,g:null,m:null},
   '267350':{d:4053,g:null,m:null},
   '267351':{d:4053,g:null,m:null},
-  '263631':{d:1995,g:'市價3090 Office365',m:null},
-  '263632':{d:1995,g:'市價3090 Office365',m:null},
-  '263633':{d:2345,g:'市價3090 Office365',m:null},
-  '263634':{d:2345,g:'市價3090 Office365',m:null},
-  '263635':{d:3045,g:'市價3090 Office365',m:null},
-  '263636':{d:3045,g:'市價3090 Office365',m:null},
-  '263637':{d:3920,g:'市價3090 Office365',m:null},
-  '263638':{d:3920,g:'市價3090 Office365',m:null},
-  '263639':{d:3220,g:'市價3090 Office365',m:null},
-  '263640':{d:3220,g:'市價3090 Office365',m:null},
-  '263641':{d:4095,g:'市價3090 Office365',m:null},
-  '263642':{d:4095,g:'市價3090 Office365',m:null},
-  '263643':{d:2345,g:'市價3090 Office365',m:null},
-  '263644':{d:2345,g:'市價3090 Office365',m:null},
-  '263645':{d:2695,g:'市價3090 Office365',m:null},
-  '263646':{d:2695,g:'市價3090 Office365',m:null},
-  '263647':{d:3395,g:'市價3090 Office365',m:null},
-  '263648':{d:3395,g:'市價3090 Office365',m:null},
-  '263649':{d:4270,g:'市價3090 Office365',m:null},
-  '263650':{d:4270,g:'市價3090 Office365',m:null},
-  '263651':{d:3570,g:'市價3090 Office365',m:null},
-  '263652':{d:3570,g:'市價3090 Office365',m:null},
-  '263653':{d:4445,g:'市價3090 Office365',m:null},
-  '263654':{d:4445,g:'市價3090 Office365',m:null},
-  '263655':{d:2545,g:'市價3090 Office365',m:null},
-  '263656':{d:2545,g:'市價3090 Office365',m:null},
-  '263657':{d:2895,g:'市價3090 Office365',m:null},
-  '263658':{d:2895,g:'市價3090 Office365',m:null},
-  '263659':{d:3595,g:'市價3090 Office365',m:null},
-  '263660':{d:3595,g:'市價3090 Office365',m:null},
-  '263661':{d:4470,g:'市價3090 Office365',m:null},
-  '263662':{d:4470,g:'市價3090 Office365',m:null},
-  '263663':{d:3770,g:'市價3090 Office365',m:null},
-  '263664':{d:3770,g:'市價3090 Office365',m:null},
-  '263665':{d:4645,g:'市價3090 Office365',m:null},
-  '263666':{d:4645,g:'市價3090 Office365',m:null},
-  '263667':{d:2895,g:'市價3090 Office365',m:null},
-  '263668':{d:2895,g:'市價3090 Office365',m:null},
-  '263669':{d:3245,g:'市價3090 Office365',m:null},
-  '263670':{d:3245,g:'市價3090 Office365',m:null},
-  '263671':{d:3945,g:'市價3090 Office365',m:null},
-  '263672':{d:3945,g:'市價3090 Office365',m:null},
-  '263673':{d:4820,g:'市價3090 Office365',m:null},
-  '263674':{d:4820,g:'市價3090 Office365',m:null},
-  '263675':{d:4120,g:'市價3090 Office365',m:null},
-  '263676':{d:4120,g:'市價3090 Office365',m:null},
-  '263677':{d:4995,g:'市價3090 Office365',m:null},
-  '263678':{d:4995,g:'市價3090 Office365',m:null},
+  '263631':{d:1995,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263632':{d:1995,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263633':{d:2345,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263634':{d:2345,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263635':{d:3045,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263636':{d:3045,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263637':{d:3920,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263638':{d:3920,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263639':{d:3220,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263640':{d:3220,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263641':{d:4095,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263642':{d:4095,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263643':{d:2345,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263644':{d:2345,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263645':{d:2695,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263646':{d:2695,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263647':{d:3395,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263648':{d:3395,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263649':{d:4270,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263650':{d:4270,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263651':{d:3570,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263652':{d:3570,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263653':{d:4445,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263654':{d:4445,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263655':{d:2545,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263656':{d:2545,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263657':{d:2895,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263658':{d:2895,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263659':{d:3595,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263660':{d:3595,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263661':{d:4470,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263662':{d:4470,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263663':{d:3770,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263664':{d:3770,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263665':{d:4645,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263666':{d:4645,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263667':{d:2895,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263668':{d:2895,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263669':{d:3245,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263670':{d:3245,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263671':{d:3945,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263672':{d:3945,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263673':{d:4820,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263674':{d:4820,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263675':{d:4120,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263676':{d:4120,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263677':{d:4995,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
+  '263678':{d:4995,g:'市價3090 Office365（貨號257407，拆1750）',m:null},
   '262292':{d:632,g:null,m:null},
   '262293':{d:632,g:null,m:null},
   '262294':{d:632,g:null,m:null},
@@ -770,6 +829,7 @@ function updateSearchResults(){
   const filtered = PRODUCTS.filter(p => {
     const matchCat = searchCat === 'all' || p.cat === searchCat;
     if(!matchCat) return false;
+    if(!matchesSub(p)) return false;
     if(!searchQuery) return true;
     const q = searchQuery.toLowerCase();
     return [p.name,p.spec,p.color,p.pid,p.mpn,String(p.price)].some(v=>v.toLowerCase().includes(q));
@@ -863,11 +923,13 @@ function renderSearch(){
         <button onclick="searchQuery='';document.getElementById('sq').value='';updateSearchResults()" style="padding:8px 14px;border-radius:10px;border:1.5px solid var(--border);background:var(--white);font-size:13px;cursor:pointer;font-family:inherit;color:var(--gray)">清除</button>
       </div>
       <div style="display:flex;gap:6px;flex-wrap:wrap">
-        ${cats.map(c=>`<button class="cat-btn" data-cat="${c}" onclick="searchCat='${c}';updateSearchResults()" style="padding:5px 14px;border-radius:20px;border:1.5px solid ${searchCat===c?'var(--blue)':'var(--border)'};background:${searchCat===c?'var(--blue)':'var(--white)'};color:${searchCat===c?'#fff':'var(--gray)'};font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .13s">${catLabels[c]}</button>`).join('')}
+        ${cats.map(c=>`<button class="cat-btn" data-cat="${c}" onclick="selectCat('${c}')" style="padding:5px 14px;border-radius:20px;border:1.5px solid ${searchCat===c?'var(--blue)':'var(--border)'};background:${searchCat===c?'var(--blue)':'var(--white)'};color:${searchCat===c?'#fff':'var(--gray)'};font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .13s">${catLabels[c]}</button>`).join('')}
       </div>
+      <div id="sub-cat-row" style="display:none;gap:6px;flex-wrap:wrap;margin-top:8px;padding-top:8px;border-top:1px dashed var(--border)"></div>
     </div>
     <div id="search-results" class="card" style="padding:0;overflow:hidden"></div>`;
 
+  renderSubMenu();
   updateSearchResults();
 }
 
