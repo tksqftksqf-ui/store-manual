@@ -94,8 +94,8 @@ function updateEduResults(){
   el.innerHTML = `
     <div style="padding:12px 16px;background:var(--light);border-bottom:1px solid var(--border);font-size:12px;color:var(--gray);font-weight:600">找到 <span style="color:var(--text)">${filtered.length}</span> 筆結果</div>
     ${filtered.length === 0 ? `<div class="empty">找不到符合的商品</div>` : `
-    <div style="overflow-x:auto">
-      <table style="width:100%;border-collapse:collapse;font-size:15px">
+    <div class="search-table-wrap" style="overflow-x:auto">
+      <table class="search-table" style="width:100%;border-collapse:collapse;font-size:15px">
         <thead>
           <tr style="background:var(--light);border-bottom:1px solid var(--border)">
             <th style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">類別</th>
@@ -107,12 +107,12 @@ function updateEduResults(){
         </thead>
         <tbody>
           ${filtered.map((p,i)=>`
-            <tr style="border-bottom:1px solid var(--border);background:${i%2===0?'var(--white)':'#fafbfc'}" onmouseover="this.style.background='var(--blue-bg)'" onmouseout="this.style.background='${i%2===0?'var(--white)':'#fafbfc'}'">
-              <td style="padding:10px 8px;white-space:nowrap"><span class="badge ${badgeCls(p.cat)}">${p.cat}</span></td>
-              <td style="padding:10px 8px;font-weight:500">${p.name}</td>
-              <td style="padding:10px 14px;color:var(--gray);font-size:13px">${p.spec}</td>
-              <td style="padding:10px 8px;text-align:right;font-weight:700;color:var(--red);white-space:nowrap">-$${p.discount.toLocaleString()}</td>
-              <td style="padding:10px 14px;text-align:center;font-family:ui-monospace,monospace;font-weight:700;color:var(--blue);font-size:16px;white-space:nowrap">${p.code}</td>
+            <tr class="search-row" style="border-bottom:1px solid var(--border);background:${i%2===0?'var(--white)':'#fafbfc'}" onmouseover="this.style.background='var(--blue-bg)'" onmouseout="this.style.background='${i%2===0?'var(--white)':'#fafbfc'}'">
+              <td data-label="類別" style="padding:10px 8px;white-space:nowrap"><span class="badge ${badgeCls(p.cat)}">${p.cat}</span></td>
+              <td data-label="商品名稱" style="padding:10px 8px;font-weight:500">${p.name}</td>
+              <td data-label="規格" style="padding:10px 14px;color:var(--gray);font-size:13px">${p.spec}</td>
+              <td data-label="折抵金額" style="padding:10px 8px;text-align:right;font-weight:700;color:var(--red);white-space:nowrap">-$${p.discount.toLocaleString()}</td>
+              <td data-label="優惠代碼" style="padding:10px 14px;text-align:center;font-family:ui-monospace,monospace;font-weight:700;color:var(--blue);font-size:16px;white-space:nowrap">${p.code}</td>
             </tr>`).join('')}
         </tbody>
       </table>
@@ -136,7 +136,7 @@ function renderEdu(){
       </div>
     </div>
     <div id="edu-results" class="card" style="padding:0;overflow:hidden"></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:0">
+    <div class="two-col-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:0">
       <div class="card">
         <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border)">每年度購買數量限制</div>
         <div style="display:flex;flex-direction:column;gap:8px;font-size:14px">

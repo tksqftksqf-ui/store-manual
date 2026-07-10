@@ -186,10 +186,10 @@ function updateArrivalResults(){
   }
 
   const catCls = c => c==='Mac'?'badge-blue':c==='iPad'?'badge-orange':c==='iPhone'?'badge-green':'badge-gray';
-  function qtyCell(n){
-    if(!n) return `<td style="padding:10px 14px;text-align:center;color:var(--border)">—</td>`;
+  function qtyCell(n, label){
+    if(!n) return `<td data-label="${label}" style="padding:10px 14px;text-align:center;color:var(--border)">—</td>`;
     const s = n>=50?'color:var(--green);font-weight:800':n>=10?'color:var(--green);font-weight:700':'color:var(--orange);font-weight:700';
-    return `<td style="padding:10px 14px;text-align:center;font-size:15px;${s}">${n.toLocaleString()}</td>`;
+    return `<td data-label="${label}" style="padding:10px 14px;text-align:center;font-size:15px;${s}">${n.toLocaleString()}</td>`;
   }
 
   let rows = '';
@@ -202,24 +202,24 @@ function updateArrivalResults(){
       : a.mpn;
     if(groupName !== prevGroup){
       prevGroup = groupName;
-      rows += `<tr style="background:#eef1f5;border-top:2px solid #c8d4e0;border-bottom:1px solid #c8d4e0">
+      rows += `<tr class="search-group-row" style="background:#eef1f5;border-top:2px solid #c8d4e0;border-bottom:1px solid #c8d4e0">
         <td colspan="4" style="padding:8px 14px;font-size:13px;font-weight:700">
           <span class="badge ${catCls(a.cat)}" style="margin-right:8px">${a.cat}</span>${groupName}
         </td>
       </tr>`;
     }
-    rows += `<tr style="border-bottom:1px solid var(--border)" onmouseover="this.style.background='var(--blue-bg)'" onmouseout="this.style.background=''">
-      <td style="padding:10px 8px;font-family:ui-monospace,monospace;font-weight:700;color:var(--blue);font-size:16px;white-space:nowrap">${a.pid}</td>
-      <td style="padding:10px 8px;color:var(--gray);font-size:13px;white-space:nowrap">${detail}</td>
-      ${qtyCell(a.qty[0])}
-      ${qtyCell(a.qty[1])}
+    rows += `<tr class="search-row" style="border-bottom:1px solid var(--border)" onmouseover="this.style.background='var(--blue-bg)'" onmouseout="this.style.background=''">
+      <td data-label="貨號" style="padding:10px 8px;font-family:ui-monospace,monospace;font-weight:700;color:var(--blue);font-size:16px;white-space:nowrap">${a.pid}</td>
+      <td data-label="顏色 / 規格" style="padding:10px 8px;color:var(--gray);font-size:13px;white-space:nowrap">${detail}</td>
+      ${qtyCell(a.qty[0], ARRIVAL_WEEKS[0])}
+      ${qtyCell(a.qty[1], ARRIVAL_WEEKS[1])}
     </tr>`;
   }
 
   el.innerHTML = `
     <div style="padding:12px 16px;background:var(--light);border-bottom:1px solid var(--border);font-size:12px;color:var(--gray);font-weight:600">找到 <span style="color:var(--text)">${filtered.length}</span> 筆結果</div>
-    <div style="overflow-x:auto">
-      <table style="width:auto;min-width:100%;border-collapse:collapse;font-size:15px">
+    <div class="search-table-wrap" style="overflow-x:auto">
+      <table class="search-table" style="width:auto;min-width:100%;border-collapse:collapse;font-size:15px">
         <thead>
           <tr style="background:var(--light);border-bottom:1px solid var(--border)">
             <th style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">貨號</th>

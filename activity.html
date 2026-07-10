@@ -30,14 +30,14 @@ const ACTIVITY_ITEMS = [
   {cat:'iPhone', series:'iPhone 16e',        type:'現折',        discount:920,  pct:null, giftAmt:null, gift:null,               desc:'現折920',                                note:null},
   {cat:'iPhone', series:'iPhone 17e',        type:'現折',        discount:1314, pct:null, giftAmt:null, gift:null,               desc:'現折1314起',                             note:null},
   {cat:'iPhone', series:'iPhone 16',         type:'現折',        discount:1424, pct:null, giftAmt:null, gift:null,               desc:'現折1424起',                             note:'256G皆現有庫存售完為止'},
-  {cat:'iPhone', series:'iPhone 17',         type:'現折+贈品',   discount:1803, pct:null, giftAmt:null, gift:'市價550鏡頭貼',     desc:'現折1803起再送市價550鏡頭貼',            note:null},
+  {cat:'iPhone', series:'iPhone 17',         type:'現折+贈品',   discount:1803, pct:null, giftAmt:null, gift:'市價550鏡頭貼（貨號262113/262114，拆290）',     desc:'現折1803起再送市價550鏡頭貼',            note:null},
   {cat:'iPhone', series:'iPhone Air',        type:'現折',        discount:2952, pct:null, giftAmt:null, gift:null,               desc:'現折2952起',                             note:'皆現有庫存售完為止'},
   {cat:'iPhone', series:'iPhone 17 Pro',     type:'滿萬送配件金', discount:null, pct:null, giftAmt:500, gift:null,               desc:'滿萬送500配件金',                        note:null},
-  {cat:'iPhone', series:'iPhone 17 Pro Max', type:'現折+贈品',   discount:1120, pct:null, giftAmt:null, gift:'市價1580 UAG保護殼', desc:'現折1120起再送市價1580 UAG保護殼',       note:null},
+  {cat:'iPhone', series:'iPhone 17 Pro Max', type:'現折+贈品',   discount:1120, pct:null, giftAmt:null, gift:'市價1580 UAG保護殼（貨號261982，拆900）', desc:'現折1120起再送市價1580 UAG保護殼',       note:null},
   // Mac
   {cat:'Mac', series:'MacBook Neo 13',        type:'滿萬送配件金', discount:null, pct:null, giftAmt:500, gift:null, desc:'滿萬送500配件金', note:null},
-  {cat:'Mac', series:'MacBook Air 13 M5',     type:'現折+贈品',    discount:1000, pct:null, giftAmt:null, gift:'市價3090 Office365', desc:'現折1000再送市價3090 Office365', note:'限量200'},
-  {cat:'Mac', series:'MacBook Air 15 M5',     type:'現折+贈品',    discount:1000, pct:null, giftAmt:null, gift:'市價3090 Office365', desc:'現折1000再送市價3090 Office365', note:null},
+  {cat:'Mac', series:'MacBook Air 13 M5',     type:'現折+贈品',    discount:1000, pct:null, giftAmt:null, gift:'市價3090 Office365（貨號257407，拆1750）', desc:'現折1000再送市價3090 Office365', note:'限量200'},
+  {cat:'Mac', series:'MacBook Air 15 M5',     type:'現折+贈品',    discount:1000, pct:null, giftAmt:null, gift:'市價3090 Office365（貨號257407，拆1750）', desc:'現折1000再送市價3090 Office365', note:null},
   {cat:'Mac', series:'MacBook Pro 14 M5',     type:'現折',         discount:3245, pct:null, giftAmt:null, gift:null, desc:'現折3245起',      note:null},
   {cat:'Mac', series:'MacBook Pro 16 M5 Pro', type:'現折',         discount:3996, pct:null, giftAmt:null, gift:null, desc:'現折3996起',      note:null},
   {cat:'Mac', series:'iMac M4',               type:'折扣%',        discount:null, pct:'5%', giftAmt:null, gift:null, desc:'現折5%',          note:null},
@@ -46,13 +46,13 @@ const ACTIVITY_ITEMS = [
   {cat:'Mac', series:'Studio Display',        type:'現折',         discount:3174, pct:null, giftAmt:null, gift:null, desc:'現折3174起',      note:null},
   // iPad
   {cat:'iPad', series:'iPad mini 7th',      type:'現折',       discount:1194, pct:null, giftAmt:null, gift:null,          desc:'現折1194起',                    note:null},
-  {cat:'iPad', series:'iPad 11吋',          type:'現折+贈品',  discount:901,  pct:null, giftAmt:null, gift:'市價790保護貼', desc:'現折901起再送市價790保護貼',    note:null},
+  {cat:'iPad', series:'iPad 11吋',          type:'現折+贈品',  discount:901,  pct:null, giftAmt:null, gift:'市價790保護貼（貨號235836，拆340）', desc:'現折901起再送市價790保護貼',    note:null},
   {cat:'iPad', series:'iPad Air 11吋 M3',   type:'無活動',     discount:null, pct:null, giftAmt:null, gift:null,          desc:'皆現有庫存售完為止',            note:'庫存售完為止'},
   {cat:'iPad', series:'iPad Air 13吋 M3',   type:'無活動',     discount:null, pct:null, giftAmt:null, gift:null,          desc:'皆現有庫存售完為止',            note:'庫存售完為止'},
   {cat:'iPad', series:'iPad Air 11吋 M4',   type:'現折',       discount:1743, pct:null, giftAmt:null, gift:null,          desc:'現折1743起',                    note:null},
   {cat:'iPad', series:'iPad Air 13吋 M4',   type:'現折',       discount:2233, pct:null, giftAmt:null, gift:null,          desc:'現折2233起',                    note:null},
-  {cat:'iPad', series:'iPad Pro 11吋 M5',   type:'現折+贈品',  discount:1995, pct:null, giftAmt:null, gift:'市價3090 Office365', desc:'現折1995起再送市價3090 Office365', note:null},
-  {cat:'iPad', series:'iPad Pro 13吋 M5',   type:'現折+贈品',  discount:2545, pct:null, giftAmt:null, gift:'市價3090 Office365', desc:'現折2545起再送市價3090 Office365', note:null},
+  {cat:'iPad', series:'iPad Pro 11吋 M5',   type:'現折+贈品',  discount:1995, pct:null, giftAmt:null, gift:'市價3090 Office365（貨號257407，拆1750）', desc:'現折1995起再送市價3090 Office365', note:null},
+  {cat:'iPad', series:'iPad Pro 13吋 M5',   type:'現折+贈品',  discount:2545, pct:null, giftAmt:null, gift:'市價3090 Office365（貨號257407，拆1750）', desc:'現折2545起再送市價3090 Office365', note:null},
   // 原廠配件
   {cat:'原廠配件', series:'原廠配件（全系列）', type:'主機加購折扣', discount:null, pct:'5%', giftAmt:null, gift:null, desc:'主機加購可享5%優惠', note:null},
   // Apple Watch
@@ -91,23 +91,23 @@ function updateActivityResults(){
     return '';
   };
   const rows = filtered.map((a,i)=>`
-    <tr style="border-bottom:1px solid var(--border);background:${i%2===0?'var(--white)':'#fafbfc'}" onmouseover="this.style.background='var(--blue-bg)'" onmouseout="this.style.background='${i%2===0?'var(--white)':'#fafbfc'}'">
-      <td style="padding:10px 8px;white-space:nowrap"><span class="badge ${catBadge[a.cat]||'badge-gray'}">${a.cat}</span></td>
-      <td style="padding:10px 8px;font-weight:500">${a.series}</td>
-      <td style="padding:10px 14px;${typeStyle(a.type)}">${a.type}</td>
-      <td style="padding:10px 8px;text-align:right;font-weight:700;color:var(--red);white-space:nowrap">${a.discount?'-$'+a.discount.toLocaleString():'—'}</td>
-      <td style="padding:10px 14px;color:var(--blue);text-align:center">${a.pct||(a.giftAmt?'送$'+a.giftAmt:'—')}</td>
-      <td style="padding:10px 8px;font-size:13px;color:var(--text)">${a.gift||'—'}</td>
-      <td style="padding:10px 14px;color:var(--text)">${a.desc}</td>
-      <td style="padding:10px 14px;font-size:12px;color:var(--gray)">${a.note||''}</td>
+    <tr class="search-row" style="border-bottom:1px solid var(--border);background:${i%2===0?'var(--white)':'#fafbfc'}" onmouseover="this.style.background='var(--blue-bg)'" onmouseout="this.style.background='${i%2===0?'var(--white)':'#fafbfc'}'">
+      <td data-label="類別" style="padding:10px 8px;white-space:nowrap"><span class="badge ${catBadge[a.cat]||'badge-gray'}">${a.cat}</span></td>
+      <td data-label="產品系列" style="padding:10px 8px;font-weight:500">${a.series}</td>
+      <td data-label="活動類型" style="padding:10px 14px;${typeStyle(a.type)}">${a.type}</td>
+      <td data-label="現折金額" style="padding:10px 8px;text-align:right;font-weight:700;color:var(--red);white-space:nowrap">${a.discount?'-$'+a.discount.toLocaleString():'—'}</td>
+      <td data-label="折扣/加購" style="padding:10px 14px;color:var(--blue);text-align:center">${a.pct||(a.giftAmt?'送$'+a.giftAmt:'—')}</td>
+      <td data-label="贈品" style="padding:10px 8px;font-size:13px;color:var(--text)">${a.gift||'—'}</td>
+      <td data-label="活動說明" style="padding:10px 14px;color:var(--text)">${a.desc}</td>
+      <td data-label="備註" style="padding:10px 14px;font-size:12px;color:var(--gray)">${a.note||''}</td>
     </tr>`).join('');
   const el = document.getElementById('activity-results');
   if(!el) return;
   el.innerHTML = filtered.length===0
     ? '<div class="empty">無符合條件的活動</div>'
     : `<div style="padding:12px 16px;background:var(--light);border-bottom:1px solid var(--border);font-size:12px;color:var(--gray);font-weight:600">找到 <span style="color:var(--text)">${filtered.length}</span> 筆活動</div>
-    <div style="overflow-x:auto">
-      <table style="width:100%;border-collapse:collapse;font-size:15px">
+    <div class="search-table-wrap" style="overflow-x:auto">
+      <table class="search-table" style="width:100%;border-collapse:collapse;font-size:15px">
         <thead>
           <tr style="background:var(--light);border-bottom:1px solid var(--border)">
             <th style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">類別</th>
