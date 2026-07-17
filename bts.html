@@ -7,16 +7,17 @@
 <link rel="stylesheet" href="shared/style.css">
 <style>
 .bts-card{background:var(--white);border-radius:14px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:14px;border:1.5px solid var(--border)}
-.bts-hdr{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 20px;cursor:pointer;user-select:none;background:linear-gradient(135deg,#fff7e6,#fffdf5)}
-.bts-hdr:hover{background:linear-gradient(135deg,#fff2d6,#fffbea)}
+.bts-hdr-top{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 20px 12px;background:linear-gradient(135deg,#fff7e6,#fffdf5)}
 .bts-hdr-left{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .bts-name{font-size:16px;font-weight:800}
 .bts-gift-banner{font-size:12px;font-weight:700;color:#b45309;background:#fef3c7;padding:3px 10px;border-radius:20px;white-space:nowrap}
 .bts-count{font-size:12px;color:var(--gray)}
-.bts-toggle{font-size:12px;color:var(--gray);flex-shrink:0}
+.bts-toggle-bar{padding:9px 20px;cursor:pointer;user-select:none;text-align:center;border-top:1px solid var(--border);background:var(--light)}
+.bts-toggle-bar:hover{background:#eef1f5}
+.bts-toggle{font-size:12px;color:var(--gray);font-weight:600}
 .bts-body{display:none}
 .bts-body.open{display:block}
-.bts-gift-box{margin:14px 20px 16px;padding:12px 16px;background:#fffbea;border:1px dashed #f0c96b;border-radius:10px;font-size:13px;line-height:1.7;color:#7c4a03}
+.bts-gift-box{margin:0 20px 16px;padding:12px 16px;background:#fffbea;border:1px dashed #f0c96b;border-radius:10px;font-size:13px;line-height:1.7;color:#7c4a03}
 .bts-gift-box b{color:#b45309}
 </style>
 </head>
@@ -286,17 +287,20 @@ function updateBTSResults(){
         <td data-label="售價" style="padding:10px 8px;text-align:right;white-space:nowrap">${fmt(p.price)}</td>
         <td data-label="教育折抵" style="padding:10px 8px;text-align:right;color:var(--green);font-weight:700;white-space:nowrap">-${fmt(p.edu)}</td>
         <td data-label="促銷價" style="padding:10px 8px;text-align:right;font-weight:700;white-space:nowrap">${fmt(p.price)}</td>
-        <td data-label="贈品" style="padding:10px 8px;font-size:12px;color:#b45309">🎁 買就送市價${g.giftBanner.toLocaleString()}好禮（明細見下方）</td>
+        <td data-label="贈品" style="padding:10px 8px;font-size:12px;color:#b45309">🎁 買就送市價${g.giftBanner.toLocaleString()}好禮（明細見上方）</td>
       </tr>`).join('');
     return `
     <div class="bts-card" data-jump="${g.key}">
-      <div class="bts-hdr" onclick="toggleGroup('${g.key}')">
+      <div class="bts-hdr-top">
         <div class="bts-hdr-left">
           <span class="bts-name">${g.name}</span>
           <span class="bts-gift-banner">🎁 買就送市價${g.giftBanner.toLocaleString()}好禮</span>
           <span class="bts-count">共 ${g.products.length} 項</span>
         </div>
-        <span class="bts-toggle">${open ? '收合 ▲' : '展開 ▼'}</span>
+      </div>
+      <div class="bts-gift-box"><b>贈品明細：</b>${g.giftText}</div>
+      <div class="bts-toggle-bar" onclick="toggleGroup('${g.key}')">
+        <span class="bts-toggle">${open ? '收合貨號 ▲' : '查看貨號、售價、教育折抵、促銷價 ▼'}</span>
       </div>
       <div class="bts-body ${open ? 'open' : ''}">
         <div class="search-table-wrap" style="overflow-x:auto">
@@ -315,7 +319,6 @@ function updateBTSResults(){
             <tbody>${rows}</tbody>
           </table>
         </div>
-        <div class="bts-gift-box"><b>贈品明細：</b>${g.giftText}</div>
       </div>
     </div>`;
   }).join('');
