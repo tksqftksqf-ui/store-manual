@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>燦坤新光華 · BTS開學季優惠</title>
+<link rel="stylesheet" href="shared/style.css">
+<style>
+.bts-card{background:var(--white);border-radius:14px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:14px;border:1.5px solid var(--border)}
+.bts-hdr{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 20px;cursor:pointer;user-select:none;background:linear-gradient(135deg,#fff7e6,#fffdf5)}
+.bts-hdr:hover{background:linear-gradient(135deg,#fff2d6,#fffbea)}
+.bts-hdr-left{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.bts-name{font-size:16px;font-weight:800}
+.bts-gift-banner{font-size:12px;font-weight:700;color:#b45309;background:#fef3c7;padding:3px 10px;border-radius:20px;white-space:nowrap}
+.bts-count{font-size:12px;color:var(--gray)}
+.bts-toggle{font-size:12px;color:var(--gray);flex-shrink:0}
+.bts-body{display:none}
+.bts-body.open{display:block}
+.bts-gift-box{margin:14px 20px 16px;padding:12px 16px;background:#fffbea;border:1px dashed #f0c96b;border-radius:10px;font-size:13px;line-height:1.7;color:#7c4a03}
+.bts-gift-box b{color:#b45309}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-left">
+    <span class="hdr-logo"></span>
+    <div>
+      <div class="hdr-title">燦坤新光華 · BTS開學季優惠</div>
+      <div class="hdr-sub">Apple Specialist Store · Three Table Shop</div>
+    </div>
+  </div>
+  <a href="index.html" class="hdr-date" style="text-decoration:none">← 工具箱首頁</a>
+</div>
+
+<div class="main" id="mc"></div>
+
+<script>
+let btsQuery = '';
+const btsOpen = new Set();
+
+const BTS_GROUPS = [
+  {
+    key:'mba13', name:'MacBook Air 13 M5', giftBanner:6869, giftSplit:3540,
+    giftText:'買就送市價6869好禮，市價3090 Microsoft 365 Personal 個人版一年盒裝（257407，拆1750），市價1000 Riivan MacBook Air M2 13.6 亮面保護貼（231581，拆340），市價1090 TUCANO Smilza都會手提電腦包13/14吋（黑256601，藍256602，奶茶256603，拆580），市價1190 Riivan 65W GaN伸縮線電源供應器2C1A-白（267701，拆610），市價499 Zeiss蔡司 手機螢幕清潔噴霧組120ml（269179，拆260），以上共拆3540，可換ACPP或JC',
+    products:[
+      {pid:'267369',color:'午夜',spec:'M5/10CPU/8GPU/16GB/512GB',price:42900,edu:3310},
+      {pid:'267370',color:'銀',spec:'M5/10CPU/8GPU/16GB/512GB',price:42900,edu:3310},
+      {pid:'267371',color:'天藍',spec:'M5/10CPU/8GPU/16GB/512GB',price:42900,edu:3310},
+      {pid:'267372',color:'星光',spec:'M5/10CPU/8GPU/16GB/512GB',price:42900,edu:3310},
+      {pid:'267373',color:'午夜',spec:'M5/10CPU/10GPU/16GB/1TB',price:53400,edu:3310},
+      {pid:'267374',color:'銀',spec:'M5/10CPU/10GPU/16GB/1TB',price:53400,edu:3310},
+      {pid:'267375',color:'天藍',spec:'M5/10CPU/10GPU/16GB/1TB',price:53400,edu:3310},
+      {pid:'267376',color:'星光',spec:'M5/10CPU/10GPU/16GB/1TB',price:53400,edu:3310},
+      {pid:'267377',color:'午夜',spec:'M5/10CPU/10GPU/24GB/1TB',price:60400,edu:3310},
+      {pid:'267378',color:'銀',spec:'M5/10CPU/10GPU/24GB/1TB',price:60400,edu:3310},
+      {pid:'267379',color:'天藍',spec:'M5/10CPU/10GPU/24GB/1TB',price:60400,edu:3310},
+      {pid:'267380',color:'星光',spec:'M5/10CPU/10GPU/24GB/1TB',price:60400,edu:3310},
+    ]
+  },
+  {
+    key:'mba15', name:'MacBook Air 15 M5', giftBanner:6969, giftSplit:3610,
+    giftText:'買就送市價6969好禮，市價3090 Microsoft 365 Personal 個人版一年盒裝（257407，拆1750），市價1000 Riivan MacBook Air 15 亮面抗刮保護貼（240939，拆340），市價1190 TUCANO Smilza都會手提電腦包15/16吋（黑256605，藍256606，拆650），市價1190 Riivan 65W GaN伸縮線電源供應器2C1A-白（267701，拆610），市價499 Zeiss蔡司 手機螢幕清潔噴霧組120ml（269179，拆260），以上共拆3610，可換ACPP或JC',
+    products:[
+      {pid:'267381',color:'午夜',spec:'M5/10CPU/10GPU/16GB/512GB',price:49900,edu:3310},
+      {pid:'267382',color:'銀',spec:'M5/10CPU/10GPU/16GB/512GB',price:49900,edu:3310},
+      {pid:'267383',color:'天藍',spec:'M5/10CPU/10GPU/16GB/512GB',price:49900,edu:3310},
+      {pid:'267384',color:'星光',spec:'M5/10CPU/10GPU/16GB/512GB',price:49900,edu:3310},
+      {pid:'267385',color:'午夜',spec:'M5/10CPU/10GPU/16GB/1TB',price:60400,edu:3310},
+      {pid:'267386',color:'銀',spec:'M5/10CPU/10GPU/16GB/1TB',price:60400,edu:3310},
+      {pid:'267387',color:'天藍',spec:'M5/10CPU/10GPU/16GB/1TB',price:60400,edu:3310},
+      {pid:'267388',color:'星光',spec:'M5/10CPU/10GPU/16GB/1TB',price:60400,edu:3310},
+      {pid:'267389',color:'午夜',spec:'M5/10CPU/10GPU/24GB/1TB',price:67400,edu:3310},
+      {pid:'267390',color:'銀',spec:'M5/10CPU/10GPU/24GB/1TB',price:67400,edu:3310},
+      {pid:'267391',color:'天藍',spec:'M5/10CPU/10GPU/24GB/1TB',price:67400,edu:3310},
+      {pid:'267392',color:'星光',spec:'M5/10CPU/10GPU/24GB/1TB',price:67400,edu:3310},
+    ]
+  },
+  {
+    key:'mbp14', name:'MacBook Pro 14 M5', giftBanner:5990, giftSplit:5290,
+    giftText:'買就送市價5990 AirPods 4-主動式降噪（252142，拆5290），以上共拆5290，可換ACPP或JC',
+    products:[
+      {pid:'263627',color:'太空黑',spec:'M5/10CPU/10GPU/16GB/1TB',price:64900,edu:3210},
+      {pid:'263628',color:'銀',spec:'M5/10CPU/10GPU/16GB/1TB',price:64900,edu:3210},
+      {pid:'263629',color:'太空黑',spec:'M5/10CPU/10GPU/24GB/1TB',price:71900,edu:3210},
+      {pid:'263630',color:'銀',spec:'M5/10CPU/10GPU/24GB/1TB',price:71900,edu:3210},
+      {pid:'267393',color:'銀',spec:'M5/10CPU/10GPU/32GB/1TB',price:78900,edu:3210},
+      {pid:'267394',color:'太空黑',spec:'M5/10CPU/10GPU/32GB/1TB',price:78900,edu:3210},
+      {pid:'267395',color:'銀',spec:'M5 Pro/15CPU/16GPU/24GB/1TB',price:84900,edu:5110},
+      {pid:'267396',color:'黑',spec:'M5 Pro/15CPU/16GPU/24GB/1TB',price:84900,edu:5110},
+      {pid:'267397',color:'銀',spec:'M5 Pro/15CPU/16GPU/24GB/2TB',price:102400,edu:6860},
+      {pid:'267398',color:'黑',spec:'M5 Pro/15CPU/16GPU/24GB/2TB',price:102400,edu:6860},
+      {pid:'267399',color:'銀',spec:'M5 Pro/18CPU/20GPU/24GB/2TB',price:109900,edu:6910},
+      {pid:'267400',color:'黑',spec:'M5 Pro/18CPU/20GPU/24GB/2TB',price:109900,edu:6910},
+      {pid:'267401',color:'銀',spec:'M5 Max/18CPU/32GPU/36GB/2TB',price:139900,edu:10210},
+      {pid:'267402',color:'黑',spec:'M5 Max/18CPU/32GPU/36GB/2TB',price:139900,edu:10210},
+    ]
+  },
+  {
+    key:'mbp16', name:'MacBook Pro 16 M5 Pro', giftBanner:5990, giftSplit:5290,
+    giftText:'買就送市價5990 AirPods 4-主動式降噪（252142，拆5290），以上共拆5290，可換ACPP或JC',
+    products:[
+      {pid:'267403',color:'銀',spec:'M5 Pro/18CPU/20GPU/24GB/1TB',price:99900,edu:6710},
+      {pid:'267404',color:'黑',spec:'M5 Pro/18CPU/20GPU/24GB/1TB',price:99900,edu:6710},
+      {pid:'267405',color:'銀',spec:'M5 Pro/18CPU/20GPU/48GB/1TB',price:120900,edu:6710},
+      {pid:'267406',color:'黑',spec:'M5 Pro/18CPU/20GPU/48GB/1TB',price:120900,edu:6710},
+      {pid:'267407',color:'銀',spec:'M5 Max/18CPU/32GPU/36GB/2TB',price:144900,edu:9910},
+      {pid:'267408',color:'黑',spec:'M5 Max/18CPU/32GPU/36GB/2TB',price:144900,edu:9910},
+      {pid:'267409',color:'銀',spec:'M5 Max/18CPU/40GPU/48GB/2TB',price:169900,edu:9910},
+      {pid:'267410',color:'黑',spec:'M5 Max/18CPU/40GPU/48GB/2TB',price:169900,edu:9910},
+    ]
+  },
+  {
+    key:'ipadair11', name:'iPad Air 11吋 M4', giftBanner:4440, giftSplit:2370,
+    giftText:'買就送市價4440好禮，市價3090 Microsoft 365 Personal 個人版一年盒裝（257407，拆1750），市價800 Riivan iPad Air 11亮面保護貼（249744，拆330），市價550 Riivan 45W GaN氮化鎵電源供應器2C（黑267696，白267697，拆290），以上共拆2370，可換ACPP或JC',
+    products:[
+      {pid:'267288',color:'太空灰',spec:'Wi-Fi 128GB',price:24900,edu:1700},
+      {pid:'267289',color:'藍',spec:'Wi-Fi 128GB',price:24900,edu:1700},
+      {pid:'267290',color:'星光',spec:'Wi-Fi 128GB',price:24900,edu:1700},
+      {pid:'267291',color:'紫',spec:'Wi-Fi 128GB',price:24900,edu:1700},
+      {pid:'267292',color:'太空灰',spec:'Wi-Fi 256GB',price:28400,edu:1700},
+      {pid:'267293',color:'藍',spec:'Wi-Fi 256GB',price:28400,edu:1700},
+      {pid:'267294',color:'星光',spec:'Wi-Fi 256GB',price:28400,edu:1700},
+      {pid:'267295',color:'紫',spec:'Wi-Fi 256GB',price:28400,edu:1700},
+      {pid:'267296',color:'太空灰',spec:'Wi-Fi 512GB',price:35400,edu:1700},
+      {pid:'267297',color:'藍',spec:'Wi-Fi 512GB',price:35400,edu:1700},
+      {pid:'267298',color:'星光',spec:'Wi-Fi 512GB',price:35400,edu:1700},
+      {pid:'267299',color:'紫',spec:'Wi-Fi 512GB',price:35400,edu:1700},
+      {pid:'267300',color:'太空灰',spec:'Wi-Fi 1TB',price:45900,edu:1700},
+      {pid:'267301',color:'藍',spec:'Wi-Fi 1TB',price:45900,edu:1700},
+      {pid:'267302',color:'星光',spec:'Wi-Fi 1TB',price:45900,edu:1700},
+      {pid:'267303',color:'紫',spec:'Wi-Fi 1TB',price:45900,edu:1700},
+      {pid:'267304',color:'太空灰',spec:'Wi-Fi+5G 128GB',price:29900,edu:1700},
+      {pid:'267305',color:'藍',spec:'Wi-Fi+5G 128GB',price:29900,edu:1700},
+      {pid:'267306',color:'星光',spec:'Wi-Fi+5G 128GB',price:29900,edu:1700},
+      {pid:'267307',color:'紫',spec:'Wi-Fi+5G 128GB',price:29900,edu:1700},
+      {pid:'267308',color:'太空灰',spec:'Wi-Fi+5G 256GB',price:33400,edu:1700},
+      {pid:'267309',color:'藍',spec:'Wi-Fi+5G 256GB',price:33400,edu:1700},
+      {pid:'267310',color:'星光',spec:'Wi-Fi+5G 256GB',price:33400,edu:1700},
+      {pid:'267311',color:'紫',spec:'Wi-Fi+5G 256GB',price:33400,edu:1700},
+      {pid:'267312',color:'太空灰',spec:'Wi-Fi+5G 512GB',price:40400,edu:1700},
+      {pid:'267313',color:'藍',spec:'Wi-Fi+5G 512GB',price:40400,edu:1700},
+      {pid:'267314',color:'星光',spec:'Wi-Fi+5G 512GB',price:40400,edu:1700},
+      {pid:'267315',color:'紫',spec:'Wi-Fi+5G 512GB',price:40400,edu:1700},
+      {pid:'267316',color:'太空灰',spec:'Wi-Fi+5G 1TB',price:50900,edu:1700},
+      {pid:'267317',color:'藍',spec:'Wi-Fi+5G 1TB',price:50900,edu:1700},
+      {pid:'267318',color:'星光',spec:'Wi-Fi+5G 1TB',price:50900,edu:1700},
+      {pid:'267319',color:'紫',spec:'Wi-Fi+5G 1TB',price:50900,edu:1700},
+    ]
+  },
+  {
+    key:'ipadair13', name:'iPad Air 13吋 M4', giftBanner:4939, giftSplit:2630,
+    giftText:'買就送市價4939好禮，市價3090 Microsoft 365 Personal 個人版一年盒裝（257407，拆1750），市價800 Riivan iPad Air/Pro 13吋亮面保護貼（249745，拆330），市價550 Riivan 45W GaN氮化鎵電源供應器2C（黑267696，白267697，拆290），市價499 Zeiss蔡司 手機螢幕清潔噴霧組120ml（269179，拆260），以上共拆2630，可換ACPP或JC',
+    products:[
+      {pid:'267320',color:'太空灰',spec:'Wi-Fi 128GB',price:31900,edu:1700},
+      {pid:'267321',color:'藍',spec:'Wi-Fi 128GB',price:31900,edu:1700},
+      {pid:'267322',color:'星光',spec:'Wi-Fi 128GB',price:31900,edu:1700},
+      {pid:'267323',color:'紫',spec:'Wi-Fi 128GB',price:31900,edu:1700},
+      {pid:'267324',color:'太空灰',spec:'Wi-Fi 256GB',price:35400,edu:1700},
+      {pid:'267325',color:'藍',spec:'Wi-Fi 256GB',price:35400,edu:1700},
+      {pid:'267326',color:'星光',spec:'Wi-Fi 256GB',price:35400,edu:1700},
+      {pid:'267327',color:'紫',spec:'Wi-Fi 256GB',price:35400,edu:1700},
+      {pid:'267328',color:'太空灰',spec:'Wi-Fi 512GB',price:42400,edu:1700},
+      {pid:'267329',color:'藍',spec:'Wi-Fi 512GB',price:42400,edu:1700},
+      {pid:'267330',color:'星光',spec:'Wi-Fi 512GB',price:42400,edu:1700},
+      {pid:'267331',color:'紫',spec:'Wi-Fi 512GB',price:42400,edu:1700},
+      {pid:'267332',color:'太空灰',spec:'Wi-Fi 1TB',price:52900,edu:1700},
+      {pid:'267333',color:'藍',spec:'Wi-Fi 1TB',price:52900,edu:1700},
+      {pid:'267334',color:'星光',spec:'Wi-Fi 1TB',price:52900,edu:1700},
+      {pid:'267335',color:'紫',spec:'Wi-Fi 1TB',price:52900,edu:1700},
+      {pid:'267336',color:'太空灰',spec:'Wi-Fi+5G 128GB',price:36900,edu:1700},
+      {pid:'267337',color:'藍',spec:'Wi-Fi+5G 128GB',price:36900,edu:1700},
+      {pid:'267338',color:'星光',spec:'Wi-Fi+5G 128GB',price:36900,edu:1700},
+      {pid:'267339',color:'紫',spec:'Wi-Fi+5G 128GB',price:36900,edu:1700},
+      {pid:'267340',color:'太空灰',spec:'Wi-Fi+5G 256GB',price:40400,edu:1700},
+      {pid:'267341',color:'藍',spec:'Wi-Fi+5G 256GB',price:40400,edu:1700},
+      {pid:'267342',color:'星光',spec:'Wi-Fi+5G 256GB',price:40400,edu:1700},
+      {pid:'267343',color:'紫',spec:'Wi-Fi+5G 256GB',price:40400,edu:1700},
+      {pid:'267344',color:'太空灰',spec:'Wi-Fi+5G 512GB',price:47400,edu:1700},
+      {pid:'267345',color:'藍',spec:'Wi-Fi+5G 512GB',price:47400,edu:1700},
+      {pid:'267346',color:'星光',spec:'Wi-Fi+5G 512GB',price:47400,edu:1700},
+      {pid:'267347',color:'紫',spec:'Wi-Fi+5G 512GB',price:47400,edu:1700},
+      {pid:'267348',color:'太空灰',spec:'Wi-Fi+5G 1TB',price:57900,edu:1700},
+      {pid:'267349',color:'藍',spec:'Wi-Fi+5G 1TB',price:57900,edu:1700},
+      {pid:'267350',color:'星光',spec:'Wi-Fi+5G 1TB',price:57900,edu:1700},
+      {pid:'267351',color:'紫',spec:'Wi-Fi+5G 1TB',price:57900,edu:1700},
+    ]
+  },
+  {
+    key:'ipadpro11', name:'iPad Pro 11吋 M5', giftBanner:5850, giftSplit:3100,
+    giftText:'買就送市價5850好禮，市價3090 Microsoft 365 Personal 個人版一年盒裝（257407，拆1750），市價980 LAUT iPad Pro 11吋多角度保護殼（黑270306，灰270307，粉270308，拆530），市價800 Riivan iPad Pro 11亮面保護貼（249746，拆330），市價980 Riivan 65W GaN氮化鎵充電器（黑254371，白254372，拆490），以上共拆3100，可換ACPP或JC',
+    products:[
+      {pid:'263631',color:'太空黑',spec:'Wi-Fi 256GB',price:39900,edu:3300},
+      {pid:'263632',color:'銀',spec:'Wi-Fi 256GB',price:39900,edu:3300},
+      {pid:'263633',color:'太空黑',spec:'Wi-Fi 512GB',price:46900,edu:3300},
+      {pid:'263634',color:'銀',spec:'Wi-Fi 512GB',price:46900,edu:3300},
+      {pid:'263635',color:'太空黑',spec:'Wi-Fi 1TB',price:60900,edu:3300},
+      {pid:'263636',color:'銀',spec:'Wi-Fi 1TB',price:60900,edu:3300},
+      {pid:'263637',color:'太空黑',spec:'Wi-Fi 2TB',price:78400,edu:3300},
+      {pid:'263638',color:'銀',spec:'Wi-Fi 2TB',price:78400,edu:3300},
+      {pid:'263639',color:'太空黑',spec:'Wi-Fi Nano 1TB',price:64400,edu:3300},
+      {pid:'263640',color:'銀',spec:'Wi-Fi Nano 1TB',price:64400,edu:3300},
+      {pid:'263641',color:'太空黑',spec:'Wi-Fi Nano 2TB',price:81900,edu:3300},
+      {pid:'263642',color:'銀',spec:'Wi-Fi Nano 2TB',price:81900,edu:3300},
+      {pid:'263643',color:'太空黑',spec:'Wi-Fi+5G 256GB',price:46900,edu:3300},
+      {pid:'263644',color:'銀',spec:'Wi-Fi+5G 256GB',price:46900,edu:3300},
+      {pid:'263645',color:'太空黑',spec:'Wi-Fi+5G 512GB',price:53900,edu:3300},
+      {pid:'263646',color:'銀',spec:'Wi-Fi+5G 512GB',price:53900,edu:3300},
+      {pid:'263647',color:'太空黑',spec:'Wi-Fi+5G 1TB',price:67900,edu:3300},
+      {pid:'263648',color:'銀',spec:'Wi-Fi+5G 1TB',price:67900,edu:3300},
+      {pid:'263649',color:'太空黑',spec:'Wi-Fi+5G 2TB',price:85400,edu:3300},
+      {pid:'263650',color:'銀',spec:'Wi-Fi+5G 2TB',price:85400,edu:3300},
+      {pid:'263651',color:'太空黑',spec:'Wi-Fi+5G Nano 1TB',price:71400,edu:3300},
+      {pid:'263652',color:'銀',spec:'Wi-Fi+5G Nano 1TB',price:71400,edu:3300},
+      {pid:'263653',color:'太空黑',spec:'Wi-Fi+5G Nano 2TB',price:88900,edu:3300},
+      {pid:'263654',color:'銀',spec:'Wi-Fi+5G Nano 2TB',price:88900,edu:3300},
+    ]
+  },
+  {
+    key:'ipadpro13', name:'iPad Pro 13吋 M5', giftBanner:5950, giftSplit:3180,
+    giftText:'買就送市價5950好禮，市價3090 Microsoft 365 Personal 個人版一年盒裝（257407，拆1750），市價1080 LAUT iPad Pro 13吋多角度保護殼（黑270309，灰270310，粉270311，拆610），市價800 Riivan iPad Air/Pro 13吋亮面保護貼（249745，拆330），市價980 Riivan 65W GaN氮化鎵充電器（黑254371，白254372，拆490），以上共拆3180，可換ACPP或JC',
+    products:[
+      {pid:'263655',color:'太空黑',spec:'Wi-Fi 256GB',price:50900,edu:3400},
+      {pid:'263656',color:'銀',spec:'Wi-Fi 256GB',price:50900,edu:3400},
+      {pid:'263657',color:'太空黑',spec:'Wi-Fi 512GB',price:57900,edu:3400},
+      {pid:'263658',color:'銀',spec:'Wi-Fi 512GB',price:57900,edu:3400},
+      {pid:'263659',color:'太空黑',spec:'Wi-Fi 1TB',price:71900,edu:3400},
+      {pid:'263660',color:'銀',spec:'Wi-Fi 1TB',price:71900,edu:3400},
+      {pid:'263661',color:'太空黑',spec:'Wi-Fi 2TB',price:89400,edu:3400},
+      {pid:'263662',color:'銀',spec:'Wi-Fi 2TB',price:89400,edu:3400},
+      {pid:'263663',color:'太空黑',spec:'Wi-Fi Nano 1TB',price:75400,edu:3400},
+      {pid:'263664',color:'銀',spec:'Wi-Fi Nano 1TB',price:75400,edu:3400},
+      {pid:'263665',color:'太空黑',spec:'Wi-Fi Nano 2TB',price:92900,edu:3400},
+      {pid:'263666',color:'銀',spec:'Wi-Fi Nano 2TB',price:92900,edu:3400},
+      {pid:'263667',color:'太空黑',spec:'Wi-Fi+5G 256GB',price:57900,edu:3400},
+      {pid:'263668',color:'銀',spec:'Wi-Fi+5G 256GB',price:57900,edu:3400},
+      {pid:'263669',color:'太空黑',spec:'Wi-Fi+5G 512GB',price:64900,edu:3400},
+      {pid:'263670',color:'銀',spec:'Wi-Fi+5G 512GB',price:64900,edu:3400},
+      {pid:'263671',color:'太空黑',spec:'Wi-Fi+5G 1TB',price:78900,edu:3400},
+      {pid:'263672',color:'銀',spec:'Wi-Fi+5G 1TB',price:78900,edu:3400},
+      {pid:'263673',color:'太空黑',spec:'Wi-Fi+5G 2TB',price:96400,edu:3400},
+      {pid:'263674',color:'銀',spec:'Wi-Fi+5G 2TB',price:96400,edu:3400},
+      {pid:'263675',color:'太空黑',spec:'Wi-Fi+5G Nano 1TB',price:82400,edu:3400},
+      {pid:'263676',color:'銀',spec:'Wi-Fi+5G Nano 1TB',price:82400,edu:3400},
+      {pid:'263677',color:'太空黑',spec:'Wi-Fi+5G Nano 2TB',price:99900,edu:3400},
+      {pid:'263678',color:'銀',spec:'Wi-Fi+5G Nano 2TB',price:99900,edu:3400},
+    ]
+  },
+];
+
+function fmt(n){ return '$'+n.toLocaleString(); }
+
+function toggleGroup(key){
+  if(btsOpen.has(key)) btsOpen.delete(key); else btsOpen.add(key);
+  updateBTSResults();
+}
+
+function updateBTSResults(){
+  const q = btsQuery.trim().toLowerCase();
+  const el = document.getElementById('bts-results');
+  if(!el) return;
+
+  const groupsToShow = BTS_GROUPS.map(g => {
+    const products = q
+      ? g.products.filter(p => [p.pid, p.color, p.spec, g.name].some(v => String(v).toLowerCase().includes(q)))
+      : g.products;
+    return {...g, products};
+  }).filter(g => g.products.length > 0);
+
+  if(q && groupsToShow.length){
+    groupsToShow.forEach(g => btsOpen.add(g.key));
+  }
+
+  if(groupsToShow.length === 0){
+    el.innerHTML = `<div class="empty">找不到符合的商品</div>`;
+    return;
+  }
+
+  el.innerHTML = groupsToShow.map(g => {
+    const open = btsOpen.has(g.key);
+    const rows = g.products.map(p => `
+      <tr class="search-row">
+        <td data-label="貨號" style="padding:10px 8px;font-family:ui-monospace,monospace;font-weight:700;color:var(--blue);font-size:15px;white-space:nowrap">${p.pid}</td>
+        <td data-label="顏色" style="padding:10px 8px;white-space:nowrap">${p.color}</td>
+        <td data-label="規格" style="padding:10px 8px;color:var(--gray);font-size:13px;white-space:nowrap">${p.spec}</td>
+        <td data-label="售價" style="padding:10px 8px;text-align:right;white-space:nowrap">${fmt(p.price)}</td>
+        <td data-label="教育折抵" style="padding:10px 8px;text-align:right;color:var(--green);font-weight:700;white-space:nowrap">-${fmt(p.edu)}</td>
+        <td data-label="促銷價" style="padding:10px 8px;text-align:right;font-weight:700;white-space:nowrap">${fmt(p.price)}</td>
+        <td data-label="贈品" style="padding:10px 8px;font-size:12px;color:#b45309">🎁 買就送市價${g.giftBanner.toLocaleString()}好禮（明細見下方）</td>
+      </tr>`).join('');
+    return `
+    <div class="bts-card" data-jump="${g.key}">
+      <div class="bts-hdr" onclick="toggleGroup('${g.key}')">
+        <div class="bts-hdr-left">
+          <span class="bts-name">${g.name}</span>
+          <span class="bts-gift-banner">🎁 買就送市價${g.giftBanner.toLocaleString()}好禮</span>
+          <span class="bts-count">共 ${g.products.length} 項</span>
+        </div>
+        <span class="bts-toggle">${open ? '收合 ▲' : '展開 ▼'}</span>
+      </div>
+      <div class="bts-body ${open ? 'open' : ''}">
+        <div class="search-table-wrap" style="overflow-x:auto">
+          <table class="search-table" style="width:auto;min-width:100%;border-collapse:collapse;font-size:14px">
+            <thead>
+              <tr style="background:var(--light);border-bottom:1px solid var(--border)">
+                <th style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">貨號</th>
+                <th style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">顏色</th>
+                <th style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">規格</th>
+                <th style="padding:10px 8px;text-align:right;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">售價</th>
+                <th style="padding:10px 8px;text-align:right;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">教育折抵</th>
+                <th style="padding:10px 8px;text-align:right;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">促銷價</th>
+                <th style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px">贈品</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+        <div class="bts-gift-box"><b>贈品明細：</b>${g.giftText}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderBTS(){
+  document.getElementById('mc').innerHTML = `
+    <div class="sec-hdr"><div>
+      <div class="sec-title">BTS開學季優惠 <span style="font-size:15px;font-weight:700;color:var(--orange);background:var(--orange-bg);padding:2px 10px;border-radius:8px;margin-left:8px">0717–0731</span></div>
+      <div class="sec-sub">共 8 個系列 · 買機送好禮，教育折抵可疊加，贈品可換ACPP或JC</div>
+    </div></div>
+    <div class="card" style="padding:16px 20px">
+      <input id="bts-search" type="text" placeholder="搜尋關鍵字…（如 MacBook Air、267371、太空黑）"
+        style="width:100%;max-width:480px;padding:.45em .8em;border:1px solid var(--border);border-radius:6px;font-size:.95em;box-sizing:border-box;outline:none"
+        value="${btsQuery}"
+        oninput="btsQuery=this.value;updateBTSResults()">
+      <div style="margin-top:.6em;display:flex;flex-wrap:wrap;gap:.4em">
+        ${BTS_GROUPS.map(g=>`<button
+          onclick="document.getElementById('bts-search').value='';btsQuery='';BTS_GROUPS.forEach(x=>btsOpen.delete(x.key));btsOpen.add('${g.key}');updateBTSResults();document.querySelector('[data-jump=\\'${g.key}\\']')?.scrollIntoView({behavior:'smooth'})"
+          style="padding:.3em .75em;font-size:.8em;border:1px solid var(--border);border-radius:20px;background:var(--white);color:var(--gray);cursor:pointer;white-space:nowrap">
+          ${g.name}
+        </button>`).join('')}
+      </div>
+    </div>
+    <div id="bts-results"></div>`;
+  updateBTSResults();
+}
+
+renderBTS();
+</script>
+</body>
+</html>
