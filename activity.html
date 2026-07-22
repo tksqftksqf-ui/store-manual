@@ -27,28 +27,27 @@ let activityCat = 'all';
 
 const ACTIVITY_ITEMS = [
   // iPhone
-  {cat:'iPhone', series:'iPhone 16e',        type:'現折',        discount:920,  pct:null, giftAmt:null, gift:null,               desc:'現折920',                                note:null},
-  {cat:'iPhone', series:'iPhone 17e',        type:'現折',        discount:1314, pct:null, giftAmt:null, gift:null,               desc:'現折1314起',                             note:null},
-  {cat:'iPhone', series:'iPhone 16',         type:'現折',        discount:1424, pct:null, giftAmt:null, gift:null,               desc:'現折1424起',                             note:'256G皆現有庫存售完為止'},
-  {cat:'iPhone', series:'iPhone 17',         type:'現折+贈品',   discount:1803, pct:null, giftAmt:null, gift:'市價550鏡頭貼（貨號262113/262114，拆290）',     desc:'現折1803起再送市價550鏡頭貼',            note:null},
-  {cat:'iPhone', series:'iPhone Air',        type:'現折',        discount:2952, pct:null, giftAmt:null, gift:null,               desc:'現折2952起',                             note:'皆現有庫存售完為止'},
-  {cat:'iPhone', series:'iPhone 17 Pro',     type:'滿萬送配件金', discount:null, pct:null, giftAmt:500, gift:null,               desc:'滿萬送500配件金',                        note:null},
-  {cat:'iPhone', series:'iPhone 17 Pro Max', type:'現折+贈品',   discount:1120, pct:null, giftAmt:null, gift:'市價1580 UAG保護殼（貨號261982，拆900）', desc:'現折1120起再送市價1580 UAG保護殼',       note:null},
+  {cat:'iPhone', series:'iPhone 16e',        type:'現折',        discount:736,  pct:null, giftAmt:null, gift:null,               desc:'現折736',                                note:null},
+  {cat:'iPhone', series:'iPhone 17e',        type:'現折+贈品',   discount:1024, pct:null, giftAmt:null, gift:'市價550充電器（貨號267696，拆290）', desc:'現折1024起再送市價550充電器',            note:null},
+  {cat:'iPhone', series:'iPhone 16',         type:'現折',        discount:1295, pct:null, giftAmt:null, gift:null,               desc:'現折1295起',                             note:'256G皆現有庫存售完為止'},
+  {cat:'iPhone', series:'iPhone 17',         type:'現折+贈品',   discount:1274, pct:null, giftAmt:null, gift:'市價990保護貼（貨號262117，拆370）',     desc:'現折1274起再送市價990保護貼',            note:null},
+  {cat:'iPhone', series:'iPhone Air',        type:'現折',        discount:2583, pct:null, giftAmt:null, gift:null,               desc:'現折2583起',                             note:'皆現有庫存售完為止'},
+  {cat:'iPhone', series:'iPhone 17 Pro',     type:'現折+贈品',   discount:756,  pct:null, giftAmt:null, gift:'市價1499 UAG保護殼貼組（貨號267705，拆840）', desc:'現折756起再送市價1499 UAG保護殼貼組', note:null},
+  {cat:'iPhone', series:'iPhone 17 Pro Max', type:'現折+贈品',   discount:1117, pct:null, giftAmt:null, gift:'市價499鏡頭環（貨號261706，拆230）', desc:'現折1117起再送市價499鏡頭環',       note:null},
   // Mac
   {cat:'Mac', series:'MacBook Neo 13',        type:'滿萬送配件金', discount:null, pct:null, giftAmt:500, gift:null, desc:'滿萬送500配件金', note:null},
-  {cat:'Mac', series:'MacBook Air 13 M5',     type:'現折+贈品',    discount:1000, pct:null, giftAmt:null, gift:'市價3090 Office365（貨號257407，拆1750）', desc:'現折1000再送市價3090 Office365', note:'限量200'},
+  {cat:'Mac', series:'MacBook Air 13 M5',     type:'現折+贈品',    discount:1000, pct:null, giftAmt:null, gift:'市價3090 Office365（貨號257407，拆1750）', desc:'現折1000再送市價3090 Office365', note:null},
   {cat:'Mac', series:'MacBook Air 15 M5',     type:'現折+贈品',    discount:1000, pct:null, giftAmt:null, gift:'市價3090 Office365（貨號257407，拆1750）', desc:'現折1000再送市價3090 Office365', note:null},
   {cat:'Mac', series:'MacBook Pro 14 M5',     type:'現折',         discount:3245, pct:null, giftAmt:null, gift:null, desc:'現折3245起',      note:null},
   {cat:'Mac', series:'MacBook Pro 16 M5 Pro', type:'現折',         discount:3996, pct:null, giftAmt:null, gift:null, desc:'現折3996起',      note:null},
   {cat:'Mac', series:'iMac M4',               type:'折扣%',        discount:null, pct:'5%', giftAmt:null, gift:null, desc:'現折5%',          note:null},
   {cat:'Mac', series:'Mac mini M4',           type:'暫無交期',     discount:null, pct:null, giftAmt:null, gift:null, desc:'貨況不穩、原價',  note:null},
   {cat:'Mac', series:'Mac Studio',            type:'暫無交期',     discount:null, pct:null, giftAmt:null, gift:null, desc:'暫無交期',        note:null},
-  {cat:'Mac', series:'Studio Display',        type:'現折',         discount:3174, pct:null, giftAmt:null, gift:null, desc:'現折3174起',      note:null},
+  {cat:'Mac', series:'Studio Display',        type:'現折',         discount:2645, pct:null, giftAmt:null, gift:null, desc:'現折2645起',      note:null},
   // iPad
-  {cat:'iPad', series:'iPad mini 7th',      type:'現折',       discount:1194, pct:null, giftAmt:null, gift:null,          desc:'現折1194起',                    note:null},
-  {cat:'iPad', series:'iPad 11吋',          type:'現折+贈品',  discount:901,  pct:null, giftAmt:null, gift:'市價790保護貼（貨號235836，拆340）', desc:'現折901起再送市價790保護貼',    note:null},
-  {cat:'iPad', series:'iPad Air 11吋 M3',   type:'無活動',     discount:null, pct:null, giftAmt:null, gift:null,          desc:'皆現有庫存售完為止',            note:'庫存售完為止'},
-  {cat:'iPad', series:'iPad Air 13吋 M3',   type:'無活動',     discount:null, pct:null, giftAmt:null, gift:null,          desc:'皆現有庫存售完為止',            note:'庫存售完為止'},
+  {cat:'iPad', series:'iPad mini 7th',      type:'現折',       discount:995,  pct:null, giftAmt:null, gift:null,          desc:'現折995起',                     note:null},
+  {cat:'iPad', series:'iPad 11吋',          type:'現折',       discount:894,  pct:null, giftAmt:null, gift:null,          desc:'現折894起',                     note:null},
+  {cat:'iPad', series:'iPad Air 11吋 M3',   type:'現折',       discount:2701, pct:null, giftAmt:null, gift:null,          desc:'現折2701（現有庫存售完為止）',  note:'現有庫存售完為止'},
   {cat:'iPad', series:'iPad Air 11吋 M4',   type:'現折',       discount:1743, pct:null, giftAmt:null, gift:null,          desc:'現折1743起',                    note:null},
   {cat:'iPad', series:'iPad Air 13吋 M4',   type:'現折',       discount:2233, pct:null, giftAmt:null, gift:null,          desc:'現折2233起',                    note:null},
   {cat:'iPad', series:'iPad Pro 11吋 M5',   type:'現折+贈品',  discount:1995, pct:null, giftAmt:null, gift:'市價3090 Office365（貨號257407，拆1750）', desc:'現折1995起再送市價3090 Office365', note:null},
@@ -56,20 +55,20 @@ const ACTIVITY_ITEMS = [
   // 原廠配件
   {cat:'原廠配件', series:'原廠配件（全系列）', type:'主機加購折扣', discount:null, pct:'5%', giftAmt:null, gift:null, desc:'主機加購可享5%優惠', note:null},
   // Apple Watch
-  {cat:'Apple Watch', series:'Apple Watch SE 3',    type:'現折', discount:632,  pct:null, giftAmt:null, gift:null, desc:'現折632起',  note:null},
-  {cat:'Apple Watch', series:'Apple Watch S11',     type:'現折', discount:1032, pct:null, giftAmt:null, gift:null, desc:'現折1032起', note:null},
-  {cat:'Apple Watch', series:'Apple Watch Ultra 3', type:'現折', discount:2421, pct:null, giftAmt:null, gift:null, desc:'現折2421起', note:null},
+  {cat:'Apple Watch', series:'Apple Watch SE 3',    type:'現折', discount:553,  pct:null, giftAmt:null, gift:null, desc:'現折553起',  note:null},
+  {cat:'Apple Watch', series:'Apple Watch S11',     type:'現折', discount:903,  pct:null, giftAmt:null, gift:null, desc:'現折903起', note:null},
+  {cat:'Apple Watch', series:'Apple Watch Ultra 3', type:'現折', discount:2152, pct:null, giftAmt:null, gift:null, desc:'現折2152起', note:null},
   // 耳機
-  {cat:'耳機', series:'AirPods Pro 3',   type:'現折',  discount:824,  pct:null, giftAmt:null, gift:null, desc:'現折824',  note:'限量300'},
-  {cat:'耳機', series:'AirPods 4',       type:'現折',  discount:510,  pct:null, giftAmt:null, gift:null, desc:'現折510',  note:'限量300'},
-  {cat:'耳機', series:'AirPods 4 降噪',  type:'現折',  discount:700,  pct:null, giftAmt:null, gift:null, desc:'現折700',  note:'限量300'},
+  {cat:'耳機', series:'AirPods Pro 3',   type:'現折',  discount:800,  pct:null, giftAmt:null, gift:null, desc:'現折800',  note:null},
+  {cat:'耳機', series:'AirPods 4',       type:'現折',  discount:500,  pct:null, giftAmt:null, gift:null, desc:'現折500',  note:null},
+  {cat:'耳機', series:'AirPods 4 降噪',  type:'現折',  discount:600,  pct:null, giftAmt:null, gift:null, desc:'現折600',  note:null},
   {cat:'耳機', series:'AirPods Max',     type:'現折',  discount:2991, pct:null, giftAmt:null, gift:null, desc:'現折2991', note:'現有庫存售完為止'},
-  {cat:'耳機', series:'AirPods Max 2',   type:'現折',  discount:900,  pct:null, giftAmt:null, gift:null, desc:'現折900',  note:null},
+  {cat:'耳機', series:'AirPods Max 2',   type:'現折',  discount:899,  pct:null, giftAmt:null, gift:null, desc:'現折899',  note:null},
   // 配件
-  {cat:'配件', series:'AirTag',      type:'現折', discount:211, pct:null, giftAmt:null, gift:null, desc:'現折211起（1件裝211／4件裝746）', note:null},
-  {cat:'配件', series:'AirTag 2',    type:'現折', discount:99,  pct:null, giftAmt:null, gift:null, desc:'現折99起（4件裝339）', note:'Surpass卡限定1件裝另享現折191(促銷價799)'},
-  {cat:'配件', series:'Apple TV 4K', type:'現折', discount:483, pct:null, giftAmt:null, gift:null, desc:'現折483起', note:null},
-  {cat:'配件', series:'HomePod',     type:'現折', discount:769, pct:null, giftAmt:null, gift:null, desc:'現折769', note:null},
+  {cat:'配件', series:'AirTag',      type:'現折', discount:746, pct:null, giftAmt:null, gift:null, desc:'現折746（4件裝）', note:null},
+  {cat:'配件', series:'AirTag 2',    type:'現折', discount:49,  pct:null, giftAmt:null, gift:null, desc:'現折49起（2-1件裝49／2-4件裝169）', note:null},
+  {cat:'配件', series:'Apple TV 4K', type:'現折', discount:345, pct:null, giftAmt:null, gift:null, desc:'現折345起', note:null},
+  {cat:'配件', series:'HomePod',     type:'現折', discount:549, pct:null, giftAmt:null, gift:null, desc:'現折549', note:null},
 ];
 function updateActivityResults(){
   const q = activityQuery.toLowerCase();
@@ -130,7 +129,7 @@ function renderActivity(){
   document.getElementById('mc').innerHTML = `
     <div class="sec-hdr"><div>
       <div class="sec-title">優惠活動</div>
-      <div class="sec-sub">活動檔期：0710–0720（2026/07/10 – 07/20）· 共 ${ACTIVITY_ITEMS.length} 筆</div>
+      <div class="sec-sub">活動檔期：0721–0731（2026/07/21 – 07/31）· 共 ${ACTIVITY_ITEMS.length} 筆</div>
     </div></div>
     <div class="card" style="padding:16px 20px">
       <input id="act-search" type="text" placeholder="搜尋關鍵字…（如 iPhone、現折、保護貼）"
