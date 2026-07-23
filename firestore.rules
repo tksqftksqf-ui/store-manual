@@ -3,8 +3,12 @@ service cloud.firestore {
   match /databases/{database}/documents {
     match /planograms/{storeId} {
       allow read: if true;
-      allow write: if request.resource.data.updateDate is string
-                   && request.resource.data.pages is map;
+      allow write: if request.resource.data.updateDate is string;
+
+      match /pages/{pageId} {
+        allow read: if true;
+        allow write: if request.resource.data.src is string;
+      }
     }
   }
 }

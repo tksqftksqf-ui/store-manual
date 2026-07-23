@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
-import { getFirestore, doc, getDoc, setDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+import { getFirestore, doc, setDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCaeYnq8jW1Tw12leHgRO7POENf8DKXIWs",
@@ -37,23 +37,33 @@ export function checkPassword(pw){
   return pw === UPLOAD_PASSWORD;
 }
 
-export async function loadAllPlanograms(){
+// 每間店的資料拆成：主文件只放 updateDate，圖片各自存成子集合 pages/{頁碼} 的獨立文件
+// 原因：Firestore 單一文件上限 1MB，一間店 7 張圖加總常超過此限制，拆開後每張圖各自獨立不受影響
+
+export async function loadStoreMeta(){
   const snap = await getDocs(collection(db, 'planograms'));
   const result = {};
   snap.forEach(d => { result[d.id] = d.data(); });
   return result;
 }
 
+export async function loadStorePages(storeName){
+  const snap = await getDocs(collection(db, 'planograms', storeName, 'pages'));
+  const pages = {};
+  snap.forEach(d => { pages[d.id] = d.data().src; });
+  return pages;
+}
+
 export async function uploadPlanogramPage(storeName, pageNum, base64Str){
-  const ref = doc(db, 'planograms', storeName);
-  const existing = await getDoc(ref);
-  const pages = existing.exists() ? Object.assign({}, existing.data().pages) : {};
-  pages[String(pageNum)] = base64Str;
-  await setDoc(ref, { updateDate: todayStr(), pages });
+  await setDoc(doc(db, 'planograms', storeName), { updateDate: todayStr() }, { merge: true });
+  await setDoc(doc(db, 'planograms', storeName, 'pages', String(pageNum)), { src: base64Str });
 }
 
 export async function migrateStoreData(storeName, updateDate, pages){
-  await setDoc(doc(db, 'planograms', storeName), { updateDate, pages });
+  await setDoc(doc(db, 'planograms', storeName), { updateDate });
+  for (const pageNum of Object.keys(pages)) {
+    await setDoc(doc(db, 'planograms', storeName, 'pages', pageNum), { src: pages[pageNum] });
+  }
 }
 
 export function compressImage(file, maxWidth, quality){

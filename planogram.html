@@ -22,30 +22,34 @@
 <div class="main" id="mc"><div class="empty">載入中...</div></div>
 
 <script type="module">
-import { PAGE_DEFS, STORE_NAMES, checkPassword, loadAllPlanograms, uploadPlanogramPage, compressImage } from './shared/firebase-planogram.js';
+import { PAGE_DEFS, STORE_NAMES, checkPassword, loadStoreMeta, loadStorePages, uploadPlanogramPage, compressImage } from './shared/firebase-planogram.js';
 
-let storeData = {};
+let storeMeta = {};
+let currentPages = {};
 let currentStore = STORE_NAMES[0];
 let unlocked = false;
 
 async function init(){
-  storeData = await loadAllPlanograms();
+  storeMeta = await loadStoreMeta();
+  await loadCurrentStorePages();
   renderPlanogramTab();
 }
 
+async function loadCurrentStorePages(){
+  currentPages = await loadStorePages(currentStore);
+}
+
 function getPages(){
-  const d = storeData[currentStore];
-  if(!d || !d.pages) return [];
   return PAGE_DEFS
-    .filter(def => d.pages[String(def.page)])
-    .map(def => ({ page: def.page, label: def.label, src: d.pages[String(def.page)] }));
+    .filter(def => currentPages[String(def.page)])
+    .map(def => ({ page: def.page, label: def.label, src: currentPages[String(def.page)] }));
 }
 
 function renderPlanogramTab(){
   const storeOptions = STORE_NAMES.map(name =>
     `<option value="${name}" ${name===currentStore?'selected':''}>${name}</option>`
   ).join('');
-  const data = storeData[currentStore] || {};
+  const data = storeMeta[currentStore] || {};
   document.getElementById('mc').innerHTML = `
     <div class="sec-hdr">
       <div>
@@ -64,8 +68,10 @@ function renderPlanogramTab(){
   `;
 }
 
-function switchStore(name){
+async function switchStore(name){
   currentStore = name;
+  document.getElementById('mc').innerHTML = `<div class="empty">載入中...</div>`;
+  await loadCurrentStorePages();
   renderPlanogramTab();
 }
 
@@ -127,11 +133,9 @@ function openUpload(){
 }
 
 function renderUploadSlots(){
-  const data = storeData[currentStore] || {};
-  const pages = data.pages || {};
   const rows = PAGE_DEFS.map(def => `
     <div class="upload-slot">
-      <span class="upload-slot-label">${def.label}${pages[String(def.page)] ? ' ✓' : ''}</span>
+      <span class="upload-slot-label">${def.label}${currentPages[String(def.page)] ? ' ✓' : ''}</span>
       <input type="file" accept="image/*" data-page="${def.page}" onchange="window.handleFileSelect(event)">
     </div>
   `).join('');
@@ -169,7 +173,8 @@ async function handleFileSelect(evt){
   try {
     const compressed = await compressImage(file);
     await uploadPlanogramPage(currentStore, pageNum, compressed);
-    storeData = await loadAllPlanograms();
+    storeMeta = await loadStoreMeta();
+    await loadCurrentStorePages();
     msgEl.textContent = '✓ 上傳成功';
     openUpload();
     renderPlanogramTab();
