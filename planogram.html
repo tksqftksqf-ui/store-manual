@@ -105,7 +105,8 @@ function expandAll(){ currentPages.forEach((pg,idx) => { document.getElementById
 function collapseAll(){ currentPages.forEach((pg,idx) => { document.getElementById('pbody-'+idx).style.display='none'; document.getElementById('ptog-'+idx).textContent='▼'; }); }
 
 function openUpload(){
-  pendingZones = null;
+  const existing = document.getElementById('upload-overlay');
+  if(existing) existing.remove();
   const overlay = document.createElement('div');
   overlay.className = 'upload-overlay';
   overlay.id = 'upload-overlay';
