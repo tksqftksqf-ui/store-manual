@@ -227,6 +227,7 @@ async function submitZones(){
     msgEl.textContent = `✓ 上傳成功，共 ${toUpload.length} 個櫃位。`;
     pendingZones = null;
     renderPlanogramTab();
+    setTimeout(closeUpload, 1200);
   } catch(e){
     msgEl.textContent = '✗ 上傳失敗：' + e.message;
   }
