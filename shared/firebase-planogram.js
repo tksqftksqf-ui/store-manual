@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
-import { getFirestore, doc, setDoc, deleteDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+import { getFirestore, doc, setDoc, deleteDoc, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCaeYnq8jW1Tw12leHgRO7POENf8DKXIWs",
@@ -44,7 +44,8 @@ export async function loadStoreMeta(){
 }
 
 export async function loadStorePages(storeName){
-  const snap = await getDocs(collection(db, 'planograms', storeName, 'pages'));
+  const q = query(collection(db, 'planograms', storeName, 'pages'), orderBy('order'));
+  const snap = await getDocs(q);
   const pages = [];
   snap.forEach(d => { pages.push({ label: d.data().label || d.id, src: d.data().src }); });
   return pages;
@@ -57,9 +58,9 @@ export async function clearStorePages(storeName){
   await Promise.all(deletions);
 }
 
-export async function uploadPlanogramPage(storeName, zoneName, base64Str){
+export async function uploadPlanogramPage(storeName, zoneName, base64Str, order){
   await setDoc(doc(db, 'planograms', storeName), { updateDate: todayStr() }, { merge: true });
-  await setDoc(doc(db, 'planograms', storeName, 'pages', zoneNameToDocId(zoneName)), { label: zoneName, src: base64Str });
+  await setDoc(doc(db, 'planograms', storeName, 'pages', zoneNameToDocId(zoneName)), { label: zoneName, src: base64Str, order });
 }
 
 export function compressImage(file, maxWidth, quality){

@@ -219,7 +219,7 @@ async function submitZones(){
   try {
     await clearStorePages(currentStore);
     for(let i = 0; i < toUpload.length; i++){
-      await uploadPlanogramPage(currentStore, toUpload[i].zoneName, toUpload[i].imageDataUrl);
+      await uploadPlanogramPage(currentStore, toUpload[i].zoneName, toUpload[i].imageDataUrl, i);
       msgEl.textContent = `上傳中 ${i+1}/${toUpload.length}...`;
     }
     storeMeta = await loadStoreMeta();
