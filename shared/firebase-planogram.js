@@ -15,16 +15,6 @@ const db = getFirestore(app);
 
 const UPLOAD_PASSWORD = "TaiwanCES";
 
-export const PAGE_DEFS = [
-  { page: 1, label: '第 1 頁 · 門市整體配置總覽' },
-  { page: 5, label: '第 5 頁 · Table 3 · Desktops + Notebooks Planogram' },
-  { page: 6, label: '第 6 頁 · Table 1 · iPhone + Watch Planogram' },
-  { page: 7, label: '第 7 頁 · Table 2 · iPad + HomePod Planogram' },
-  { page: 8, label: '第 8 頁 · Flex Bar · iPad + iPhone + Glass Case Planogram' },
-  { page: 9, label: '第 9 頁 · Flex Wall (左) · Mac + Glass Case Planogram' },
-  { page: 10, label: '第 10 頁 · Flex Wall (右) · Apple TV + Glass Case Planogram' },
-];
-
 export const STORE_NAMES = ['新光華','五甲店','自由店','華榮店','岡山店','右昌店','台南永華二店','台南中華店','斗六店','全國電子屏東店','全國電子民族店'];
 
 function todayStr(){
@@ -37,8 +27,14 @@ export function checkPassword(pw){
   return pw === UPLOAD_PASSWORD;
 }
 
-// 每間店的資料拆成：主文件只放 updateDate，圖片各自存成子集合 pages/{頁碼} 的獨立文件
-// 原因：Firestore 單一文件上限 1MB，一間店 7 張圖加總常超過此限制，拆開後每張圖各自獨立不受影響
+// Firestore 文件ID不能含「/」，其餘符號（•、空白、+）皆合法；仍做保守轉換避免過長或特殊字元問題，
+// 顯示用文字另存 label 欄位保留原始櫃位名稱
+export function zoneNameToDocId(zoneName){
+  return zoneName.replace(/\//g, '-').slice(0, 300);
+}
+
+// 每間店的資料拆成：主文件只放 updateDate，圖片各自存成子集合 pages/{櫃位名稱} 的獨立文件
+// 原因：Firestore 單一文件上限 1MB，一間店多張圖加總常超過此限制，拆開後每張圖各自獨立不受影響
 
 export async function loadStoreMeta(){
   const snap = await getDocs(collection(db, 'planograms'));
@@ -49,21 +45,14 @@ export async function loadStoreMeta(){
 
 export async function loadStorePages(storeName){
   const snap = await getDocs(collection(db, 'planograms', storeName, 'pages'));
-  const pages = {};
-  snap.forEach(d => { pages[d.id] = d.data().src; });
+  const pages = [];
+  snap.forEach(d => { pages.push({ label: d.data().label || d.id, src: d.data().src }); });
   return pages;
 }
 
-export async function uploadPlanogramPage(storeName, pageNum, base64Str){
+export async function uploadPlanogramPage(storeName, zoneName, base64Str){
   await setDoc(doc(db, 'planograms', storeName), { updateDate: todayStr() }, { merge: true });
-  await setDoc(doc(db, 'planograms', storeName, 'pages', String(pageNum)), { src: base64Str });
-}
-
-export async function migrateStoreData(storeName, updateDate, pages){
-  await setDoc(doc(db, 'planograms', storeName), { updateDate });
-  for (const pageNum of Object.keys(pages)) {
-    await setDoc(doc(db, 'planograms', storeName, 'pages', pageNum), { src: pages[pageNum] });
-  }
+  await setDoc(doc(db, 'planograms', storeName, 'pages', zoneNameToDocId(zoneName)), { label: zoneName, src: base64Str });
 }
 
 export function compressImage(file, maxWidth, quality){

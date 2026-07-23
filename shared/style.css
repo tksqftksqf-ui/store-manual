@@ -72,7 +72,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue"
 .empty{text-align:center;padding:40px;color:var(--gray);font-size:14px}
 
 .upload-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;z-index:200;padding:20px}
-.upload-modal{background:var(--white);border-radius:16px;padding:24px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto}
+.upload-modal{background:var(--white);border-radius:16px;padding:24px;max-width:560px;width:100%;max-height:85vh;overflow-y:auto}
 .upload-modal-title{font-size:15px;font-weight:700;margin-bottom:16px}
 .upload-row{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
 .upload-row label{font-size:12px;font-weight:600;color:var(--gray)}
@@ -81,6 +81,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue"
 .upload-slot{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--light)}
 .upload-slot-label{font-size:12.5px;flex:1}
 .upload-slot input[type="file"]{font-size:11px;max-width:150px}
+.upload-thumb{width:64px;height:64px;object-fit:cover;border-radius:8px;border:1px solid var(--border);flex-shrink:0}
+.upload-zone-input{flex:1;padding:8px 10px;border-radius:8px;border:1.5px solid var(--border);font-size:12.5px;font-family:inherit}
+.upload-skip-label{font-size:11px;color:var(--gray);display:flex;align-items:center;gap:4px;flex-shrink:0;white-space:nowrap}
 .upload-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
 .search-thead-th{background:var(--light)}
 

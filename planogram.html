@@ -22,12 +22,14 @@
 <div class="main" id="mc"><div class="empty">載入中...</div></div>
 
 <script type="module">
-import { PAGE_DEFS, STORE_NAMES, checkPassword, loadStoreMeta, loadStorePages, uploadPlanogramPage, compressImage } from './shared/firebase-planogram.js';
+import { STORE_NAMES, checkPassword, loadStoreMeta, loadStorePages, uploadPlanogramPage } from './shared/firebase-planogram.js';
+import { extractPagesFromPdf, groupPagesByZone } from './shared/pdf-planogram.js';
 
 let storeMeta = {};
-let currentPages = {};
+let currentPages = [];
 let currentStore = STORE_NAMES[0];
 let unlocked = false;
+let pendingZones = null; // PDF 解析後、送出前的待確認清單
 
 async function init(){
   storeMeta = await loadStoreMeta();
@@ -37,12 +39,6 @@ async function init(){
 
 async function loadCurrentStorePages(){
   currentPages = await loadStorePages(currentStore);
-}
-
-function getPages(){
-  return PAGE_DEFS
-    .filter(def => currentPages[String(def.page)])
-    .map(def => ({ page: def.page, label: def.label, src: currentPages[String(def.page)] }));
 }
 
 function renderPlanogramTab(){
@@ -62,7 +58,7 @@ function renderPlanogramTab(){
       <select id="store-select" onchange="window.switchStore(this.value)">${storeOptions}</select>
       <button class="btn-sm" onclick="window.expandAll()">全部展開</button>
       <button class="btn-sm" onclick="window.collapseAll()">全部收合</button>
-      <button class="btn-sm" onclick="window.openUpload()">📤 上傳／更新圖示</button>
+      <button class="btn-sm" onclick="window.openUpload()">📤 上傳 Planogram PDF</button>
     </div>
     ${renderPlanogram()}
   `;
@@ -76,17 +72,16 @@ async function switchStore(name){
 }
 
 function renderPlanogram(){
-  const pages = getPages();
-  if(pages.length === 0){
+  if(currentPages.length === 0){
     return `<div class="empty">此門市尚未上傳 Planogram 圖示</div>`;
   }
-  const cards = pages.map(pg => `
-    <div class="plan-card" id="pcard-${pg.page}">
-      <div class="plan-hdr" onclick="window.togglePlan(${pg.page})">
+  const cards = currentPages.map((pg, idx) => `
+    <div class="plan-card" id="pcard-${idx}">
+      <div class="plan-hdr" onclick="window.togglePlan(${idx})">
         <span class="plan-label">${pg.label}</span>
-        <span class="plan-toggle" id="ptog-${pg.page}">${pg.label.includes('門市整體配置總覽')?'▲':'▼'}</span>
+        <span class="plan-toggle" id="ptog-${idx}">${idx===0?'▲':'▼'}</span>
       </div>
-      <div class="plan-body" id="pbody-${pg.page}" style="${pg.label.includes('門市整體配置總覽')?'':'display:none'}">
+      <div class="plan-body" id="pbody-${idx}" style="${idx===0?'':'display:none'}">
         <img src="${pg.src}" class="plan-img" loading="lazy" alt="${pg.label}">
       </div>
     </div>
@@ -94,9 +89,9 @@ function renderPlanogram(){
   return cards;
 }
 
-function togglePlan(page){
-  const body = document.getElementById('pbody-'+page);
-  const tog  = document.getElementById('ptog-'+page);
+function togglePlan(idx){
+  const body = document.getElementById('pbody-'+idx);
+  const tog  = document.getElementById('ptog-'+idx);
   if(body.style.display === 'none'){
     body.style.display = 'block';
     tog.textContent = '▲';
@@ -106,16 +101,17 @@ function togglePlan(page){
   }
 }
 
-function expandAll(){ getPages().forEach(pg => { document.getElementById('pbody-'+pg.page).style.display='block'; document.getElementById('ptog-'+pg.page).textContent='▲'; }); }
-function collapseAll(){ getPages().forEach(pg => { document.getElementById('pbody-'+pg.page).style.display='none'; document.getElementById('ptog-'+pg.page).textContent='▼'; }); }
+function expandAll(){ currentPages.forEach((pg,idx) => { document.getElementById('pbody-'+idx).style.display='block'; document.getElementById('ptog-'+idx).textContent='▲'; }); }
+function collapseAll(){ currentPages.forEach((pg,idx) => { document.getElementById('pbody-'+idx).style.display='none'; document.getElementById('ptog-'+idx).textContent='▼'; }); }
 
 function openUpload(){
+  pendingZones = null;
   const overlay = document.createElement('div');
   overlay.className = 'upload-overlay';
   overlay.id = 'upload-overlay';
   overlay.innerHTML = `
     <div class="upload-modal">
-      <div class="upload-modal-title">上傳／更新「${currentStore}」的 Planogram 圖示</div>
+      <div class="upload-modal-title">上傳「${currentStore}」的 Planogram PDF</div>
       ${!unlocked ? `
         <div class="upload-row">
           <label>共用密碼</label>
@@ -126,30 +122,26 @@ function openUpload(){
           <button class="btn-sm" onclick="window.closeUpload()">取消</button>
           <button class="btn-sm" onclick="window.verifyPassword()">確認</button>
         </div>
-      ` : renderUploadSlots()}
+      ` : renderPdfPicker()}
     </div>
   `;
   document.body.appendChild(overlay);
 }
 
-function renderUploadSlots(){
-  const rows = PAGE_DEFS.map(def => `
-    <div class="upload-slot">
-      <span class="upload-slot-label">${def.label}${currentPages[String(def.page)] ? ' ✓' : ''}</span>
-      <input type="file" accept="image/*" data-page="${def.page}" onchange="window.handleFileSelect(event)">
-    </div>
-  `).join('');
+function renderPdfPicker(){
   return `
-    <div class="upload-msg" id="upload-msg"></div>
-    ${rows}
+    <div class="upload-msg" id="upload-msg">請選擇完整的 Planogram PDF 檔案，系統會自動辨識每頁對應的櫃位。</div>
+    <input type="file" accept="application/pdf" onchange="window.handlePdfSelect(event)">
+    <div id="upload-zone-list"></div>
     <div class="upload-actions">
-      <button class="btn-sm" onclick="window.closeUpload()">完成</button>
+      <button class="btn-sm" onclick="window.closeUpload()">取消</button>
     </div>
   `;
 }
 
 function closeUpload(){
   unlocked = false;
+  pendingZones = null;
   const el = document.getElementById('upload-overlay');
   if(el) el.remove();
 }
@@ -164,19 +156,73 @@ function verifyPassword(){
   }
 }
 
-async function handleFileSelect(evt){
+async function handlePdfSelect(evt){
   const file = evt.target.files[0];
-  const pageNum = evt.target.getAttribute('data-page');
   if(!file) return;
   const msgEl = document.getElementById('upload-msg');
-  msgEl.textContent = '壓縮並上傳中...';
+  msgEl.textContent = '正在解析 PDF，請稍候（頁數較多時可能需要 10~30 秒）...';
+  document.getElementById('upload-zone-list').innerHTML = '';
   try {
-    const compressed = await compressImage(file);
-    await uploadPlanogramPage(currentStore, pageNum, compressed);
+    const pages = await extractPagesFromPdf(file);
+    const zones = groupPagesByZone(pages);
+    if(zones.length === 0){
+      msgEl.textContent = '✗ 沒有偵測到任何陳列圖頁面，請確認 PDF 內容是否正確。';
+      return;
+    }
+    pendingZones = zones.map(z => ({ ...z, zoneName: z.zoneName, skip: false }));
+    msgEl.textContent = `偵測到 ${zones.length} 個陳列頁面，請確認櫃位名稱是否正確（可直接修改文字）：`;
+    renderZoneConfirmList();
+  } catch(e){
+    msgEl.textContent = '✗ PDF 解析失敗：' + e.message;
+  }
+}
+
+function renderZoneConfirmList(){
+  const rows = pendingZones.map((z, idx) => `
+    <div class="upload-slot">
+      <img src="${z.imageDataUrl}" class="upload-thumb" alt="第${z.pageNum}頁預覽">
+      <input type="text" class="upload-zone-input" id="zone-name-${idx}" value="${z.zoneName.replace(/"/g,'&quot;')}" ${z.skip?'disabled':''}>
+      <label class="upload-skip-label">
+        <input type="checkbox" ${z.skip?'checked':''} onchange="window.toggleSkip(${idx}, this.checked)">
+        略過此頁
+      </label>
+    </div>
+  `).join('');
+  document.getElementById('upload-zone-list').innerHTML = `
+    ${rows}
+    <div class="upload-actions">
+      <button class="btn-sm" onclick="window.closeUpload()">取消</button>
+      <button class="btn-sm" onclick="window.submitZones()">確認上傳</button>
+    </div>
+  `;
+}
+
+function toggleSkip(idx, checked){
+  pendingZones[idx].skip = checked;
+  document.getElementById('zone-name-'+idx).disabled = checked;
+}
+
+async function submitZones(){
+  const msgEl = document.getElementById('upload-msg');
+  const toUpload = pendingZones
+    .filter(z => !z.skip)
+    .map((z, i) => ({ ...z, zoneName: document.getElementById('zone-name-'+pendingZones.indexOf(z)).value.trim() }))
+    .filter(z => z.zoneName);
+  if(toUpload.length === 0){
+    msgEl.textContent = '沒有可上傳的頁面（全部已略過或名稱為空）。';
+    return;
+  }
+  msgEl.textContent = `上傳中 0/${toUpload.length}...`;
+  document.getElementById('upload-zone-list').innerHTML = '';
+  try {
+    for(let i = 0; i < toUpload.length; i++){
+      await uploadPlanogramPage(currentStore, toUpload[i].zoneName, toUpload[i].imageDataUrl);
+      msgEl.textContent = `上傳中 ${i+1}/${toUpload.length}...`;
+    }
     storeMeta = await loadStoreMeta();
     await loadCurrentStorePages();
-    msgEl.textContent = '✓ 上傳成功';
-    openUpload();
+    msgEl.textContent = `✓ 上傳成功，共 ${toUpload.length} 個櫃位。`;
+    pendingZones = null;
     renderPlanogramTab();
   } catch(e){
     msgEl.textContent = '✗ 上傳失敗：' + e.message;
@@ -190,7 +236,9 @@ window.collapseAll = collapseAll;
 window.openUpload = openUpload;
 window.closeUpload = closeUpload;
 window.verifyPassword = verifyPassword;
-window.handleFileSelect = handleFileSelect;
+window.handlePdfSelect = handlePdfSelect;
+window.toggleSkip = toggleSkip;
+window.submitZones = submitZones;
 
 init();
 </script>
