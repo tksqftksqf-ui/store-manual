@@ -69,13 +69,13 @@ function switchStore(name){
 
 function renderPlanogram(){
   const pages = STORE_PLANOGRAMS[currentStore].pages;
-  const cards = pages.map((pg, i) => `
+  const cards = pages.map(pg => `
     <div class="plan-card" id="pcard-${pg.page}">
       <div class="plan-hdr" onclick="togglePlan(${pg.page})">
         <span class="plan-label">${pg.label}</span>
-        <span class="plan-toggle" id="ptog-${pg.page}">▼</span>
+        <span class="plan-toggle" id="ptog-${pg.page}">${pg.label.includes('門市整體配置總覽')?'▲':'▼'}</span>
       </div>
-      <div class="plan-body" id="pbody-${pg.page}" style="${i===0?'':'display:none'}">
+      <div class="plan-body" id="pbody-${pg.page}" style="${pg.label.includes('門市整體配置總覽')?'':'display:none'}">
         <img src="${pg.src}" class="plan-img" loading="lazy" alt="${pg.label}">
       </div>
     </div>
