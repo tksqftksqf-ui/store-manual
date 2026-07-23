@@ -1,0 +1,10 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /planograms/{storeId} {
+      allow read: if true;
+      allow write: if request.resource.data.updateDate is string
+                   && request.resource.data.pages is map;
+    }
+  }
+}
