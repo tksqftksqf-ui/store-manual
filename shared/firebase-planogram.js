@@ -13,7 +13,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const UPLOAD_PASSWORD = "TaiwanCES";
+const UPLOAD_PASSWORD = "apple";
 
 export const STORE_NAMES = ['新光華','五甲店','自由店','華榮店','岡山店','右昌店','台南永華二店','台南中華店','斗六店','全國電子屏東店','全國電子民族店'];
 
