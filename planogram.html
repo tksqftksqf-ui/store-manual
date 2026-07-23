@@ -22,7 +22,7 @@
 <div class="main" id="mc"><div class="empty">載入中...</div></div>
 
 <script type="module">
-import { STORE_NAMES, checkPassword, loadStoreMeta, loadStorePages, uploadPlanogramPage } from './shared/firebase-planogram.js';
+import { STORE_NAMES, checkPassword, loadStoreMeta, loadStorePages, uploadPlanogramPage, clearStorePages } from './shared/firebase-planogram.js';
 import { extractPagesFromPdf, groupPagesByZone } from './shared/pdf-planogram.js';
 
 let storeMeta = {};
@@ -189,6 +189,7 @@ function renderZoneConfirmList(){
     </div>
   `).join('');
   document.getElementById('upload-zone-list').innerHTML = `
+    <div class="upload-msg" style="color:#c0392b">⚠️ 確認上傳後會清空「${currentStore}」目前所有的 Planogram 圖示，以這次上傳的內容為準。</div>
     ${rows}
     <div class="upload-actions">
       <button class="btn-sm" onclick="window.closeUpload()">取消</button>
@@ -212,9 +213,10 @@ async function submitZones(){
     msgEl.textContent = '沒有可上傳的頁面（全部已略過或名稱為空）。';
     return;
   }
-  msgEl.textContent = `上傳中 0/${toUpload.length}...`;
+  msgEl.textContent = `清除舊資料中...`;
   document.getElementById('upload-zone-list').innerHTML = '';
   try {
+    await clearStorePages(currentStore);
     for(let i = 0; i < toUpload.length; i++){
       await uploadPlanogramPage(currentStore, toUpload[i].zoneName, toUpload[i].imageDataUrl);
       msgEl.textContent = `上傳中 ${i+1}/${toUpload.length}...`;

@@ -7,8 +7,9 @@ service cloud.firestore {
 
       match /pages/{pageId} {
         allow read: if true;
-        allow write: if request.resource.data.src is string
-                     && request.resource.data.label is string;
+        allow create, update: if request.resource.data.src is string
+                              && request.resource.data.label is string;
+        allow delete: if true;
       }
     }
   }
