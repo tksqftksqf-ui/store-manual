@@ -7,9 +7,10 @@ async function extractPageTitle(page){
   const items = content.items;
   if(items.length === 0) return '';
   // 標題行是 y 座標最大（頁面最上方，pdf.js 座標原點在左下角）的那些文字項目
+  // 誤差容許值需夠寬：標題列裡的圓點符號「•」跟文字本身的基準線常有 2~3pt 落差（不同字型渲染高度不同）
   const maxY = Math.max(...items.map(it => it.transform[5]));
   const titleItems = items
-    .filter(it => Math.abs(it.transform[5] - maxY) < 2)
+    .filter(it => Math.abs(it.transform[5] - maxY) < 5)
     .sort((a, b) => a.transform[4] - b.transform[4]);
   return titleItems.map(it => it.str).join('').trim();
 }
