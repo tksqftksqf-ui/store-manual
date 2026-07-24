@@ -50,6 +50,7 @@ const PRODUCTS = [
   {cat:'Mac',name:'MacBook Pro 16.2" M5 Max 2026',spec:'M5 Max/18CPU/40GPU/48GB/2TB',color:'銀',pid:'267409',mpn:'MGE94',price:169900},
   {cat:'Mac',name:'MacBook Pro 16.2" M5 Max 2026',spec:'M5 Max/18CPU/40GPU/48GB/2TB',color:'黑',pid:'267410',mpn:'MGEE4',price:169900},
   // ── Mac Mini 2024 ──
+  {cat:'Mac',name:'Mac Mini 2024',spec:'M4/10CPU/10GPU/16GB/256GB',color:'銀',pid:'253544',mpn:'MU9D3',price:26900},
   {cat:'Mac',name:'Mac Mini 2024',spec:'M4/10CPU/10GPU/16GB/512GB',color:'銀',pid:'253545',mpn:'MU9E3',price:33900},
   {cat:'Mac',name:'Mac Mini 2024',spec:'M4/10CPU/10GPU/24GB/512GB',color:'銀',pid:'253546',mpn:'MCYT4',price:40900},
   {cat:'Mac',name:'Mac Mini 2024',spec:'M4 Pro/12CPU/16GPU/24GB/512GB',color:'銀',pid:'253547',mpn:'MCX44',price:54900},
@@ -503,15 +504,13 @@ const PRODUCTS = [
   {cat:'配件',name:'HomePod mini',spec:'',color:'藍',pid:'222183',mpn:'MJ2C3',price:3990},
   {cat:'配件',name:'HomePod mini',spec:'',color:'橙',pid:'222184',mpn:'MJ2D3',price:3990},
   {cat:'配件',name:'HomePod mini',spec:'',color:'黃',pid:'222185',mpn:'MJ2E3',price:3990},
-  {cat:'配件',name:'HomePod (2023)',spec:'',color:'午夜色',pid:'236921',mpn:'MQJ73',price:10900},
-  {cat:'配件',name:'HomePod (2023)',spec:'',color:'白',pid:'236922',mpn:'MQJ83',price:10900},
   {cat:'配件',name:'HomePod',spec:'',color:'白色',pid:'264479',mpn:'MDEY4',price:10990},
   {cat:'配件',name:'HomePod',spec:'',color:'午夜色',pid:'264478',mpn:'MDEW4',price:10990},
   // ── AirTag ──
   {cat:'配件',name:'AirTag 1件裝',spec:'',color:'',pid:'217386',mpn:'MX532',price:990},
   {cat:'配件',name:'AirTag 4件裝',spec:'',color:'',pid:'217387',mpn:'MX542',price:3390},
-  {cat:'配件',name:'AirTag 2 1件裝',spec:'',color:'',pid:'266323',mpn:'MHWD4',price:990},
-  {cat:'配件',name:'AirTag 2 4件裝',spec:'',color:'',pid:'266324',mpn:'MHWG4',price:3390},
+  {cat:'配件',name:'AirTag 2 1件裝',spec:'',color:'',pid:'266323',mpn:'MFE94',price:990},
+  {cat:'配件',name:'AirTag 2 4件裝',spec:'',color:'',pid:'266324',mpn:'MFEA4',price:3390},
   // ── Beats ──
   {cat:'配件',name:'PowerBeats Pro 2',spec:'',color:'流沙金',pid:'255759',mpn:'MX733',price:8790},
   {cat:'配件',name:'PowerBeats Pro 2',spec:'',color:'電光橙',pid:'255760',mpn:'MX743',price:8790},
