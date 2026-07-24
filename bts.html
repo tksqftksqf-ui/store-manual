@@ -251,6 +251,10 @@ const BTS_GROUPS = [
 
 function fmt(n){ return '$'+n.toLocaleString(); }
 
+function highlightGiftText(text){
+  return text.replace(/以上共拆\d+/g, m => `<span style="font-weight:800;text-decoration:underline;color:#dc2626">${m}</span>`);
+}
+
 function toggleGroup(key){
   if(btsOpen.has(key)) btsOpen.delete(key); else btsOpen.add(key);
   updateBTSResults();
@@ -286,7 +290,7 @@ function updateBTSResults(){
         <td data-label="規格" style="padding:10px 8px;color:var(--gray);font-size:13px;white-space:nowrap">${p.spec}</td>
         <td data-label="售價" style="padding:10px 8px;text-align:right;white-space:nowrap">${fmt(p.price)}</td>
         <td data-label="教育折抵" style="padding:10px 8px;text-align:right;color:var(--green);font-weight:700;white-space:nowrap">-${fmt(p.edu)}</td>
-        <td data-label="促銷價" style="padding:10px 8px;text-align:right;font-weight:700;white-space:nowrap">${fmt(p.price)}</td>
+        <td data-label="促銷價" style="padding:10px 8px;text-align:right;font-weight:700;white-space:nowrap">${fmt(p.price - p.edu)}</td>
         <td data-label="贈品" style="padding:10px 8px;font-size:12px;color:#b45309">🎁 買就送市價${g.giftBanner.toLocaleString()}好禮（明細見上方）</td>
       </tr>`).join('');
     return `
@@ -298,7 +302,7 @@ function updateBTSResults(){
           <span class="bts-count">共 ${g.products.length} 項</span>
         </div>
       </div>
-      <div class="bts-gift-box"><b>贈品明細：</b>${g.giftText}</div>
+      <div class="bts-gift-box"><b>贈品明細：</b>${highlightGiftText(g.giftText)}</div>
       <div class="bts-toggle-bar" onclick="toggleGroup('${g.key}')">
         <span class="bts-toggle">${open ? '收合貨號 ▲' : '查看貨號、售價、教育折抵、促銷價 ▼'}</span>
       </div>
