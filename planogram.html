@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Planogram 圖示</title>
 <link rel="stylesheet" href="shared/style.css">
+<style>
+.plan-store-banner{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:linear-gradient(135deg,#e8f2ff,#f0f7ff);border:2px solid var(--blue);border-radius:12px;padding:14px 20px;margin-bottom:14px}
+.plan-store-banner .plan-store-name{font-size:18px;font-weight:800;color:var(--blue)}
+.plan-store-banner .plan-store-name b{text-decoration:underline}
+.plan-store-banner .plan-store-date{font-size:13px;font-weight:700;color:#b45309;background:#fef3c7;padding:4px 12px;border-radius:20px;white-space:nowrap}
+</style>
 </head>
 <body>
 
@@ -50,8 +56,12 @@ function renderPlanogramTab(){
     <div class="sec-hdr">
       <div>
         <div class="sec-title">Planogram · 陳列圖示核對</div>
-        <div class="sec-sub">Apple Shop 3.0${data.updateDate?' · 更新日期：'+data.updateDate:''} &nbsp;·&nbsp; 點擊標題展開／收合</div>
+        <div class="sec-sub">Apple Shop 3.0 &nbsp;·&nbsp; 點擊標題展開／收合</div>
       </div>
+    </div>
+    <div class="plan-store-banner">
+      <span class="plan-store-name">📍 目前檢視門市：<b>${currentStore}</b></span>
+      <span class="plan-store-date">🕐 最後更新：${data.updateDate || '尚未上傳'}</span>
     </div>
     <div class="plan-ctrl">
       <label for="store-select">門市：</label>
