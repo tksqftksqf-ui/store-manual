@@ -1,4 +1,4 @@
-const PRODUCTS_UPDATED = '2026-08-26';
+const PRODUCTS_VERSION = '20260724v1';
 const PRODUCTS = [
   // ── MacBook Air 13.6" M5 2026 ──
   {cat:'Mac',name:'MacBook Air 13.6" M5 2026',spec:'M5/10CPU/8GPU/16GB/512GB',color:'午夜',pid:'267369',mpn:'MDHE4',price:42900},
