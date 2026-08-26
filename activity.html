@@ -16,7 +16,10 @@
       <div class="hdr-sub">Apple Specialist Store · Three Table Shop</div>
     </div>
   </div>
-  <a href="index.html" class="hdr-date" style="text-decoration:none">← 工具箱首頁</a>
+  <div class="hdr-right">
+    <div class="hdr-updated" id="activity-updated"></div>
+    <a href="index.html" class="hdr-date" style="text-decoration:none">← 工具箱首頁</a>
+  </div>
 </div>
 
 <div class="main" id="mc"></div>
@@ -25,6 +28,9 @@
 let activityQuery = '';
 let activityCat = 'all';
 let activityPeriod = 'A';
+
+const ACTIVITY_UPDATED = '2026-08-18';
+document.getElementById('activity-updated').textContent = '活動更新：' + ACTIVITY_UPDATED;
 
 const ACTIVITY_PERIODS = [
   {key:'A', label:'0817-0831 操盤', range:'2026/08/17–08/31'},

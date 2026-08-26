@@ -16,13 +16,17 @@
       <div class="hdr-sub">Apple Specialist Store · Three Table Shop</div>
     </div>
   </div>
-  <a href="index.html" class="hdr-date" style="text-decoration:none">← 工具箱首頁</a>
+  <div class="hdr-right">
+    <div class="hdr-updated" id="products-updated"></div>
+    <a href="index.html" class="hdr-date" style="text-decoration:none">← 工具箱首頁</a>
+  </div>
 </div>
 
 <div class="main" id="mc"></div>
 
 <script src="shared/products.js"></script>
 <script>
+document.getElementById('products-updated').textContent = '貨號表更新：' + PRODUCTS_UPDATED;
 let searchQuery = '';
 let searchCat = 'all';
 let searchSeries = 'all';
