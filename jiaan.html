@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>激安活動</title>
+<link rel="stylesheet" href="shared/style.css">
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-left">
+    <span class="hdr-logo"></span>
+    <div>
+      <div class="hdr-title">激安活動</div>
+      <div class="hdr-sub">永二・新光華・澄清文山</div>
+    </div>
+  </div>
+  <div class="hdr-right">
+    <div class="hdr-updated" id="products-updated"></div>
+    <a href="index.html" class="hdr-date" style="text-decoration:none">← 工具箱首頁</a>
+  </div>
+</div>
+
+<div class="main" id="mc"></div>
+
+<script src="shared/products.js"></script>
+<script>
+document.getElementById('products-updated').textContent = '貨號表版本：' + (typeof PRODUCTS_VERSION !== 'undefined' ? PRODUCTS_VERSION : '—');
+let searchQuery = '';
+let searchCat = 'all';
+let searchSeries = 'all';
+let searchSub = 'all';
+
+const SERIES_ORDER = {
+  'Mac': ['MacBook Air','MacBook Pro','Mac mini','iMac','Mac Studio','MacBook Neo'],
+  'iPad': ['iPad mini','iPad A16','iPad Air','iPad Pro'],
+  'iPhone': ['iPhone 17e','iPhone 17','iPhone Air','iPhone 17 Pro','iPhone 17 Pro Max','iPhone 16e','iPhone 16','iPhone 16 Plus'],
+  'Watch': ['Apple Watch SE3','Apple Watch S11','Apple Watch Ultra 3'],
+};
+function getSeries(cat, name){
+  if(cat==='Mac'){
+    if(name.startsWith('MacBook Air')) return 'MacBook Air';
+    if(name.startsWith('MacBook Pro')) return 'MacBook Pro';
+    if(name.startsWith('MacBook Neo')) return 'MacBook Neo';
+    if(name.startsWith('Mac Mini')) return 'Mac mini';
+    if(name.startsWith('Mac Studio')) return 'Mac Studio';
+    if(name.startsWith('iMac')) return 'iMac';
+  }
+  if(cat==='iPad'){
+    if(name.startsWith('iPad mini')) return 'iPad mini';
+    if(name.startsWith('iPad A16')) return 'iPad A16';
+    if(name.startsWith('iPad Pro')) return 'iPad Pro';
+    if(name.startsWith('iPad Air')) return 'iPad Air';
+  }
+  if(cat==='iPhone'){
+    if(name.startsWith('iPhone 17e')) return 'iPhone 17e';
+    if(name.startsWith('iPhone 17 Pro Max')) return 'iPhone 17 Pro Max';
+    if(name.startsWith('iPhone 17 Pro')) return 'iPhone 17 Pro';
+    if(name.startsWith('iPhone 17')) return 'iPhone 17';
+    if(name.startsWith('iPhone Air')) return 'iPhone Air';
+    if(name.startsWith('iPhone 16e')) return 'iPhone 16e';
+    if(name.startsWith('iPhone 16 Plus')) return 'iPhone 16 Plus';
+    if(name.startsWith('iPhone 16')) return 'iPhone 16';
+  }
+  if(cat==='Watch'){
+    if(name.includes('SE3')) return 'Apple Watch SE3';
+    if(name.includes('Ultra 3')) return 'Apple Watch Ultra 3';
+    if(name.includes('S11')) return 'Apple Watch S11';
+  }
+  return null;
+}
+
+const ACCESSORY_GROUP_ORDER = ['滑鼠鍵盤','Studio Display','耳機轉接/連接線','Apple TV/週邊','充電器/電源','Apple Pencil','AirPods/耳機','HomePod','AirTag','iPad鍵盤/保護','iPhone保護殼/卡套'];
+const ACCESSORY_GROUP = {
+  'Apple Magic Mouse':'滑鼠鍵盤','Magic Trackpad':'滑鼠鍵盤','Magic Keyboard 繁中':'滑鼠鍵盤','Magic Keyboard 繁中 含數字鍵':'滑鼠鍵盤','Magic Keyboard 含TouchID與數字鍵盤 繁中':'滑鼠鍵盤','Magic Keyboard 含Touch ID 繁中':'滑鼠鍵盤',
+  'Studio Display 標準玻璃 可調斜度支架':'Studio Display','Studio Display 標準玻璃 可調斜度高度支架':'Studio Display','Studio Display 標準玻璃 VESA吊架':'Studio Display','Studio Display Nano texture 可調斜度支架 CTO':'Studio Display','Studio Display Nano texture 可調斜度高度支架 CTO':'Studio Display','Studio Display Nano texture VESA吊架 CTO':'Studio Display','Studio Display XDR 標準玻璃 可調斜度高度支架 CTO':'Studio Display','Studio Display XDR 標準玻璃 VESA吊架 CTO':'Studio Display',
+  'EarPods (3.5mm耳機接頭)':'耳機轉接/連接線','EarPods (Lightning 連接器)':'耳機轉接/連接線','EarPods (USB-C)':'耳機轉接/連接線','Lightning 對 USB 連接線 (1m)':'耳機轉接/連接線','Lightning 數位 AV 轉接器':'耳機轉接/連接線','Lightning 對 USB 3 相機轉接器':'耳機轉接/連接線','USB-C 對 3.5mm耳機插孔轉接器':'耳機轉接/連接線','USB-C 對 3.5mm 音訊連接線 (1.2m)':'耳機轉接/連接線','USB-C 對 USB 轉接器':'耳機轉接/連接線','USB-C 對 SD 卡讀卡機':'耳機轉接/連接線','USB-C Digital AV 多埠轉接器':'耳機轉接/連接線','Thunderbolt 4 Pro連接線 (3m)':'耳機轉接/連接線','Thunderbolt 5 Pro連接線 (1m)':'耳機轉接/連接線',
+  'Apple TV 4K 64GB (2022)':'Apple TV/週邊','Apple TV 4K 128GB (2022)':'Apple TV/週邊','Siri Remote':'Apple TV/週邊',
+  '磁性充電器對 USB-C線 (1m)':'充電器/電源','60W USB-C 充電連接線 (1m)':'充電器/電源','240W USB-C 充電連接線 (2m)':'充電器/電源','USB-C 對 Lightning 線 (1m)':'充電器/電源','USB-C 對 Lightning 線 (2m)':'充電器/電源','iPhone Air MagSafe電池':'充電器/電源','MagSafe 充電器 (1m)':'充電器/電源','MagSafe 充電器 (2m)':'充電器/電源','85W MagSafe 2 電源轉換器':'充電器/電源','USB-C對MagSafe 3 連接線 (2m)':'充電器/電源','20W USB-C 電源轉接器':'充電器/電源','35W 雙 USB-C 埠小型電源轉接器':'充電器/電源','35W 雙 USB-C 埠電源轉接器':'充電器/電源','40W 動態電源轉接器':'充電器/電源','70W USB-C 電源轉接器':'充電器/電源','96W USB-C 電源轉接器':'充電器/電源','140W USB-C 電源轉接器':'充電器/電源',
+  'Apple Pencil 筆尖4件裝':'Apple Pencil','Apple Pencil (USB-C)':'Apple Pencil','Apple Pencil 第一代':'Apple Pencil','Apple Pencil 第二代':'Apple Pencil','Apple Pencil Pro':'Apple Pencil',
+  'AirPods 4':'AirPods/耳機','AirPods 4 主動式降噪':'AirPods/耳機','AirPods Pro 第三代':'AirPods/耳機','AirPods Max':'AirPods/耳機','AirPods Max 2':'AirPods/耳機','PowerBeats Pro 2':'AirPods/耳機',
+  'HomePod mini':'HomePod','HomePod (2023)':'HomePod','HomePod':'HomePod',
+  'AirTag 1件裝':'AirTag','AirTag 4件裝':'AirTag','AirTag 2 1件裝':'AirTag','AirTag 2 4件裝':'AirTag',
+  'iPad mini 聰穎雙面夾':'iPad鍵盤/保護','iPad A16 聰穎雙面夾':'iPad鍵盤/保護','iPad A16 巧控鍵盤雙面夾':'iPad鍵盤/保護','iPad Air 11吋 M3 巧控鍵盤':'iPad鍵盤/保護','iPad Air 13吋 M3 巧控鍵盤':'iPad鍵盤/保護','iPad Pro 11吋 M4 巧控鍵盤':'iPad鍵盤/保護','iPad Pro 13吋 M4 巧控鍵盤':'iPad鍵盤/保護','iPad Air 13吋 M2 聰穎雙面夾':'iPad鍵盤/保護','iPad Pro 11吋 M4 聰穎雙面夾':'iPad鍵盤/保護','iPad Pro 13吋 M4 聰穎雙面夾':'iPad鍵盤/保護',
+  'iPhone 16e 矽膠保護殼':'iPhone保護殼/卡套','iPhone 16e MagSafe 透明保護殼':'iPhone保護殼/卡套','iPhone 17e 矽膠保護殼':'iPhone保護殼/卡套','iPhone Air MagSafe保護殼':'iPhone保護殼/卡套','iPhone Air 防護邊框':'iPhone保護殼/卡套','iPhone 17 MagSafe 透明保護殼':'iPhone保護殼/卡套','iPhone 17 MagSafe 矽膠保護殼':'iPhone保護殼/卡套','iPhone 17 Pro MagSafe 透明保護殼':'iPhone保護殼/卡套','iPhone 17 Pro MagSafe 矽膠保護殼':'iPhone保護殼/卡套','iPhone 17 Pro MagSafe 科技織紋':'iPhone保護殼/卡套','iPhone 17 Pro Max MagSafe 透明保護殼':'iPhone保護殼/卡套','iPhone 17 Pro Max MagSafe 矽膠保護殼':'iPhone保護殼/卡套','iPhone 17 Pro Max MagSafe 科技織紋':'iPhone保護殼/卡套','精細織紋卡套':'iPhone保護殼/卡套',
+};
+function getSubOptions(cat){
+  if(cat==='配件') return ACCESSORY_GROUP_ORDER;
+  if(cat==='Mac'||cat==='iPad'||cat==='iPhone'||cat==='Watch'){
+    const seen = new Set(), out = [];
+    for(const p of PRODUCTS){
+      if(p.cat!==cat) continue;
+      if(searchSeries!=='all' && getSeries(p.cat,p.name)!==searchSeries) continue;
+      if(!seen.has(p.name)){ seen.add(p.name); out.push(p.name); }
+    }
+    return out;
+  }
+  return null;
+}
+function matchesSeries(p){
+  if(searchSeries==='all') return true;
+  return getSeries(p.cat, p.name) === searchSeries;
+}
+function matchesSub(p){
+  if(searchSub==='all') return true;
+  if(p.cat==='配件') return (ACCESSORY_GROUP[p.name]||'其他') === searchSub;
+  return p.name === searchSub;
+}
+function selectCat(c){
+  searchCat = c;
+  searchSeries = 'all';
+  searchSub = 'all';
+  renderSeriesMenu();
+  renderSubMenu();
+  updateSearchResults();
+}
+function selectSeries(s){
+  searchSeries = s;
+  searchSub = 'all';
+  renderSeriesMenu();
+  renderSubMenu();
+  updateSearchResults();
+}
+function selectSub(s){
+  searchSub = s;
+  renderSubMenu();
+  updateSearchResults();
+}
+function renderSeriesMenu(){
+  const el = document.getElementById('series-row');
+  if(!el) return;
+  const list = SERIES_ORDER[searchCat];
+  el.innerHTML = '';
+  if(!list){ el.style.display = 'none'; return; }
+  el.style.display = 'flex';
+  const opts = ['all', ...list];
+  for(const s of opts){
+    const btn = document.createElement('button');
+    btn.className = 'series-btn';
+    btn.textContent = s === 'all' ? '全部系列' : s;
+    const on = s === searchSeries;
+    btn.style.cssText = `padding:4px 12px;border-radius:16px;border:1.5px solid ${on?'var(--blue)':'var(--border)'};background:${on?'var(--blue-bg)':'var(--white)'};color:${on?'var(--blue)':'var(--gray)'};font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .13s`;
+    btn.addEventListener('click', () => selectSeries(s));
+    el.appendChild(btn);
+  }
+}
+function renderSubMenu(){
+  const el = document.getElementById('sub-cat-row');
+  if(!el) return;
+  const subs = getSubOptions(searchCat);
+  el.innerHTML = '';
+  if(!subs){ el.style.display = 'none'; return; }
+  el.style.display = 'flex';
+  const opts = ['all', ...subs];
+  for(const s of opts){
+    const btn = document.createElement('button');
+    btn.className = 'sub-cat-btn';
+    btn.textContent = s === 'all' ? '全部' : s;
+    const on = s === searchSub;
+    btn.style.cssText = `padding:4px 12px;border-radius:16px;border:1.5px solid ${on?'var(--green)':'var(--border)'};background:${on?'var(--green-bg)':'var(--white)'};color:${on?'var(--green)':'var(--gray)'};font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .13s`;
+    btn.addEventListener('click', () => selectSub(s));
+    el.appendChild(btn);
+  }
+}
+
+const EDU_DISCOUNT = {
+  '234826': 711,
+  '243982': 350,
+  '248675': 390,
+  '248676': 690,
+  '248677': 690,
+  '248678': 690,
+  '248679': 690,
+  '253160': 1700,
+  '253161': 1700,
+  '253162': 1700,
+  '253163': 1700,
+  '253164': 1700,
+  '253165': 1700,
+  '253166': 1700,
+  '253167': 1700,
+  '253168': 1700,
+  '253169': 1700,
+  '253170': 1700,
+  '253171': 1700,
+  '253172': 1700,
+  '253173': 1700,
+  '253174': 1700,
+  '253175': 1700,
+  '253176': 1700,
+  '253177': 1700,
+  '253178': 1700,
+  '253179': 1700,
+  '253180': 1700,
+  '253181': 1700,
+  '253182': 1700,
+  '253183': 1700,
+  '253474': 1710,
+  '253475': 1710,
+  '253476': 1710,
+  '253477': 1710,
+  '253478': 3410,
+  '253479': 3410,
+  '253480': 3410,
+  '253481': 3410,
+  '253482': 3410,
+  '253483': 3410,
+  '253484': 3410,
+  '253485': 3410,
+  '253486': 3410,
+  '253487': 3410,
+  '253488': 3410,
+  '253489': 3410,
+  '253544': 3410,
+  '253545': 3410,
+  '253546': 3410,
+  '253547': 3410,
+  '256000': 390,
+  '256001': 370,
+  '256491': 700,
+  '256493': 700,
+  '256494': 700,
+  '256495': 700,
+  '256496': 700,
+  '256497': 700,
+  '256498': 700,
+  '256499': 700,
+  '256500': 700,
+  '256501': 700,
+  '256502': 700,
+  '256503': 700,
+  '256504': 700,
+  '256505': 700,
+  '256506': 700,
+  '256507': 700,
+  '256508': 700,
+  '256509': 700,
+  '256510': 700,
+  '256511': 700,
+  '256512': 700,
+  '256513': 700,
+  '256514': 700,
+  '256515': 700,
+  '256580': 690,
+  '256581': 590,
+  '256657': 6810,
+  '256658': 14010,
+  '262292': 600,
+  '262293': 600,
+  '262294': 600,
+  '262295': 600,
+  '262296': 600,
+  '262297': 600,
+  '262298': 600,
+  '262299': 600,
+  '262300': 1000,
+  '262301': 1000,
+  '262302': 1000,
+  '262303': 1000,
+  '262304': 1000,
+  '262305': 1000,
+  '262306': 1000,
+  '262307': 1000,
+  '262308': 1300,
+  '262309': 1300,
+  '262310': 1300,
+  '262311': 1300,
+  '262312': 1300,
+  '262313': 1300,
+  '262314': 1300,
+  '262315': 1300,
+  '262316': 1300,
+  '262317': 1300,
+  '262318': 1300,
+  '262319': 1300,
+  '262320': 1300,
+  '262321': 1300,
+  '262322': 1300,
+  '262323': 1300,
+  '262324': 1300,
+  '262325': 1300,
+  '262326': 1300,
+  '262327': 1300,
+  '262328': 1300,
+  '262329': 1300,
+  '262330': 1300,
+  '262331': 1300,
+  '262332': 2500,
+  '262333': 2500,
+  '262334': 2500,
+  '262335': 2500,
+  '262336': 2500,
+  '262337': 2500,
+  '262338': 2500,
+  '262339': 2500,
+  '262340': 2500,
+  '262341': 1300,
+  '262342': 1300,
+  '262343': 1300,
+  '262344': 1300,
+  '262345': 1300,
+  '262346': 1300,
+  '262347': 1300,
+  '262348': 1300,
+  '262349': 2500,
+  '262350': 2500,
+  '262351': 2500,
+  '262352': 2500,
+  '262353': 2500,
+  '262354': 2500,
+  '262355': 2500,
+  '262356': 2500,
+  '262357': 2500,
+  '262358': 2500,
+  '262359': 2500,
+  '262360': 2500,
+  '262361': 2700,
+  '262362': 2700,
+  '262363': 2700,
+  '262364': 2700,
+  '262365': 2700,
+  '262366': 2700,
+  '262367': 2700,
+  '262368': 2700,
+  '262369': 2700,
+  '262370': 2700,
+  '262371': 2700,
+  '262372': 2700,
+  '262373': 2700,
+  '262374': 2700,
+  '262375': 2700,
+  '262376': 2700,
+  '262377': 2700,
+  '262378': 2700,
+  '263627': 3210,
+  '263628': 3210,
+  '263629': 3210,
+  '263630': 3210,
+  '263631': 3300,
+  '263632': 3300,
+  '263633': 3300,
+  '263634': 3300,
+  '263635': 3300,
+  '263636': 3300,
+  '263637': 3300,
+  '263638': 3300,
+  '263639': 3300,
+  '263640': 3300,
+  '263641': 3300,
+  '263642': 3300,
+  '263643': 3300,
+  '263644': 3300,
+  '263645': 3300,
+  '263646': 3300,
+  '263647': 3300,
+  '263648': 3300,
+  '263649': 3300,
+  '263650': 3300,
+  '263651': 3300,
+  '263652': 3300,
+  '263653': 3300,
+  '263654': 3300,
+  '263655': 3400,
+  '263656': 3400,
+  '263657': 3400,
+  '263658': 3400,
+  '263659': 3400,
+  '263660': 3400,
+  '263661': 3400,
+  '263662': 3400,
+  '263663': 3400,
+  '263664': 3400,
+  '263665': 3400,
+  '263666': 3400,
+  '263667': 3400,
+  '263668': 3400,
+  '263669': 3400,
+  '263670': 3400,
+  '263671': 3400,
+  '263672': 3400,
+  '263673': 3400,
+  '263674': 3400,
+  '263675': 3400,
+  '263676': 3400,
+  '263677': 3400,
+  '263678': 3400,
+  '263679': 690,
+  '263680': 590,
+  '267288': 1700,
+  '267289': 1700,
+  '267290': 1700,
+  '267291': 1700,
+  '267292': 1700,
+  '267293': 1700,
+  '267294': 1700,
+  '267295': 1700,
+  '267296': 1700,
+  '267297': 1700,
+  '267298': 1700,
+  '267299': 1700,
+  '267300': 1700,
+  '267301': 1700,
+  '267302': 1700,
+  '267303': 1700,
+  '267304': 1700,
+  '267305': 1700,
+  '267306': 1700,
+  '267307': 1700,
+  '267308': 1700,
+  '267309': 1700,
+  '267310': 1700,
+  '267311': 1700,
+  '267312': 1700,
+  '267313': 1700,
+  '267314': 1700,
+  '267315': 1700,
+  '267316': 1700,
+  '267317': 1700,
+  '267318': 1700,
+  '267319': 1700,
+  '267320': 1700,
+  '267321': 1700,
+  '267322': 1700,
+  '267323': 1700,
+  '267324': 1700,
+  '267325': 1700,
+  '267326': 1700,
+  '267327': 1700,
+  '267328': 1700,
+  '267329': 1700,
+  '267330': 1700,
+  '267331': 1700,
+  '267332': 1700,
+  '267333': 1700,
+  '267334': 1700,
+  '267335': 1700,
+  '267336': 1700,
+  '267337': 1700,
+  '267338': 1700,
+  '267339': 1700,
+  '267340': 1700,
+  '267341': 1700,
+  '267342': 1700,
+  '267343': 1700,
+  '267344': 1700,
+  '267345': 1700,
+  '267346': 1700,
+  '267347': 1700,
+  '267348': 1700,
+  '267349': 1700,
+  '267350': 1700,
+  '267351': 1700,
+  '267369': 3310,
+  '267370': 3310,
+  '267371': 3310,
+  '267372': 3310,
+  '267373': 3310,
+  '267374': 3310,
+  '267375': 3310,
+  '267376': 3310,
+  '267377': 3310,
+  '267378': 3310,
+  '267379': 3310,
+  '267380': 3310,
+  '267381': 3310,
+  '267382': 3310,
+  '267383': 3310,
+  '267384': 3310,
+  '267385': 3310,
+  '267386': 3310,
+  '267387': 3310,
+  '267388': 3310,
+  '267389': 3310,
+  '267390': 3310,
+  '267391': 3310,
+  '267392': 3310,
+  '267393': 3210,
+  '267394': 3210,
+  '267395': 5110,
+  '267396': 5110,
+  '267397': 6860,
+  '267398': 6860,
+  '267399': 6910,
+  '267400': 6910,
+  '267401': 10210,
+  '267402': 10210,
+  '267403': 6710,
+  '267404': 6710,
+  '267405': 6710,
+  '267406': 6710,
+  '267407': 9910,
+  '267408': 9910,
+  '267409': 9910,
+  '267410': 9910,
+  '267411': 3300,
+  '267412': 3300,
+  '267413': 3300,
+  '267414': 3300,
+  '267415': 3300,
+  '267416': 3300,
+  '267417': 3300,
+  '267418': 3300,
+  '267442': 3000,
+  '267443': 3000,
+  '267444': 3000,
+  '267445': 3000,
+  '267446': 3000,
+  '267447': 3000,
+  '267448': 3000,
+  '267449': 3000
+};
+const ACTIVITY_PROMO = {
+  // 202608激安操盤.pdf（永二・新光華・澄清文山）— 依PDF百分比換算實際折扣金額
+  // 未列入本表＝該系列不參與本次激安活動（如iPhone 16e、Mac Studio、一般配件、軟體）
+  '267369':[{period:'A',d:1716,g:null,m:null}], // MacBook Air 13.6" M5 2026
+  '267370':[{period:'A',d:1716,g:null,m:null}], // MacBook Air 13.6" M5 2026
+  '267371':[{period:'A',d:1716,g:null,m:null}], // MacBook Air 13.6" M5 2026
+  '267372':[{period:'A',d:1716,g:null,m:null}], // MacBook Air 13.6" M5 2026
+  '267373':[{period:'A',d:2136,g:null,m:null}], // MacBook Air 13.6" M5 2026
+  '267374':[{period:'A',d:2136,g:null,m:null}], // MacBook Air 13.6" M5 2026
+  '267375':[{period:'A',d:2136,g:null,m:null}], // MacBook Air 13.6" M5 2026
+  '267376':[{period:'A',d:2136,g:null,m:null}], // MacBook Air 13.6" M5 2026
+  '267377':[{period:'A',d:2416,g:null,m:null}], // MacBook Air 13.6" M5 2026
+  '267378':[{period:'A',d:2416,g:null,m:null}], // MacBook Air 13.6" M5 2026
+  '267379':[{period:'A',d:2416,g:null,m:null}], // MacBook Air 13.6" M5 2026
+  '267380':[{period:'A',d:2416,g:null,m:null}], // MacBook Air 13.6" M5 2026
+  '267381':[{period:'A',d:1996,g:null,m:null}], // MacBook Air 15.3" M5 2026
+  '267382':[{period:'A',d:1996,g:null,m:null}], // MacBook Air 15.3" M5 2026
+  '267383':[{period:'A',d:1996,g:null,m:null}], // MacBook Air 15.3" M5 2026
+  '267384':[{period:'A',d:1996,g:null,m:null}], // MacBook Air 15.3" M5 2026
+  '267385':[{period:'A',d:2416,g:null,m:null}], // MacBook Air 15.3" M5 2026
+  '267386':[{period:'A',d:2416,g:null,m:null}], // MacBook Air 15.3" M5 2026
+  '267387':[{period:'A',d:2416,g:null,m:null}], // MacBook Air 15.3" M5 2026
+  '267388':[{period:'A',d:2416,g:null,m:null}], // MacBook Air 15.3" M5 2026
+  '267389':[{period:'A',d:2696,g:null,m:null}], // MacBook Air 15.3" M5 2026
+  '267390':[{period:'A',d:2696,g:null,m:null}], // MacBook Air 15.3" M5 2026
+  '267391':[{period:'A',d:2696,g:null,m:null}], // MacBook Air 15.3" M5 2026
+  '267392':[{period:'A',d:2696,g:null,m:null}], // MacBook Air 15.3" M5 2026
+  '263627':[{period:'A',d:4543,g:null,m:null}], // MacBook Pro 14.2" M5 2025/2026
+  '263628':[{period:'A',d:4543,g:null,m:null}], // MacBook Pro 14.2" M5 2025/2026
+  '263629':[{period:'A',d:5033,g:null,m:null}], // MacBook Pro 14.2" M5 2025/2026
+  '263630':[{period:'A',d:5033,g:null,m:null}], // MacBook Pro 14.2" M5 2025/2026
+  '267394':[{period:'A',d:5523,g:null,m:null}], // MacBook Pro 14.2" M5 2025/2026
+  '267393':[{period:'A',d:5523,g:null,m:null}], // MacBook Pro 14.2" M5 2025/2026
+  '267395':[{period:'A',d:5943,g:null,m:null}], // MacBook Pro 14.2" M5 Pro 2025/2026
+  '267396':[{period:'A',d:5943,g:null,m:null}], // MacBook Pro 14.2" M5 Pro 2025/2026
+  '267397':[{period:'A',d:7168,g:null,m:null}], // MacBook Pro 14.2" M5 Pro 2025/2026
+  '267398':[{period:'A',d:7168,g:null,m:null}], // MacBook Pro 14.2" M5 Pro 2025/2026
+  '267399':[{period:'A',d:7693,g:null,m:null}], // MacBook Pro 14.2" M5 Pro 2025/2026
+  '267400':[{period:'A',d:7693,g:null,m:null}], // MacBook Pro 14.2" M5 Pro 2025/2026
+  '267401':[{period:'A',d:9793,g:null,m:null}], // MacBook Pro 14.2" M5 Max 2025/2026
+  '267402':[{period:'A',d:9793,g:null,m:null}], // MacBook Pro 14.2" M5 Max 2025/2026
+  '267403':[{period:'A',d:6993,g:null,m:null}], // MacBook Pro 16.2" M5 Pro 2026
+  '267404':[{period:'A',d:6993,g:null,m:null}], // MacBook Pro 16.2" M5 Pro 2026
+  '267405':[{period:'A',d:8463,g:null,m:null}], // MacBook Pro 16.2" M5 Pro 2026
+  '267406':[{period:'A',d:8463,g:null,m:null}], // MacBook Pro 16.2" M5 Pro 2026
+  '267407':[{period:'A',d:10143,g:null,m:null}], // MacBook Pro 16.2" M5 Max 2026
+  '267408':[{period:'A',d:10143,g:null,m:null}], // MacBook Pro 16.2" M5 Max 2026
+  '267409':[{period:'A',d:11893,g:null,m:null}], // MacBook Pro 16.2" M5 Max 2026
+  '267410':[{period:'A',d:11893,g:null,m:null}], // MacBook Pro 16.2" M5 Max 2026
+  '253544':[{period:'A',d:1076,g:'限有貨款式，售完為止',m:null}], // Mac Mini 2024
+  '253545':[{period:'A',d:1356,g:'限有貨款式，售完為止',m:null}], // Mac Mini 2024
+  '253546':[{period:'A',d:1636,g:'限有貨款式，售完為止',m:null}], // Mac Mini 2024
+  '253547':[{period:'A',d:2196,g:'限有貨款式，售完為止',m:null}], // Mac Mini 2024
+  '253474':[{period:'A',d:2994,g:null,m:null}], // iMac 24" M4 2024
+  '253475':[{period:'A',d:2994,g:null,m:null}], // iMac 24" M4 2024
+  '253476':[{period:'A',d:2994,g:null,m:null}], // iMac 24" M4 2024
+  '253477':[{period:'A',d:2994,g:null,m:null}], // iMac 24" M4 2024
+  '253478':[{period:'A',d:3474,g:null,m:null}], // iMac 24" M4 2024
+  '253479':[{period:'A',d:3474,g:null,m:null}], // iMac 24" M4 2024
+  '253480':[{period:'A',d:3474,g:null,m:null}], // iMac 24" M4 2024
+  '253481':[{period:'A',d:3474,g:null,m:null}], // iMac 24" M4 2024
+  '253482':[{period:'A',d:3894,g:null,m:null}], // iMac 24" M4 2024
+  '253483':[{period:'A',d:3894,g:null,m:null}], // iMac 24" M4 2024
+  '253484':[{period:'A',d:3894,g:null,m:null}], // iMac 24" M4 2024
+  '253485':[{period:'A',d:3894,g:null,m:null}], // iMac 24" M4 2024
+  '253486':[{period:'A',d:4314,g:null,m:null}], // iMac 24" M4 2024
+  '253487':[{period:'A',d:4314,g:null,m:null}], // iMac 24" M4 2024
+  '253488':[{period:'A',d:4314,g:null,m:null}], // iMac 24" M4 2024
+  '253489':[{period:'A',d:4314,g:null,m:null}], // iMac 24" M4 2024
+  '253490':[{period:'A',d:3894,g:null,m:null}], // iMac 24" M4 2024
+  '267442':[{period:'A',d:null,g:'滿萬送500',m:null}], // MacBook Neo
+  '267443':[{period:'A',d:null,g:'滿萬送500',m:null}], // MacBook Neo
+  '267444':[{period:'A',d:null,g:'滿萬送500',m:null}], // MacBook Neo
+  '267445':[{period:'A',d:null,g:'滿萬送500',m:null}], // MacBook Neo
+  '267446':[{period:'A',d:null,g:'滿萬送500',m:null}], // MacBook Neo
+  '267447':[{period:'A',d:null,g:'滿萬送500',m:null}], // MacBook Neo
+  '267448':[{period:'A',d:null,g:'滿萬送500',m:null}], // MacBook Neo
+  '267449':[{period:'A',d:null,g:'滿萬送500',m:null}], // MacBook Neo
+  '253160':[{period:'A',d:1393,g:null,m:null}], // iPad mini 8.3" 第7代
+  '253161':[{period:'A',d:1393,g:null,m:null}], // iPad mini 8.3" 第7代
+  '253162':[{period:'A',d:1393,g:null,m:null}], // iPad mini 8.3" 第7代
+  '253163':[{period:'A',d:1393,g:null,m:null}], // iPad mini 8.3" 第7代
+  '253164':[{period:'A',d:1638,g:null,m:null}], // iPad mini 8.3" 第7代
+  '253165':[{period:'A',d:1638,g:null,m:null}], // iPad mini 8.3" 第7代
+  '253166':[{period:'A',d:1638,g:null,m:null}], // iPad mini 8.3" 第7代
+  '253167':[{period:'A',d:1638,g:null,m:null}], // iPad mini 8.3" 第7代
+  '253168':[{period:'A',d:2128,g:null,m:null}], // iPad mini 8.3" 第7代
+  '253169':[{period:'A',d:2128,g:null,m:null}], // iPad mini 8.3" 第7代
+  '253170':[{period:'A',d:2128,g:null,m:null}], // iPad mini 8.3" 第7代
+  '253171':[{period:'A',d:2128,g:null,m:null}], // iPad mini 8.3" 第7代
+  '253172':[{period:'A',d:1743,g:null,m:null}], // iPad mini 8.3" 第7代
+  '253173':[{period:'A',d:1743,g:null,m:null}], // iPad mini 8.3" 第7代
+  '253174':[{period:'A',d:1743,g:null,m:null}], // iPad mini 8.3" 第7代
+  '253175':[{period:'A',d:1743,g:null,m:null}], // iPad mini 8.3" 第7代
+  '253176':[{period:'A',d:1988,g:null,m:null}], // iPad mini 8.3" 第7代
+  '253177':[{period:'A',d:1988,g:null,m:null}], // iPad mini 8.3" 第7代
+  '253178':[{period:'A',d:1988,g:null,m:null}], // iPad mini 8.3" 第7代
+  '253179':[{period:'A',d:1988,g:null,m:null}], // iPad mini 8.3" 第7代
+  '253180':[{period:'A',d:2478,g:null,m:null}], // iPad mini 8.3" 第7代
+  '253181':[{period:'A',d:2478,g:null,m:null}], // iPad mini 8.3" 第7代
+  '253182':[{period:'A',d:2478,g:null,m:null}], // iPad mini 8.3" 第7代
+  '253183':[{period:'A',d:2478,g:null,m:null}], // iPad mini 8.3" 第7代
+  '256491':[{period:'A',d:1192,g:null,m:null}], // iPad A16
+  '256493':[{period:'A',d:1192,g:null,m:null}], // iPad A16
+  '256494':[{period:'A',d:1192,g:null,m:null}], // iPad A16
+  '256495':[{period:'A',d:1192,g:null,m:null}], // iPad A16
+  '256496':[{period:'A',d:1472,g:null,m:null}], // iPad A16
+  '256497':[{period:'A',d:1472,g:null,m:null}], // iPad A16
+  '256498':[{period:'A',d:1472,g:null,m:null}], // iPad A16
+  '256499':[{period:'A',d:1472,g:null,m:null}], // iPad A16
+  '256500':[{period:'A',d:2032,g:null,m:null}], // iPad A16
+  '256501':[{period:'A',d:2032,g:null,m:null}], // iPad A16
+  '256502':[{period:'A',d:2032,g:null,m:null}], // iPad A16
+  '256503':[{period:'A',d:2032,g:null,m:null}], // iPad A16
+  '256504':[{period:'A',d:1592,g:null,m:null}], // iPad A16
+  '256505':[{period:'A',d:1592,g:null,m:null}], // iPad A16
+  '256506':[{period:'A',d:1592,g:null,m:null}], // iPad A16
+  '256507':[{period:'A',d:1592,g:null,m:null}], // iPad A16
+  '256508':[{period:'A',d:1872,g:null,m:null}], // iPad A16
+  '256509':[{period:'A',d:1872,g:null,m:null}], // iPad A16
+  '256510':[{period:'A',d:1872,g:null,m:null}], // iPad A16
+  '256511':[{period:'A',d:1872,g:null,m:null}], // iPad A16
+  '256512':[{period:'A',d:2432,g:null,m:null}], // iPad A16
+  '256513':[{period:'A',d:2432,g:null,m:null}], // iPad A16
+  '256514':[{period:'A',d:2432,g:null,m:null}], // iPad A16
+  '256515':[{period:'A',d:2432,g:null,m:null}], // iPad A16
+  '263631':[{period:'A',d:3591,g:null,m:null}], // iPad Pro 11" M5 2025
+  '263632':[{period:'A',d:3591,g:null,m:null}], // iPad Pro 11" M5 2025
+  '263633':[{period:'A',d:4221,g:null,m:null}], // iPad Pro 11" M5 2025
+  '263634':[{period:'A',d:4221,g:null,m:null}], // iPad Pro 11" M5 2025
+  '263635':[{period:'A',d:5481,g:null,m:null}], // iPad Pro 11" M5 2025
+  '263636':[{period:'A',d:5481,g:null,m:null}], // iPad Pro 11" M5 2025
+  '263637':[{period:'A',d:7056,g:null,m:null}], // iPad Pro 11" M5 2025
+  '263638':[{period:'A',d:7056,g:null,m:null}], // iPad Pro 11" M5 2025
+  '263639':[{period:'A',d:5796,g:null,m:null}], // iPad Pro 11" M5 2025
+  '263640':[{period:'A',d:5796,g:null,m:null}], // iPad Pro 11" M5 2025
+  '263641':[{period:'A',d:7371,g:null,m:null}], // iPad Pro 11" M5 2025
+  '263642':[{period:'A',d:7371,g:null,m:null}], // iPad Pro 11" M5 2025
+  '263643':[{period:'A',d:4221,g:null,m:null}], // iPad Pro 11" M5 2025
+  '263644':[{period:'A',d:4221,g:null,m:null}], // iPad Pro 11" M5 2025
+  '263645':[{period:'A',d:4851,g:null,m:null}], // iPad Pro 11" M5 2025
+  '263646':[{period:'A',d:4851,g:null,m:null}], // iPad Pro 11" M5 2025
+  '263647':[{period:'A',d:6111,g:null,m:null}], // iPad Pro 11" M5 2025
+  '263648':[{period:'A',d:6111,g:null,m:null}], // iPad Pro 11" M5 2025
+  '263649':[{period:'A',d:7686,g:null,m:null}], // iPad Pro 11" M5 2025
+  '263650':[{period:'A',d:7686,g:null,m:null}], // iPad Pro 11" M5 2025
+  '263651':[{period:'A',d:6426,g:null,m:null}], // iPad Pro 11" M5 2025
+  '263652':[{period:'A',d:6426,g:null,m:null}], // iPad Pro 11" M5 2025
+  '263653':[{period:'A',d:8001,g:null,m:null}], // iPad Pro 11" M5 2025
+  '263654':[{period:'A',d:8001,g:null,m:null}], // iPad Pro 11" M5 2025
+  '263655':[{period:'A',d:4581,g:null,m:null}], // iPad Pro 13" M5 2025
+  '263656':[{period:'A',d:4581,g:null,m:null}], // iPad Pro 13" M5 2025
+  '263657':[{period:'A',d:5211,g:null,m:null}], // iPad Pro 13" M5 2025
+  '263658':[{period:'A',d:5211,g:null,m:null}], // iPad Pro 13" M5 2025
+  '263659':[{period:'A',d:6471,g:null,m:null}], // iPad Pro 13" M5 2025
+  '263660':[{period:'A',d:6471,g:null,m:null}], // iPad Pro 13" M5 2025
+  '263661':[{period:'A',d:8046,g:null,m:null}], // iPad Pro 13" M5 2025
+  '263662':[{period:'A',d:8046,g:null,m:null}], // iPad Pro 13" M5 2025
+  '263663':[{period:'A',d:6786,g:null,m:null}], // iPad Pro 13" M5 2025
+  '263664':[{period:'A',d:6786,g:null,m:null}], // iPad Pro 13" M5 2025
+  '263665':[{period:'A',d:8361,g:null,m:null}], // iPad Pro 13" M5 2025
+  '263666':[{period:'A',d:8361,g:null,m:null}], // iPad Pro 13" M5 2025
+  '263667':[{period:'A',d:5211,g:null,m:null}], // iPad Pro 13" M5 2025
+  '263668':[{period:'A',d:5211,g:null,m:null}], // iPad Pro 13" M5 2025
+  '263669':[{period:'A',d:5841,g:null,m:null}], // iPad Pro 13" M5 2025
+  '263670':[{period:'A',d:5841,g:null,m:null}], // iPad Pro 13" M5 2025
+  '263671':[{period:'A',d:7101,g:null,m:null}], // iPad Pro 13" M5 2025
+  '263672':[{period:'A',d:7101,g:null,m:null}], // iPad Pro 13" M5 2025
+  '263673':[{period:'A',d:8676,g:null,m:null}], // iPad Pro 13" M5 2025
+  '263674':[{period:'A',d:8676,g:null,m:null}], // iPad Pro 13" M5 2025
+  '263675':[{period:'A',d:7416,g:null,m:null}], // iPad Pro 13" M5 2025
+  '263676':[{period:'A',d:7416,g:null,m:null}], // iPad Pro 13" M5 2025
+  '263677':[{period:'A',d:8991,g:null,m:null}], // iPad Pro 13" M5 2025
+  '263678':[{period:'A',d:8991,g:null,m:null}], // iPad Pro 13" M5 2025
+  '267288':[{period:'A',d:1992,g:null,m:null}], // iPad Air 11" M4 2026
+  '267289':[{period:'A',d:1992,g:null,m:null}], // iPad Air 11" M4 2026
+  '267290':[{period:'A',d:1992,g:null,m:null}], // iPad Air 11" M4 2026
+  '267291':[{period:'A',d:1992,g:null,m:null}], // iPad Air 11" M4 2026
+  '267292':[{period:'A',d:2272,g:null,m:null}], // iPad Air 11" M4 2026
+  '267293':[{period:'A',d:2272,g:null,m:null}], // iPad Air 11" M4 2026
+  '267294':[{period:'A',d:2272,g:null,m:null}], // iPad Air 11" M4 2026
+  '267295':[{period:'A',d:2272,g:null,m:null}], // iPad Air 11" M4 2026
+  '267296':[{period:'A',d:2832,g:null,m:null}], // iPad Air 11" M4 2026
+  '267297':[{period:'A',d:2832,g:null,m:null}], // iPad Air 11" M4 2026
+  '267298':[{period:'A',d:2832,g:null,m:null}], // iPad Air 11" M4 2026
+  '267299':[{period:'A',d:2832,g:null,m:null}], // iPad Air 11" M4 2026
+  '267300':[{period:'A',d:3672,g:null,m:null}], // iPad Air 11" M4 2026
+  '267301':[{period:'A',d:3672,g:null,m:null}], // iPad Air 11" M4 2026
+  '267302':[{period:'A',d:3672,g:null,m:null}], // iPad Air 11" M4 2026
+  '267303':[{period:'A',d:3672,g:null,m:null}], // iPad Air 11" M4 2026
+  '267304':[{period:'A',d:2392,g:null,m:null}], // iPad Air 11" M4 2026
+  '267305':[{period:'A',d:2392,g:null,m:null}], // iPad Air 11" M4 2026
+  '267306':[{period:'A',d:2392,g:null,m:null}], // iPad Air 11" M4 2026
+  '267307':[{period:'A',d:2392,g:null,m:null}], // iPad Air 11" M4 2026
+  '267308':[{period:'A',d:2672,g:null,m:null}], // iPad Air 11" M4 2026
+  '267309':[{period:'A',d:2672,g:null,m:null}], // iPad Air 11" M4 2026
+  '267310':[{period:'A',d:2672,g:null,m:null}], // iPad Air 11" M4 2026
+  '267311':[{period:'A',d:2672,g:null,m:null}], // iPad Air 11" M4 2026
+  '267312':[{period:'A',d:3232,g:null,m:null}], // iPad Air 11" M4 2026
+  '267313':[{period:'A',d:3232,g:null,m:null}], // iPad Air 11" M4 2026
+  '267314':[{period:'A',d:3232,g:null,m:null}], // iPad Air 11" M4 2026
+  '267315':[{period:'A',d:3232,g:null,m:null}], // iPad Air 11" M4 2026
+  '267316':[{period:'A',d:4072,g:null,m:null}], // iPad Air 11" M4 2026
+  '267317':[{period:'A',d:4072,g:null,m:null}], // iPad Air 11" M4 2026
+  '267318':[{period:'A',d:4072,g:null,m:null}], // iPad Air 11" M4 2026
+  '267319':[{period:'A',d:4072,g:null,m:null}], // iPad Air 11" M4 2026
+  '267320':[{period:'A',d:2552,g:null,m:null}], // iPad Air 13" M4 2026
+  '267321':[{period:'A',d:2552,g:null,m:null}], // iPad Air 13" M4 2026
+  '267322':[{period:'A',d:2552,g:null,m:null}], // iPad Air 13" M4 2026
+  '267323':[{period:'A',d:2552,g:null,m:null}], // iPad Air 13" M4 2026
+  '267324':[{period:'A',d:2832,g:null,m:null}], // iPad Air 13" M4 2026
+  '267325':[{period:'A',d:2832,g:null,m:null}], // iPad Air 13" M4 2026
+  '267326':[{period:'A',d:2832,g:null,m:null}], // iPad Air 13" M4 2026
+  '267327':[{period:'A',d:2832,g:null,m:null}], // iPad Air 13" M4 2026
+  '267328':[{period:'A',d:3392,g:null,m:null}], // iPad Air 13" M4 2026
+  '267329':[{period:'A',d:3392,g:null,m:null}], // iPad Air 13" M4 2026
+  '267330':[{period:'A',d:3392,g:null,m:null}], // iPad Air 13" M4 2026
+  '267331':[{period:'A',d:3392,g:null,m:null}], // iPad Air 13" M4 2026
+  '267332':[{period:'A',d:4232,g:null,m:null}], // iPad Air 13" M4 2026
+  '267333':[{period:'A',d:4232,g:null,m:null}], // iPad Air 13" M4 2026
+  '267334':[{period:'A',d:4232,g:null,m:null}], // iPad Air 13" M4 2026
+  '267335':[{period:'A',d:4232,g:null,m:null}], // iPad Air 13" M4 2026
+  '267336':[{period:'A',d:2952,g:null,m:null}], // iPad Air 13" M4 2026
+  '267337':[{period:'A',d:2952,g:null,m:null}], // iPad Air 13" M4 2026
+  '267338':[{period:'A',d:2952,g:null,m:null}], // iPad Air 13" M4 2026
+  '267339':[{period:'A',d:2952,g:null,m:null}], // iPad Air 13" M4 2026
+  '267340':[{period:'A',d:3232,g:null,m:null}], // iPad Air 13" M4 2026
+  '267341':[{period:'A',d:3232,g:null,m:null}], // iPad Air 13" M4 2026
+  '267342':[{period:'A',d:3232,g:null,m:null}], // iPad Air 13" M4 2026
+  '267343':[{period:'A',d:3232,g:null,m:null}], // iPad Air 13" M4 2026
+  '267344':[{period:'A',d:3792,g:null,m:null}], // iPad Air 13" M4 2026
+  '267345':[{period:'A',d:3792,g:null,m:null}], // iPad Air 13" M4 2026
+  '267346':[{period:'A',d:3792,g:null,m:null}], // iPad Air 13" M4 2026
+  '267347':[{period:'A',d:3792,g:null,m:null}], // iPad Air 13" M4 2026
+  '267348':[{period:'A',d:4632,g:null,m:null}], // iPad Air 13" M4 2026
+  '267349':[{period:'A',d:4632,g:null,m:null}], // iPad Air 13" M4 2026
+  '267350':[{period:'A',d:4632,g:null,m:null}], // iPad Air 13" M4 2026
+  '267351':[{period:'A',d:4632,g:null,m:null}], // iPad Air 13" M4 2026
+  '267282':[{period:'A',d:1314,g:null,m:null}], // iPhone 17e 6.1"
+  '267283':[{period:'A',d:1314,g:null,m:null}], // iPhone 17e 6.1"
+  '267284':[{period:'A',d:1314,g:null,m:null}], // iPhone 17e 6.1"
+  '267285':[{period:'A',d:1734,g:null,m:null}], // iPhone 17e 6.1"
+  '267286':[{period:'A',d:1734,g:null,m:null}], // iPhone 17e 6.1"
+  '267287':[{period:'A',d:1734,g:null,m:null}], // iPhone 17e 6.1"
+  '262249':[{period:'A',d:1196,g:null,m:null}], // iPhone 17 6.3"
+  '262250':[{period:'A',d:1196,g:null,m:null}], // iPhone 17 6.3"
+  '262251':[{period:'A',d:1196,g:null,m:null}], // iPhone 17 6.3"
+  '262252':[{period:'A',d:1196,g:null,m:null}], // iPhone 17 6.3"
+  '262253':[{period:'A',d:1196,g:null,m:null}], // iPhone 17 6.3"
+  '262254':[{period:'A',d:1476,g:null,m:null}], // iPhone 17 6.3"
+  '262255':[{period:'A',d:1476,g:null,m:null}], // iPhone 17 6.3"
+  '262256':[{period:'A',d:1476,g:null,m:null}], // iPhone 17 6.3"
+  '262257':[{period:'A',d:1476,g:null,m:null}], // iPhone 17 6.3"
+  '262258':[{period:'A',d:1476,g:null,m:null}], // iPhone 17 6.3"
+  '262259':[{period:'A',d:2952,g:null,m:null}], // iPhone Air 6.5"
+  '262260':[{period:'A',d:2952,g:null,m:null}], // iPhone Air 6.5"
+  '262261':[{period:'A',d:2952,g:null,m:null}], // iPhone Air 6.5"
+  '262262':[{period:'A',d:2952,g:null,m:null}], // iPhone Air 6.5"
+  '262263':[{period:'A',d:3512,g:null,m:null}], // iPhone Air 6.5"
+  '262264':[{period:'A',d:3512,g:null,m:null}], // iPhone Air 6.5"
+  '262265':[{period:'A',d:3512,g:null,m:null}], // iPhone Air 6.5"
+  '262266':[{period:'A',d:3512,g:null,m:null}], // iPhone Air 6.5"
+  '262267':[{period:'A',d:4072,g:null,m:null}], // iPhone Air 6.5"
+  '262268':[{period:'A',d:4072,g:null,m:null}], // iPhone Air 6.5"
+  '262269':[{period:'A',d:4072,g:null,m:null}], // iPhone Air 6.5"
+  '262270':[{period:'A',d:4072,g:null,m:null}], // iPhone Air 6.5"
+  '262271':[{period:'A',d:1596,g:null,m:null}], // iPhone 17 Pro 6.3"
+  '262272':[{period:'A',d:1596,g:null,m:null}], // iPhone 17 Pro 6.3"
+  '262273':[{period:'A',d:1596,g:null,m:null}], // iPhone 17 Pro 6.3"
+  '262274':[{period:'A',d:1876,g:null,m:null}], // iPhone 17 Pro 6.3"
+  '262275':[{period:'A',d:1876,g:null,m:null}], // iPhone 17 Pro 6.3"
+  '262276':[{period:'A',d:1876,g:null,m:null}], // iPhone 17 Pro 6.3"
+  '262277':[{period:'A',d:2156,g:null,m:null}], // iPhone 17 Pro 6.3"
+  '262278':[{period:'A',d:2156,g:null,m:null}], // iPhone 17 Pro 6.3"
+  '262279':[{period:'A',d:2156,g:null,m:null}], // iPhone 17 Pro 6.3"
+  '262280':[{period:'A',d:1796,g:null,m:null}], // iPhone 17 Pro Max 6.9"
+  '262281':[{period:'A',d:1796,g:null,m:null}], // iPhone 17 Pro Max 6.9"
+  '262282':[{period:'A',d:1796,g:null,m:null}], // iPhone 17 Pro Max 6.9"
+  '262283':[{period:'A',d:2076,g:null,m:null}], // iPhone 17 Pro Max 6.9"
+  '262284':[{period:'A',d:2076,g:null,m:null}], // iPhone 17 Pro Max 6.9"
+  '262285':[{period:'A',d:2076,g:null,m:null}], // iPhone 17 Pro Max 6.9"
+  '262286':[{period:'A',d:2356,g:null,m:null}], // iPhone 17 Pro Max 6.9"
+  '262287':[{period:'A',d:2356,g:null,m:null}], // iPhone 17 Pro Max 6.9"
+  '262288':[{period:'A',d:2356,g:null,m:null}], // iPhone 17 Pro Max 6.9"
+  '262289':[{period:'A',d:2916,g:null,m:null}], // iPhone 17 Pro Max 6.9"
+  '262290':[{period:'A',d:2916,g:null,m:null}], // iPhone 17 Pro Max 6.9"
+  '262291':[{period:'A',d:2916,g:null,m:null}], // iPhone 17 Pro Max 6.9"
+  '252083':[{period:'A',d:1554,g:null,m:null}], // iPhone 16 6.1"
+  '252084':[{period:'A',d:1554,g:null,m:null}], // iPhone 16 6.1"
+  '252085':[{period:'A',d:1554,g:null,m:null}], // iPhone 16 6.1"
+  '252086':[{period:'A',d:1554,g:null,m:null}], // iPhone 16 6.1"
+  '252087':[{period:'A',d:1554,g:null,m:null}], // iPhone 16 6.1"
+  '252098':[{period:'A',d:1794,g:null,m:null}], // iPhone 16 Plus 6.7"
+  '252099':[{period:'A',d:1794,g:null,m:null}], // iPhone 16 Plus 6.7"
+  '252100':[{period:'A',d:1794,g:null,m:null}], // iPhone 16 Plus 6.7"
+  '252101':[{period:'A',d:1794,g:null,m:null}], // iPhone 16 Plus 6.7"
+  '252102':[{period:'A',d:1794,g:null,m:null}], // iPhone 16 Plus 6.7"
+  '252103':[{period:'A',d:2004,g:null,m:null}], // iPhone 16 Plus 6.7"
+  '252104':[{period:'A',d:2004,g:null,m:null}], // iPhone 16 Plus 6.7"
+  '252105':[{period:'A',d:2004,g:null,m:null}], // iPhone 16 Plus 6.7"
+  '252106':[{period:'A',d:2004,g:null,m:null}], // iPhone 16 Plus 6.7"
+  '252107':[{period:'A',d:2004,g:null,m:null}], // iPhone 16 Plus 6.7"
+  '262292':[{period:'A',d:632,g:null,m:null}], // Apple Watch SE3 40mm GPS 鋁
+  '262293':[{period:'A',d:632,g:null,m:null}], // Apple Watch SE3 40mm GPS 鋁
+  '262294':[{period:'A',d:632,g:null,m:null}], // Apple Watch SE3 40mm GPS 鋁
+  '262295':[{period:'A',d:632,g:null,m:null}], // Apple Watch SE3 40mm GPS 鋁
+  '262296':[{period:'A',d:712,g:null,m:null}], // Apple Watch SE3 44mm GPS 鋁
+  '262297':[{period:'A',d:712,g:null,m:null}], // Apple Watch SE3 44mm GPS 鋁
+  '262298':[{period:'A',d:712,g:null,m:null}], // Apple Watch SE3 44mm GPS 鋁
+  '262299':[{period:'A',d:712,g:null,m:null}], // Apple Watch SE3 44mm GPS 鋁
+  '262300':[{period:'A',d:752,g:null,m:null}], // Apple Watch SE3 40mm GPS+行動 鋁
+  '262301':[{period:'A',d:752,g:null,m:null}], // Apple Watch SE3 40mm GPS+行動 鋁
+  '262302':[{period:'A',d:752,g:null,m:null}], // Apple Watch SE3 40mm GPS+行動 鋁
+  '262303':[{period:'A',d:752,g:null,m:null}], // Apple Watch SE3 40mm GPS+行動 鋁
+  '262304':[{period:'A',d:832,g:null,m:null}], // Apple Watch SE3 44mm GPS+行動 鋁
+  '262305':[{period:'A',d:832,g:null,m:null}], // Apple Watch SE3 44mm GPS+行動 鋁
+  '262306':[{period:'A',d:832,g:null,m:null}], // Apple Watch SE3 44mm GPS+行動 鋁
+  '262307':[{period:'A',d:832,g:null,m:null}], // Apple Watch SE3 44mm GPS+行動 鋁
+  '262308':[{period:'A',d:1032,g:null,m:null}], // Apple Watch S11 42mm GPS 鋁
+  '262309':[{period:'A',d:1032,g:null,m:null}], // Apple Watch S11 42mm GPS 鋁
+  '262310':[{period:'A',d:1032,g:null,m:null}], // Apple Watch S11 42mm GPS 鋁
+  '262311':[{period:'A',d:1032,g:null,m:null}], // Apple Watch S11 42mm GPS 鋁
+  '262312':[{period:'A',d:1032,g:null,m:null}], // Apple Watch S11 42mm GPS 鋁
+  '262313':[{period:'A',d:1032,g:null,m:null}], // Apple Watch S11 42mm GPS 鋁
+  '262314':[{period:'A',d:1032,g:null,m:null}], // Apple Watch S11 42mm GPS 鋁
+  '262315':[{period:'A',d:1032,g:null,m:null}], // Apple Watch S11 42mm GPS 鋁
+  '262316':[{period:'A',d:1112,g:null,m:null}], // Apple Watch S11 46mm GPS 鋁
+  '262317':[{period:'A',d:1112,g:null,m:null}], // Apple Watch S11 46mm GPS 鋁
+  '262318':[{period:'A',d:1112,g:null,m:null}], // Apple Watch S11 46mm GPS 鋁
+  '262319':[{period:'A',d:1112,g:null,m:null}], // Apple Watch S11 46mm GPS 鋁
+  '262320':[{period:'A',d:1112,g:null,m:null}], // Apple Watch S11 46mm GPS 鋁
+  '262321':[{period:'A',d:1112,g:null,m:null}], // Apple Watch S11 46mm GPS 鋁
+  '262322':[{period:'A',d:1112,g:null,m:null}], // Apple Watch S11 46mm GPS 鋁
+  '262323':[{period:'A',d:1112,g:null,m:null}], // Apple Watch S11 46mm GPS 鋁
+  '262324':[{period:'A',d:1272,g:null,m:null}], // Apple Watch S11 42mm LTE 鋁
+  '262325':[{period:'A',d:1272,g:null,m:null}], // Apple Watch S11 42mm LTE 鋁
+  '262326':[{period:'A',d:1272,g:null,m:null}], // Apple Watch S11 42mm LTE 鋁
+  '262327':[{period:'A',d:1272,g:null,m:null}], // Apple Watch S11 42mm LTE 鋁
+  '262328':[{period:'A',d:1272,g:null,m:null}], // Apple Watch S11 42mm LTE 鋁
+  '262329':[{period:'A',d:1272,g:null,m:null}], // Apple Watch S11 42mm LTE 鋁
+  '262330':[{period:'A',d:1272,g:null,m:null}], // Apple Watch S11 42mm LTE 鋁
+  '262331':[{period:'A',d:1272,g:null,m:null}], // Apple Watch S11 42mm LTE 鋁
+  '262341':[{period:'A',d:1352,g:null,m:null}], // Apple Watch S11 46mm LTE 鋁
+  '262342':[{period:'A',d:1352,g:null,m:null}], // Apple Watch S11 46mm LTE 鋁
+  '262343':[{period:'A',d:1352,g:null,m:null}], // Apple Watch S11 46mm LTE 鋁
+  '262344':[{period:'A',d:1352,g:null,m:null}], // Apple Watch S11 46mm LTE 鋁
+  '262345':[{period:'A',d:1352,g:null,m:null}], // Apple Watch S11 46mm LTE 鋁
+  '262346':[{period:'A',d:1352,g:null,m:null}], // Apple Watch S11 46mm LTE 鋁
+  '262347':[{period:'A',d:1352,g:null,m:null}], // Apple Watch S11 46mm LTE 鋁
+  '262348':[{period:'A',d:1352,g:null,m:null}], // Apple Watch S11 46mm LTE 鋁
+  '262332':[{period:'A',d:1832,g:null,m:null}], // Apple Watch S11 42mm LTE 鈦
+  '262333':[{period:'A',d:1832,g:null,m:null}], // Apple Watch S11 42mm LTE 鈦
+  '262334':[{period:'A',d:1832,g:null,m:null}], // Apple Watch S11 42mm LTE 鈦
+  '262335':[{period:'A',d:1832,g:null,m:null}], // Apple Watch S11 42mm LTE 鈦
+  '262336':[{period:'A',d:1832,g:null,m:null}], // Apple Watch S11 42mm LTE 鈦
+  '262337':[{period:'A',d:1832,g:null,m:null}], // Apple Watch S11 42mm LTE 鈦
+  '262349':[{period:'A',d:1952,g:null,m:null}], // Apple Watch S11 46mm LTE 鈦
+  '262350':[{period:'A',d:1952,g:null,m:null}], // Apple Watch S11 46mm LTE 鈦
+  '262351':[{period:'A',d:1952,g:null,m:null}], // Apple Watch S11 46mm LTE 鈦
+  '262352':[{period:'A',d:1952,g:null,m:null}], // Apple Watch S11 46mm LTE 鈦
+  '262353':[{period:'A',d:1952,g:null,m:null}], // Apple Watch S11 46mm LTE 鈦
+  '262354':[{period:'A',d:1952,g:null,m:null}], // Apple Watch S11 46mm LTE 鈦
+  '262338':[{period:'A',d:1952,g:null,m:null}], // Apple Watch S11 42mm LTE 不鏽鋼米蘭
+  '262339':[{period:'A',d:1952,g:null,m:null}], // Apple Watch S11 42mm LTE 不鏽鋼米蘭
+  '262340':[{period:'A',d:1952,g:null,m:null}], // Apple Watch S11 42mm LTE 不鏽鋼米蘭
+  '262355':[{period:'A',d:2072,g:null,m:null}], // Apple Watch S11 46mm LTE 不鏽鋼米蘭
+  '262356':[{period:'A',d:2072,g:null,m:null}], // Apple Watch S11 46mm LTE 不鏽鋼米蘭
+  '262357':[{period:'A',d:2072,g:null,m:null}], // Apple Watch S11 46mm LTE 不鏽鋼米蘭
+  '262358':[{period:'A',d:2072,g:null,m:null}], // Apple Watch S11 46mm LTE 不鏽鋼米蘭
+  '262359':[{period:'A',d:2072,g:null,m:null}], // Apple Watch S11 46mm LTE 不鏽鋼米蘭
+  '262360':[{period:'A',d:2072,g:null,m:null}], // Apple Watch S11 46mm LTE 不鏽鋼米蘭
+  '262361':[{period:'A',d:2421,g:null,m:null}], // Apple Watch Ultra 3 49mm LTE
+  '262362':[{period:'A',d:2421,g:null,m:null}], // Apple Watch Ultra 3 49mm LTE
+  '262363':[{period:'A',d:2421,g:null,m:null}], // Apple Watch Ultra 3 49mm 鈦 LTE
+  '262364':[{period:'A',d:2421,g:null,m:null}], // Apple Watch Ultra 3 49mm 鈦 LTE
+  '262365':[{period:'A',d:2421,g:null,m:null}], // Apple Watch Ultra 3 49mm 鈦 LTE
+  '262366':[{period:'A',d:2421,g:null,m:null}], // Apple Watch Ultra 3 49mm 鈦 LTE
+  '262367':[{period:'A',d:2421,g:null,m:null}], // Apple Watch Ultra 3 49mm 鈦 LTE
+  '262368':[{period:'A',d:2421,g:null,m:null}], // Apple Watch Ultra 3 49mm 鈦 LTE
+  '262369':[{period:'A',d:2421,g:null,m:null}], // Apple Watch Ultra 3 49mm 鈦 LTE
+  '262370':[{period:'A',d:2421,g:null,m:null}], // Apple Watch Ultra 3 49mm 鈦 LTE
+  '262371':[{period:'A',d:2421,g:null,m:null}], // Apple Watch Ultra 3 49mm 鈦 LTE
+  '262372':[{period:'A',d:2421,g:null,m:null}], // Apple Watch Ultra 3 49mm 鈦 LTE
+  '262373':[{period:'A',d:2691,g:null,m:null}], // Apple Watch Ultra 3 49mm 鈦米蘭 LTE
+  '262374':[{period:'A',d:2691,g:null,m:null}], // Apple Watch Ultra 3 49mm 鈦米蘭 LTE
+  '262375':[{period:'A',d:2691,g:null,m:null}], // Apple Watch Ultra 3 49mm 鈦米蘭 LTE
+  '262376':[{period:'A',d:2691,g:null,m:null}], // Apple Watch Ultra 3 49mm 鈦米蘭 LTE
+  '262377':[{period:'A',d:2691,g:null,m:null}], // Apple Watch Ultra 3 49mm 鈦米蘭 LTE
+  '262378':[{period:'A',d:2691,g:null,m:null}], // Apple Watch Ultra 3 49mm 鈦米蘭 LTE
+  '267411':[{period:'A',d:3703,g:null,m:null}], // Studio Display 標準玻璃 可調斜度支架
+  '267412':[{period:'A',d:4543,g:null,m:null}], // Studio Display 標準玻璃 可調斜度高度支架
+  '267413':[{period:'A',d:3703,g:null,m:null}], // Studio Display 標準玻璃 VESA吊架
+  '267414':[{period:'A',d:4403,g:null,m:null}], // Studio Display Nano texture 可調斜度支架 CTO
+  '267415':[{period:'A',d:5243,g:null,m:null}], // Studio Display Nano texture 可調斜度高度支架 CTO
+  '267416':[{period:'A',d:4403,g:null,m:null}], // Studio Display Nano texture VESA吊架 CTO
+  '267417':[{period:'A',d:7693,g:null,m:null}], // Studio Display XDR 標準玻璃 可調斜度高度支架 CTO
+  '267418':[{period:'A',d:6853,g:null,m:null}], // Studio Display XDR 標準玻璃 VESA吊架 CTO
+  '252141':[{period:'A',d:510,g:null,m:null}], // AirPods 4
+  '252142':[{period:'A',d:710,g:null,m:null}], // AirPods 4 主動式降噪
+  '262379':[{period:'A',d:900,g:null,m:null}], // AirPods Pro 第三代
+  '267952':[{period:'A',d:1799,g:null,m:null}], // AirPods Max 2
+  '267953':[{period:'A',d:1799,g:null,m:null}], // AirPods Max 2
+  '267954':[{period:'A',d:1799,g:null,m:null}], // AirPods Max 2
+  '267955':[{period:'A',d:1799,g:null,m:null}], // AirPods Max 2
+  '267956':[{period:'A',d:1799,g:null,m:null}], // AirPods Max 2
+  '255759':[{period:'A',d:1319,g:null,m:null}], // PowerBeats Pro 2
+  '255760':[{period:'A',d:1319,g:null,m:null}], // PowerBeats Pro 2
+  '255761':[{period:'A',d:1319,g:null,m:null}], // PowerBeats Pro 2
+};
+const ACTIVITY_PERIODS = {
+  A:{label:'202608激安操盤',color:'var(--red)',bg:'var(--red-bg)'},
+};
+const ACTIVITY_PERIOD_ORDER = ['A'];
+let searchPeriod = 'A';
+function updateSearchResults(){
+  const filtered = PRODUCTS.filter(p => {
+    const matchCat = searchCat === 'all' || p.cat === searchCat;
+    if(!matchCat) return false;
+    if(!matchesSeries(p)) return false;
+    if(!matchesSub(p)) return false;
+    if(!searchQuery) return true;
+    const q = searchQuery.toLowerCase();
+    return [p.name,p.spec,p.color,p.pid,p.mpn,String(p.price)].some(v=>v.toLowerCase().includes(q));
+  });
+
+  document.querySelectorAll('.cat-btn').forEach(btn => {
+    const c = btn.dataset.cat;
+    const on = c === searchCat;
+    btn.style.borderColor = on ? 'var(--blue)' : 'var(--border)';
+    btn.style.background  = on ? 'var(--blue)' : 'var(--white)';
+    btn.style.color       = on ? '#fff' : 'var(--gray)';
+  });
+
+  const el = document.getElementById('search-results');
+  if(!el) return;
+
+  if(filtered.length === 0){
+    el.innerHTML = `<div style="padding:12px 16px;background:var(--light);border-bottom:1px solid var(--border);font-size:12px;color:var(--gray);font-weight:600">找到 <span style="color:var(--text)">0</span> 筆結果</div><div class="empty">找不到符合的商品</div>`;
+    return;
+  }
+
+  const catCls = c => c==='Mac'?'badge-blue':c==='iPad'?'badge-orange':c==='iPhone'?'badge-green':'badge-gray';
+  let rows = '';
+  let prevName = null, prevSpec = null, specToggle = 0;
+
+  for(const p of filtered){
+    if(p.name !== prevName){
+      prevName = p.name;
+      prevSpec = null;
+      specToggle = 0;
+      rows += `<tr class="search-group-row" style="background:#eef1f5;border-top:2px solid #c8d4e0;border-bottom:1px solid #c8d4e0">
+        <td colspan="8" style="padding:8px 14px;font-size:13px;font-weight:700">
+          <span class="badge ${catCls(p.cat)}" style="margin-right:8px">${p.cat}</span>${p.name}
+        </td>
+      </tr>`;
+    }
+    if(p.spec !== prevSpec){
+      prevSpec = p.spec;
+      specToggle ^= 1;
+    }
+    const bg = specToggle ? '#f4f7fb' : 'var(--white)';
+    const edu = EDU_DISCOUNT[p.pid];
+    const acts = ACTIVITY_PROMO[p.pid] || [];
+    const act = acts.find(a => a.period === searchPeriod) || null;
+    const otherActs = acts.filter(a => a.period !== searchPeriod);
+    const actStyle = act?.d ? 'color:var(--green)' : act?.m==='暫無交期' ? 'color:var(--red)' : act?.m ? 'color:var(--orange)' : 'color:var(--border)';
+    const actVal = act?.d ? '-$'+act.d.toLocaleString() : act?.m || '—';
+    const promo = act?.d ? p.price - act.d : null;
+    const otherTag = otherActs.length ? `<span title="${otherActs.map(a=>ACTIVITY_PERIODS[a.period]?.label||a.period).join('、')}也有活動" style="display:inline-block;margin-left:5px;padding:1px 5px;border-radius:4px;font-size:9px;font-weight:700;color:var(--gray);background:var(--light);white-space:nowrap;cursor:help">另有活動</span>` : '';
+    rows += `<tr class="search-row" style="border-bottom:1px solid var(--border);background:${bg}" onmouseover="this.style.background='var(--blue-bg)'" onmouseout="this.style.background='${bg}'">
+      <td data-label="貨號" style="padding:10px 8px;font-family:ui-monospace,monospace;font-weight:700;color:var(--blue);font-size:16px;white-space:nowrap">${p.pid}</td>
+      <td data-label="顏色" style="padding:10px 8px;white-space:nowrap">${p.color||'—'}</td>
+      <td data-label="規格" style="padding:10px 8px;white-space:nowrap;color:var(--gray);font-size:13px">${p.spec}</td>
+      <td data-label="售價" style="padding:10px 8px;text-align:left;font-weight:600;white-space:nowrap">$${p.price.toLocaleString()}</td>
+      <td data-label="活動折扣" style="padding:10px 4px 10px 8px;text-align:left;font-weight:700;width:90px;max-width:90px;white-space:normal;${actStyle}">${actVal}${otherTag}</td>
+      <td data-label="促銷價(未含教育折扣)" style="padding:10px 8px 10px 4px;text-align:left;white-space:nowrap">${promo!=null?`<span style="display:inline-block;padding:3px 9px;border-radius:6px;background:var(--green-bg);color:var(--green);font-weight:700;font-size:14px">$${promo.toLocaleString()}</span>`:'<span style="color:var(--border)">—</span>'}</td>
+      <td data-label="贈品" style="padding:10px 8px;font-size:13px;color:var(--text)">${act?.g||'—'}</td>
+      <td data-label="教育折抵" style="padding:10px 8px;text-align:left;font-weight:700;white-space:nowrap;${edu?'color:var(--red)':'color:var(--border)'}">${edu?'-$'+edu.toLocaleString():'—'}</td>
+    </tr>`;
+  }
+
+  el.innerHTML = `
+    <div style="padding:12px 16px;background:var(--light);border-bottom:1px solid var(--border);font-size:12px;color:var(--gray);font-weight:600">找到 <span style="color:var(--text)">${filtered.length}</span> 筆結果</div>
+    <div class="search-table-wrap" style="overflow-x:auto">
+      <table class="search-table" style="width:auto;min-width:100%;border-collapse:collapse;font-size:15px">
+        <thead>
+          <tr style="background:var(--light);border-bottom:1px solid var(--border)">
+            <th class="search-thead-th" style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">貨號</th>
+            <th class="search-thead-th" style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">顏色</th>
+            <th class="search-thead-th" style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px">規格</th>
+            <th class="search-thead-th" style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">售價</th>
+            <th class="search-thead-th" style="padding:10px 4px 10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap;width:90px;max-width:90px">活動折扣</th>
+            <th class="search-thead-th" style="padding:10px 8px 10px 4px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">促銷價<br><span style="font-size:9px;font-weight:400;text-transform:none;letter-spacing:0;color:var(--gray)">未含教育折扣</span></th>
+            <th class="search-thead-th" style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">贈品</th>
+            <th class="search-thead-th" style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">教育折抵</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+}
+
+function renderSearch(){
+  const cats = ['all','Mac','iPad','iPhone','Watch','配件','軟體'];
+  const catLabels = {all:'全部',Mac:'Mac',iPad:'iPad',iPhone:'iPhone',Watch:'Watch',配件:'配件',軟體:'軟體'};
+
+  document.getElementById('mc').innerHTML = `
+    <div class="sec-hdr"><div><div class="sec-title">激安活動</div><div class="sec-sub">共 ${PRODUCTS.length} 筆資料 · 來源：202608激安操盤.pdf（永二・新光華・澄清文山）</div></div></div>
+    <div class="card" style="padding:14px 20px;margin-bottom:14px;background:#fff7f0;border:1.5px solid #f3c8a0;font-size:12.5px;line-height:1.8;color:#8a4a1e">
+      <b>活動注意事項：</b>客製機款不參與活動；活動不與出清價格、其他操盤並行；活動可搭配舊換新折抵；教育價可全額並行優惠（需未被禁止）；限制每人每卡二台，不接大宗採購。iPhone/iPad/Mac客訂皆無交貨日期，依客訂順序出貨，請勿壓交期。<br>
+      <b>展示機出清另計：</b>展-iPhone 16e 128GB（貨號811928）$11,900、展-15.3吋MBA M3/8CPU/10GPU/16G（貨號811642）$24,900，為門市展示機出清特例，非本表一般貨號，數量有限售完為止。<br>
+      <b>本表未列入折扣的系列</b>（iPhone 16e、Mac Studio、一般原廠/副廠配件、軟體）不參與本次激安活動，僅顯示原價。
+    </div>
+    <div class="card" style="padding:16px 20px">
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">
+        ${ACTIVITY_PERIOD_ORDER.map(k=>`<button onclick="searchPeriod='${k}';updateSearchResults()" style="padding:.4em .9em;font-size:.85em;font-weight:700;border:1.5px solid ${k===searchPeriod?ACTIVITY_PERIODS[k].color:'var(--border)'};border-radius:20px;background:${k===searchPeriod?ACTIVITY_PERIODS[k].color:'var(--white)'};color:${k===searchPeriod?'#fff':'var(--gray)'};cursor:pointer;white-space:nowrap">${ACTIVITY_PERIODS[k].label}</button>`).join('')}
+      </div>
+      <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center">
+        <input id="sq" type="search" value="${searchQuery.replace(/"/g,'&quot;')}" placeholder="輸入關鍵字：貨號 / 型號 / 品名 / 規格 / 顏色 / 價格…" autocomplete="off"
+          style="flex:1;min-width:200px;padding:10px 14px;border-radius:10px;border:1.5px solid var(--border);font-size:16px;font-family:inherit;outline:none;background:var(--light)"
+          oninput="searchQuery=this.value;updateSearchResults()" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--border)'">
+        <button onclick="searchQuery='';document.getElementById('sq').value='';updateSearchResults()" style="padding:8px 14px;border-radius:10px;border:1.5px solid var(--border);background:var(--white);font-size:13px;cursor:pointer;font-family:inherit;color:var(--gray)">清除</button>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        ${cats.map(c=>`<button class="cat-btn" data-cat="${c}" onclick="selectCat('${c}')" style="padding:5px 14px;border-radius:20px;border:1.5px solid ${searchCat===c?'var(--blue)':'var(--border)'};background:${searchCat===c?'var(--blue)':'var(--white)'};color:${searchCat===c?'#fff':'var(--gray)'};font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .13s">${catLabels[c]}</button>`).join('')}
+      </div>
+      <div id="series-row" style="display:none;gap:6px;flex-wrap:wrap;margin-top:8px;padding-top:8px;border-top:1px dashed var(--border)"></div>
+      <div id="sub-cat-row" style="display:none;gap:6px;flex-wrap:wrap;margin-top:8px;padding-top:8px;border-top:1px dashed var(--border)"></div>
+    </div>
+    <div id="search-results" class="card" style="padding:0;overflow:hidden"></div>`;
+
+  renderSeriesMenu();
+  renderSubMenu();
+  updateSearchResults();
+}
+
+renderSearch();
+</script>
+</body>
+</html>
