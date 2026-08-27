@@ -37,10 +37,14 @@ const EDU_ITEMS = [
   {cat:'Mac', name:'MacBook Pro 16.2"', spec:'M5 Max 18CPU / 40CPU', discount:9910, code:'270811'},
   {cat:'Mac', name:'MacBook Neo 13"', spec:'A18 Pro 全系列', discount:3000, code:'200056'},
   {cat:'Mac', name:'Mac mini', spec:'M4 / M4 Pro 全系列', discount:3410, code:'270807'},
+  {cat:'Mac', name:'Mac mini M6', spec:'M6 全系列', discount:3310, code:'267540'},
+  {cat:'Mac', name:'Mac mini M6', spec:'M5 Pro', discount:3510, code:'272707'},
   {cat:'Mac', name:'iMac 24"', spec:'M4 8CPU', discount:1710, code:'270806'},
   {cat:'Mac', name:'iMac 24"', spec:'M4 10CPU 全系列', discount:3410, code:'270807'},
   {cat:'Mac', name:'Mac Studio', spec:'M4 Max', discount:6810, code:'270808'},
   {cat:'Mac', name:'Mac Studio', spec:'M3 Ultra', discount:14010, code:'270809'},
+  {cat:'Mac', name:'Mac Studio M5', spec:'M5 Max', discount:6810, code:'270808'},
+  {cat:'Mac', name:'Mac Studio M5', spec:'M5 Ultra', discount:14510, code:'272708'},
   {cat:'Mac', name:'Studio Display', spec:'標準玻璃 可調整斜度 / VESA', discount:3300, code:'240067'},
   {cat:'Mac', name:'Studio Display', spec:'標準玻璃 可調整高斜度', discount:3300, code:'240067'},
   {cat:'Mac', name:'Studio Display', spec:'Nano texture 可調整斜度 / VESA', discount:3300, code:'240067'},
@@ -123,6 +127,12 @@ function renderEdu(){
   const catLabels = {all:'全部', Mac:'Mac', iPad:'iPad', Watch:'Watch', 配件:'配件'};
   document.getElementById('mc').innerHTML = `
     <div class="sec-hdr"><div><div class="sec-title">教育優惠操作手冊</div><div class="sec-sub">來源：大專院校優惠操作手冊 ver 8.9 · 2026/06/26 · 現役商品 ${EDU_ITEMS.length} 筆</div></div></div>
+    <div class="card" style="padding:14px 20px;margin-bottom:14px;background:#fff7f0;border:1.5px solid #f3c8a0;font-size:13px;line-height:1.8;color:#8a4a1e">
+      🔔 <b>提醒</b><br>
+      10/1（四）起，大專院校學生辦理教育價資格驗證時，學生證需具備【115學年度上學期註冊章】。<br>
+      考量各大專院校最晚已於9/14開學，且中間適逢中秋連假，已預留足夠時間供學校完成相關行政及註冊作業，因此10/1後將依上述規範執行。<br>
+      再請協助留意並依規定辦理，謝謝。
+    </div>
     <div class="card" style="padding:16px 20px">
       <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center">
         <input id="eq" type="search" value="${eduQuery.replace(/"/g,'&quot;')}" placeholder="搜尋商品名稱 / 規格 / 優惠代碼 / 折抵金額…" autocomplete="off"

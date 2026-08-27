@@ -55,6 +55,11 @@ const PRODUCTS = [
   {cat:'Mac',name:'Mac Mini 2024',spec:'M4/10CPU/10GPU/16GB/512GB',color:'銀',pid:'253545',mpn:'MU9E3',price:33900},
   {cat:'Mac',name:'Mac Mini 2024',spec:'M4/10CPU/10GPU/24GB/512GB',color:'銀',pid:'253546',mpn:'MCYT4',price:40900},
   {cat:'Mac',name:'Mac Mini 2024',spec:'M4 Pro/12CPU/16GPU/24GB/512GB',color:'銀',pid:'253547',mpn:'MCX44',price:54900},
+  // ── Mac Mini M6 2026 ──
+  {cat:'Mac',name:'Mac Mini M6 2026',spec:'M6/12CPU/12GPU/16GB/256GB',color:'銀',pid:'272711',mpn:'MHQK4',price:29900},
+  {cat:'Mac',name:'Mac Mini M6 2026',spec:'M6/12CPU/12GPU/16GB/512GB',color:'銀',pid:'272712',mpn:'MHQL4',price:36900},
+  {cat:'Mac',name:'Mac Mini M6 2026',spec:'M6/12CPU/12GPU/24GB/512GB',color:'銀',pid:'272713',mpn:'MHQM4',price:43900},
+  {cat:'Mac',name:'Mac Mini M6 2026',spec:'M5 Pro/15CPU/16GPU/24GB/512GB',color:'銀',pid:'272714',mpn:'MHQN4',price:59900},
   // ── iMac 24" 2024 ──
   {cat:'Mac',name:'iMac 24" M4 2024',spec:'M4/8CPU/8GPU/16GB/256GB',color:'銀',pid:'253474',mpn:'MWUC3',price:49900},
   {cat:'Mac',name:'iMac 24" M4 2024',spec:'M4/8CPU/8GPU/16GB/256GB',color:'藍',pid:'253475',mpn:'MWUF3',price:49900},
@@ -76,6 +81,9 @@ const PRODUCTS = [
   // ── Mac Studio 2025 ──
   {cat:'Mac',name:'Mac Studio 2025',spec:'M4 Max/14CPU/32GPU/36GB/512GB',color:'銀',pid:'256657',mpn:'MU963',price:84900},
   {cat:'Mac',name:'Mac Studio 2025',spec:'M3 Ultra/28CPU/60GPU/96GB/1TB',color:'銀',pid:'256658',mpn:'MU973',price:184900},
+  // ── Mac Studio M5 2026 ──
+  {cat:'Mac',name:'Mac Studio M5 2026',spec:'M5 Max/18CPU/32GPU/36GB/512GB',color:'銀',pid:'272715',mpn:'MHL64',price:84900},
+  {cat:'Mac',name:'Mac Studio M5 2026',spec:'M5 Ultra/30CPU/64GPU/96GB/1TB',color:'銀',pid:'272716',mpn:'MHL74',price:199900},
   // ── MacBook Neo ──
   {cat:'Mac',name:'MacBook Neo',spec:'A18 Pro/6CPU/5GPU/8GB/256GB',color:'胭粉',pid:'267442',mpn:'MHFH4',price:22900},
   {cat:'Mac',name:'MacBook Neo',spec:'A18 Pro/6CPU/5GPU/8GB/256GB',color:'青橘黃',pid:'267443',mpn:'MHFD4',price:22900},
