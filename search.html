@@ -5,6 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>貨號查詢</title>
 <link rel="stylesheet" href="shared/style.css">
+<style>
+.srs-card{background:var(--white);border-radius:14px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:12px;border:1.5px solid var(--border)}
+.srs-hdr-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;flex-wrap:wrap}
+.srs-hdr-left{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.srs-name{font-size:15px;font-weight:800}
+.srs-badge{font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap}
+.srs-count{font-size:12px;color:var(--gray);white-space:nowrap}
+.srs-toggle-bar{padding:9px 18px;cursor:pointer;user-select:none;text-align:center;border-top:1px solid var(--border);background:var(--light)}
+.srs-toggle-bar:hover{background:#eef1f5}
+.srs-toggle{font-size:12px;color:var(--gray);font-weight:600}
+.srs-body{display:none}
+.srs-body.open{display:block}
+</style>
 </head>
 <body>
 
@@ -31,6 +44,7 @@ let searchQuery = '';
 let searchCat = 'all';
 let searchSeries = 'all';
 let searchSub = 'all';
+const searchOpen = new Set();
 
 const SERIES_ORDER = {
   'Mac': ['MacBook Air','MacBook Pro','Mac mini','iMac','Mac Studio','MacBook Neo'],
@@ -125,6 +139,10 @@ function selectSeries(s){
 function selectSub(s){
   searchSub = s;
   renderSubMenu();
+  updateSearchResults();
+}
+function toggleSearchGroup(name){
+  if(searchOpen.has(name)) searchOpen.delete(name); else searchOpen.add(name);
   updateSearchResults();
 }
 function renderSeriesMenu(){
@@ -957,69 +975,127 @@ function updateSearchResults(){
   if(!el) return;
 
   if(filtered.length === 0){
-    el.innerHTML = `<div style="padding:12px 16px;background:var(--light);border-bottom:1px solid var(--border);font-size:12px;color:var(--gray);font-weight:600">找到 <span style="color:var(--text)">0</span> 筆結果</div><div class="empty">找不到符合的商品</div>`;
+    el.innerHTML = `<div style="padding:0 2px 12px;font-size:12px;color:var(--gray);font-weight:600">找到 <span style="color:var(--text)">0</span> 筆結果</div><div class="empty">找不到符合的商品</div>`;
     return;
   }
 
   const catCls = c => c==='Mac'?'badge-blue':c==='iPad'?'badge-orange':c==='iPhone'?'badge-green':'badge-gray';
-  let rows = '';
-  let prevName = null, prevSpec = null, specToggle = 0;
 
+  // group filtered products by series name, preserving first-seen order
+  const groups = new Map();
   for(const p of filtered){
-    if(p.name !== prevName){
-      prevName = p.name;
-      prevSpec = null;
-      specToggle = 0;
-      rows += `<tr class="search-group-row" style="background:#eef1f5;border-top:2px solid #c8d4e0;border-bottom:1px solid #c8d4e0">
-        <td colspan="8" style="padding:8px 14px;font-size:13px;font-weight:700">
-          <span class="badge ${catCls(p.cat)}" style="margin-right:8px">${p.cat}</span>${p.name}
-        </td>
-      </tr>`;
-    }
-    if(p.spec !== prevSpec){
-      prevSpec = p.spec;
-      specToggle ^= 1;
-    }
-    const bg = specToggle ? '#f4f7fb' : 'var(--white)';
-    const edu = EDU_DISCOUNT[p.pid];
-    const acts = ACTIVITY_PROMO[p.pid] || [];
-    const act = acts.find(a => a.period === searchPeriod) || null;
-    const otherActs = acts.filter(a => a.period !== searchPeriod);
-    const actStyle = act?.d ? 'color:var(--green)' : act?.m==='暫無交期' ? 'color:var(--red)' : act?.m ? 'color:var(--orange)' : 'color:var(--border)';
-    const actVal = act?.d ? '-$'+act.d.toLocaleString() : act?.m || '—';
-    const promo = act?.d ? p.price - act.d : null;
-    const otherTag = otherActs.length ? `<span title="${otherActs.map(a=>ACTIVITY_PERIODS[a.period]?.label||a.period).join('、')}也有活動" style="display:inline-block;margin-left:5px;padding:1px 5px;border-radius:4px;font-size:9px;font-weight:700;color:var(--gray);background:var(--light);white-space:nowrap;cursor:help">另有活動</span>` : '';
-    rows += `<tr class="search-row" style="border-bottom:1px solid var(--border);background:${bg}" onmouseover="this.style.background='var(--blue-bg)'" onmouseout="this.style.background='${bg}'">
-      <td data-label="貨號" style="padding:10px 8px;font-family:ui-monospace,monospace;font-weight:700;color:var(--blue);font-size:16px;white-space:nowrap">${p.pid}</td>
-      <td data-label="顏色" style="padding:10px 8px;white-space:nowrap">${p.color||'—'}</td>
-      <td data-label="規格" style="padding:10px 8px;white-space:nowrap;color:var(--gray);font-size:13px">${p.spec}</td>
-      <td data-label="售價" style="padding:10px 8px;text-align:left;font-weight:600;white-space:nowrap">$${p.price.toLocaleString()}</td>
-      <td data-label="活動折扣" style="padding:10px 4px 10px 8px;text-align:left;font-weight:700;width:90px;max-width:90px;white-space:normal;${actStyle}">${actVal}${otherTag}</td>
-      <td data-label="促銷價(未含教育折扣)" style="padding:10px 8px 10px 4px;text-align:left;white-space:nowrap">${promo!=null?`<span style="display:inline-block;padding:3px 9px;border-radius:6px;background:var(--green-bg);color:var(--green);font-weight:700;font-size:14px">$${promo.toLocaleString()}</span>`:'<span style="color:var(--border)">—</span>'}</td>
-      <td data-label="贈品" style="padding:10px 8px;font-size:13px;color:var(--text)">${act?.g||'—'}</td>
-      <td data-label="教育折抵" style="padding:10px 8px;text-align:left;font-weight:700;white-space:nowrap;${edu?'color:var(--red)':'color:var(--border)'}">${edu?'-$'+edu.toLocaleString():'—'}</td>
-    </tr>`;
+    if(!groups.has(p.name)) groups.set(p.name, []);
+    groups.get(p.name).push(p);
   }
 
-  el.innerHTML = `
-    <div style="padding:12px 16px;background:var(--light);border-bottom:1px solid var(--border);font-size:12px;color:var(--gray);font-weight:600">找到 <span style="color:var(--text)">${filtered.length}</span> 筆結果</div>
-    <div class="search-table-wrap" style="overflow-x:auto">
-      <table class="search-table" style="width:auto;min-width:100%;border-collapse:collapse;font-size:15px">
-        <thead>
-          <tr style="background:var(--light);border-bottom:1px solid var(--border)">
-            <th class="search-thead-th" style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">貨號</th>
-            <th class="search-thead-th" style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">顏色</th>
-            <th class="search-thead-th" style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px">規格</th>
-            <th class="search-thead-th" style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">售價</th>
-            <th class="search-thead-th" style="padding:10px 4px 10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap;width:90px;max-width:90px">活動折扣</th>
-            <th class="search-thead-th" style="padding:10px 8px 10px 4px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">促銷價<br><span style="font-size:9px;font-weight:400;text-transform:none;letter-spacing:0;color:var(--gray)">未含教育折扣</span></th>
-            <th class="search-thead-th" style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">贈品</th>
-            <th class="search-thead-th" style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">教育折抵</th>
-          </tr>
-        </thead>
-        <tbody>${rows}</tbody>
-      </table>
+  const q = searchQuery.trim();
+  if(q){
+    for(const name of groups.keys()) searchOpen.add(name);
+  }
+
+  const theadHtml = `
+    <thead>
+      <tr style="background:var(--light);border-bottom:1px solid var(--border)">
+        <th class="search-thead-th" style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">貨號</th>
+        <th class="search-thead-th" style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">顏色</th>
+        <th class="search-thead-th" style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px">規格</th>
+        <th class="search-thead-th" style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">售價</th>
+        <th class="search-thead-th" style="padding:10px 4px 10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap;width:90px;max-width:90px">活動折扣</th>
+        <th class="search-thead-th" style="padding:10px 8px 10px 4px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">促銷價<br><span style="font-size:9px;font-weight:400;text-transform:none;letter-spacing:0;color:var(--gray)">未含教育折扣</span></th>
+        <th class="search-thead-th" style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">贈品</th>
+        <th class="search-thead-th" style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">教育折抵</th>
+      </tr>
+    </thead>`;
+
+  const SRS_PALETTE = ['#ffffff', '#eaf2ff', '#fdeef0', '#eef8ec', '#f3ecfb'];
+
+  const cards = [...groups.entries()].map(([name, prods], idx) => {
+    let rows = '';
+    let prevSpec = null, specToggle = 0;
+    const groupOtherPeriods = new Set();
+
+    for(const p of prods){
+      if(p.spec !== prevSpec){
+        prevSpec = p.spec;
+        specToggle ^= 1;
+      }
+      const bg = specToggle ? '#f4f7fb' : 'var(--white)';
+      const edu = EDU_DISCOUNT[p.pid];
+      const acts = ACTIVITY_PROMO[p.pid] || [];
+      const act = acts.find(a => a.period === searchPeriod) || null;
+      const otherActs = acts.filter(a => a.period !== searchPeriod);
+      otherActs.forEach(a => groupOtherPeriods.add(a.period));
+      const actStyle = act?.d ? 'color:var(--green)' : act?.m==='暫無交期' ? 'color:var(--red)' : act?.m ? 'color:var(--orange)' : 'color:var(--border)';
+      const actVal = act?.d ? '-$'+act.d.toLocaleString() : act?.m || '—';
+      const promo = act?.d ? p.price - act.d : null;
+      const otherTag = otherActs.length ? `<span title="${otherActs.map(a=>ACTIVITY_PERIODS[a.period]?.label||a.period).join('、')}也有活動" style="display:inline-block;margin-left:5px;padding:1px 5px;border-radius:4px;font-size:9px;font-weight:700;color:var(--gray);background:var(--light);white-space:nowrap;cursor:help">另有活動</span>` : '';
+      rows += `<tr class="search-row" style="border-bottom:1px solid var(--border);background:${bg}" onmouseover="this.style.background='var(--blue-bg)'" onmouseout="this.style.background='${bg}'">
+        <td data-label="貨號" style="padding:10px 8px;font-family:ui-monospace,monospace;font-weight:700;color:var(--blue);font-size:16px;white-space:nowrap">${p.pid}</td>
+        <td data-label="顏色" style="padding:10px 8px;white-space:nowrap">${p.color||'—'}</td>
+        <td data-label="規格" style="padding:10px 8px;white-space:nowrap;color:var(--gray);font-size:13px">${p.spec}</td>
+        <td data-label="售價" style="padding:10px 8px;text-align:left;font-weight:600;white-space:nowrap">$${p.price.toLocaleString()}</td>
+        <td data-label="活動折扣" style="padding:10px 4px 10px 8px;text-align:left;font-weight:700;width:90px;max-width:90px;white-space:normal;${actStyle}">${actVal}${otherTag}</td>
+        <td data-label="促銷價(未含教育折扣)" style="padding:10px 8px 10px 4px;text-align:left;white-space:nowrap">${promo!=null?`<span style="display:inline-block;padding:3px 9px;border-radius:6px;background:var(--green-bg);color:var(--green);font-weight:700;font-size:14px">$${promo.toLocaleString()}</span>`:'<span style="color:var(--border)">—</span>'}</td>
+        <td data-label="贈品" style="padding:10px 8px;font-size:13px;color:var(--text)">${act?.g||'—'}</td>
+        <td data-label="教育折抵" style="padding:10px 8px;text-align:left;font-weight:700;white-space:nowrap;${edu?'color:var(--red)':'color:var(--border)'}">${edu?'-$'+edu.toLocaleString():'—'}</td>
+      </tr>`;
+    }
+
+    // series-level activity summary for the card header
+    const groupActs = prods.map(p => (ACTIVITY_PROMO[p.pid]||[]).find(a => a.period === searchPeriod)).filter(Boolean);
+    const dVals = groupActs.filter(a => a.d != null).map(a => a.d);
+    let badgeText, badgeStyle;
+    if(dVals.length){
+      const minD = Math.min(...dVals);
+      const allSame = dVals.every(v => v === minD);
+      badgeText = '現折$' + minD.toLocaleString() + (allSame ? '' : '起');
+      badgeStyle = 'color:var(--green);background:var(--green-bg)';
+    } else {
+      const mVal = groupActs.find(a => a.m)?.m;
+      const gVal = groupActs.find(a => a.g)?.g;
+      if(mVal){
+        badgeText = mVal;
+        badgeStyle = mVal === '暫無交期' ? 'color:var(--red);background:var(--red-bg)' : 'color:var(--orange);background:var(--orange-bg)';
+      } else if(gVal){
+        badgeText = gVal;
+        badgeStyle = 'color:var(--orange);background:var(--orange-bg)';
+      } else {
+        badgeText = '目前無活動';
+        badgeStyle = 'color:var(--gray);background:var(--light)';
+      }
+    }
+    const groupOtherTag = groupOtherPeriods.size ? `<span title="${[...groupOtherPeriods].map(k=>ACTIVITY_PERIODS[k]?.label||k).join('、')}也有活動" style="display:inline-block;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:700;color:var(--gray);background:var(--light);white-space:nowrap;cursor:help">另有活動</span>` : '';
+
+    const open = searchOpen.has(name);
+    const cardBg = SRS_PALETTE[idx % SRS_PALETTE.length];
+    return `
+    <div class="srs-card" style="background:${cardBg}">
+      <div class="srs-hdr-top">
+        <div class="srs-hdr-left">
+          <span class="badge ${catCls(prods[0].cat)}">${prods[0].cat}</span>
+          <span class="srs-name">${name}</span>
+          <span class="srs-badge" style="${badgeStyle}">${badgeText}</span>
+          ${groupOtherTag}
+        </div>
+        <span class="srs-count">共 ${prods.length} 項</span>
+      </div>
+      <div class="srs-toggle-bar" onclick="toggleSearchGroup('${name.replace(/'/g,"\\'").replace(/"/g,'&quot;')}')">
+        <span class="srs-toggle">${open ? '收合明細 ▲' : '查看貨號、售價、活動折扣、贈品明細 ▼'}</span>
+      </div>
+      <div class="srs-body ${open ? 'open' : ''}">
+        <div class="search-table-wrap" style="overflow-x:auto">
+          <table class="search-table" style="width:auto;min-width:100%;border-collapse:collapse;font-size:15px">
+            ${theadHtml}
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+      </div>
     </div>`;
+  }).join('');
+
+  el.innerHTML = `
+    <div style="padding:0 2px 12px;font-size:12px;color:var(--gray);font-weight:600">找到 <span style="color:var(--text)">${filtered.length}</span> 筆結果 · <span style="color:var(--text)">${groups.size}</span> 個系列</div>
+    ${cards}`;
 }
 
 function renderSearch(){
@@ -1044,7 +1120,7 @@ function renderSearch(){
       <div id="series-row" style="display:none;gap:6px;flex-wrap:wrap;margin-top:8px;padding-top:8px;border-top:1px dashed var(--border)"></div>
       <div id="sub-cat-row" style="display:none;gap:6px;flex-wrap:wrap;margin-top:8px;padding-top:8px;border-top:1px dashed var(--border)"></div>
     </div>
-    <div id="search-results" class="card" style="padding:0;overflow:hidden"></div>`;
+    <div id="search-results"></div>`;
 
   renderSeriesMenu();
   renderSubMenu();
