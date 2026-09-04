@@ -972,6 +972,15 @@ function updateSearchResults(){
     btn.style.color       = on ? '#fff' : 'var(--gray)';
   });
 
+  document.querySelectorAll('.period-btn').forEach(btn => {
+    const k = btn.dataset.period;
+    const on = k === searchPeriod;
+    const c = ACTIVITY_PERIODS[k].color;
+    btn.style.borderColor = on ? c : 'var(--border)';
+    btn.style.background  = on ? c : 'var(--white)';
+    btn.style.color       = on ? '#fff' : 'var(--gray)';
+  });
+
   const el = document.getElementById('search-results');
   if(!el) return;
 
@@ -1107,7 +1116,7 @@ function renderSearch(){
     <div class="sec-hdr"><div><div class="sec-title">貨號查詢</div><div class="sec-sub">共 ${PRODUCTS.length} 筆資料 · 來源：貨號一覽表 20260626</div></div></div>
     <div class="card" style="padding:16px 20px">
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">
-        ${ACTIVITY_PERIOD_ORDER.map(k=>`<button onclick="searchPeriod='${k}';updateSearchResults()" style="padding:.4em .9em;font-size:.85em;font-weight:700;border:1.5px solid ${k===searchPeriod?ACTIVITY_PERIODS[k].color:'var(--border)'};border-radius:20px;background:${k===searchPeriod?ACTIVITY_PERIODS[k].color:'var(--white)'};color:${k===searchPeriod?'#fff':'var(--gray)'};cursor:pointer;white-space:nowrap">${ACTIVITY_PERIODS[k].label}</button>`).join('')}
+        ${ACTIVITY_PERIOD_ORDER.map(k=>`<button class="period-btn" data-period="${k}" onclick="searchPeriod='${k}';updateSearchResults()" style="padding:.4em .9em;font-size:.85em;font-weight:700;border:1.5px solid ${k===searchPeriod?ACTIVITY_PERIODS[k].color:'var(--border)'};border-radius:20px;background:${k===searchPeriod?ACTIVITY_PERIODS[k].color:'var(--white)'};color:${k===searchPeriod?'#fff':'var(--gray)'};cursor:pointer;white-space:nowrap">${ACTIVITY_PERIODS[k].label}</button>`).join('')}
       </div>
       <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center">
         <input id="sq" type="search" value="${searchQuery.replace(/"/g,'&quot;')}" placeholder="輸入關鍵字：貨號 / 型號 / 品名 / 規格 / 顏色 / 價格…" autocomplete="off"
