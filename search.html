@@ -1019,6 +1019,16 @@ function updateSearchResults(){
 
   const SRS_PALETTE = ['#ffffff', '#eaf2ff', '#fdeef0', '#eef8ec', '#f3ecfb'];
 
+  function actValue(a){
+    if(!a) return null;
+    if(a.d != null) return a.d;
+    if(a.g){
+      const m = a.g.match(/(\d[\d,]*)/);
+      if(m) return parseInt(m[1].replace(/,/g,''),10);
+    }
+    return null;
+  }
+
   const cards = [...groups.entries()].map(([name, prods], idx) => {
     let rows = '';
     let prevSpec = null, specToggle = 0;
@@ -1038,7 +1048,22 @@ function updateSearchResults(){
       const actStyle = act?.d ? 'color:var(--green)' : act?.m==='暫無交期' ? 'color:var(--red)' : act?.m ? 'color:var(--orange)' : 'color:var(--border)';
       const actVal = act?.d ? '-$'+act.d.toLocaleString() : act?.m || '—';
       const promo = act?.d ? p.price - act.d : null;
-      const otherTag = otherActs.length ? `<span title="${otherActs.map(a=>ACTIVITY_PERIODS[a.period]?.label||a.period).join('、')}也有活動" style="display:inline-block;margin-left:5px;padding:1px 5px;border-radius:4px;font-size:9px;font-weight:700;color:var(--gray);background:var(--light);white-space:nowrap;cursor:help">另有活動</span>` : '';
+      const curVal = actValue(act);
+      let bestOther = null;
+      for(const a of otherActs){
+        const v = actValue(a);
+        if(v != null && (bestOther === null || v > bestOther.v)) bestOther = {a, v};
+      }
+      const otherTag = (() => {
+        if(!otherActs.length) return '';
+        if(bestOther && curVal != null && bestOther.v > curVal){
+          const diff = bestOther.v - curVal;
+          const label = ACTIVITY_PERIODS[bestOther.a.period]?.label || bestOther.a.period;
+          return `<span title="切換到${label}查看" style="display:inline-block;margin-left:5px;padding:1px 6px;border-radius:4px;font-size:9px;font-weight:700;color:#fff;background:var(--red);white-space:nowrap">${label}更優 多$${diff.toLocaleString()}</span>`;
+        }
+        const periodLabels = otherActs.map(a=>ACTIVITY_PERIODS[a.period]?.label||a.period).join('、');
+        return `<span title="${periodLabels}也有活動" style="display:inline-block;margin-left:5px;padding:1px 5px;border-radius:4px;font-size:9px;font-weight:700;color:var(--gray);background:var(--light);white-space:nowrap;cursor:help">另有活動</span>`;
+      })();
       rows += `<tr class="search-row" style="border-bottom:1px solid var(--border);background:${bg}" onmouseover="this.style.background='var(--blue-bg)'" onmouseout="this.style.background='${bg}'">
         <td data-label="貨號" style="padding:10px 8px;font-family:ui-monospace,monospace;font-weight:700;color:var(--blue);font-size:16px;white-space:nowrap">${p.pid}</td>
         <td data-label="顏色" style="padding:10px 8px;white-space:nowrap">${p.color||'—'}</td>
@@ -1074,7 +1099,29 @@ function updateSearchResults(){
         badgeStyle = 'color:var(--gray);background:var(--light)';
       }
     }
-    const groupOtherTag = groupOtherPeriods.size ? `<span title="${[...groupOtherPeriods].map(k=>ACTIVITY_PERIODS[k]?.label||k).join('、')}也有活動" style="display:inline-block;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:700;color:var(--gray);background:var(--light);white-space:nowrap;cursor:help">另有活動</span>` : '';
+    const groupOtherTag = (() => {
+      if(!groupOtherPeriods.size) return '';
+      const groupValueFor = (periodKey) => {
+        const pacts = prods.map(p => (ACTIVITY_PROMO[p.pid]||[]).find(a => a.period === periodKey)).filter(Boolean);
+        const pdVals = pacts.filter(a => a.d != null).map(a => a.d);
+        if(pdVals.length) return Math.min(...pdVals);
+        const pg = pacts.find(a => a.g)?.g;
+        if(pg){ const m = pg.match(/(\d[\d,]*)/); if(m) return parseInt(m[1].replace(/,/g,''),10); }
+        return null;
+      };
+      const curGroupValue = groupValueFor(searchPeriod);
+      let bestOtherPeriod = null, bestOtherGroupValue = null;
+      for(const k of groupOtherPeriods){
+        const v = groupValueFor(k);
+        if(v != null && (bestOtherGroupValue === null || v > bestOtherGroupValue)){ bestOtherGroupValue = v; bestOtherPeriod = k; }
+      }
+      if(bestOtherPeriod !== null && curGroupValue != null && bestOtherGroupValue > curGroupValue){
+        const diff = bestOtherGroupValue - curGroupValue;
+        const label = ACTIVITY_PERIODS[bestOtherPeriod]?.label || bestOtherPeriod;
+        return `<span title="切換到${label}查看" style="display:inline-block;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:700;color:#fff;background:var(--red);white-space:nowrap">${label}更優 多$${diff.toLocaleString()}</span>`;
+      }
+      return `<span title="${[...groupOtherPeriods].map(k=>ACTIVITY_PERIODS[k]?.label||k).join('、')}也有活動" style="display:inline-block;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:700;color:var(--gray);background:var(--light);white-space:nowrap;cursor:help">另有活動</span>`;
+    })();
 
     const open = searchOpen.has(name);
     const cardBg = SRS_PALETTE[idx % SRS_PALETTE.length];
