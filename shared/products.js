@@ -1,4 +1,4 @@
-const PRODUCTS_VERSION = '20260910v5';
+const PRODUCTS_VERSION = '20260910v6';
 const PRODUCTS = [
   // ── MacBook Neo ──
   {cat:'Mac',name:'MacBook Neo',spec:'A18 Pro/6CPU/5GPU/8GB/256GB',color:'胭粉',pid:'267442',mpn:'MHFH4',price:22900},
@@ -474,6 +474,8 @@ const PRODUCTS = [
   // ── AirPods ──
   {cat:'配件',name:'AirPods 4',spec:'',color:'',pid:'252141',mpn:'MXP63',price:3790},
   {cat:'配件',name:'AirPods 4 主動式降噪',spec:'',color:'',pid:'252142',mpn:'MXP93',price:4790},
+  {cat:'配件',name:'AirPods 5',spec:'',color:'',pid:'TBD041',mpn:'TBD',price:4490},
+  {cat:'配件',name:'AirPods 5（配備無線充電盒）',spec:'',color:'',pid:'TBD042',mpn:'TBD',price:5190},
   {cat:'配件',name:'AirPods Pro 第三代',spec:'',color:'',pid:'262379',mpn:'MFHP4',price:7490},
   {cat:'配件',name:'AirPods Max 2',spec:'',color:'午夜',pid:'267952',mpn:'MHWK4',price:17990},
   {cat:'配件',name:'AirPods Max 2',spec:'',color:'星光',pid:'267953',mpn:'MHWL4',price:17990},
