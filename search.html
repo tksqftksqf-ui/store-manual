@@ -37,7 +37,7 @@
 
 <div class="main" id="mc"></div>
 
-<script src="shared/products.js?v=20260910v1"></script>
+<script src="shared/products.js?v=20260910v2"></script>
 <script>
 document.getElementById('products-updated').textContent = '貨號表版本：' + (typeof PRODUCTS_VERSION !== 'undefined' ? PRODUCTS_VERSION : '—');
 let searchQuery = '';
@@ -47,9 +47,9 @@ let searchSub = 'all';
 const searchOpen = new Set();
 
 const SERIES_ORDER = {
-  'Mac': ['MacBook Air','MacBook Pro','Mac mini','iMac','Mac Studio','MacBook Neo'],
+  'Mac': ['MacBook Neo','MacBook Air','MacBook Pro','Mac mini','iMac','Mac Studio'],
   'iPad': ['iPad mini','iPad A16','iPad Air','iPad Pro'],
-  'iPhone': ['iPhone 17e','iPhone 17','iPhone Air','iPhone 17 Pro','iPhone 17 Pro Max','iPhone 16e','iPhone 16','iPhone 16 Plus'],
+  'iPhone': ['iPhone 16e','iPhone 17e','iPhone 16','iPhone 16 Plus','iPhone Air','iPhone 17','iPhone 17 Pro','iPhone 17 Pro Max'],
   'Watch': ['Apple Watch SE3','Apple Watch S11','Apple Watch Ultra 3'],
 };
 function getSeries(cat, name){
