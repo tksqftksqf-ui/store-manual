@@ -1,4 +1,4 @@
-const PRODUCTS_VERSION = '20260910v3';
+const PRODUCTS_VERSION = '20260910v4';
 const PRODUCTS = [
   // ── MacBook Neo ──
   {cat:'Mac',name:'MacBook Neo',spec:'A18 Pro/6CPU/5GPU/8GB/256GB',color:'胭粉',pid:'267442',mpn:'MHFH4',price:22900},
@@ -262,10 +262,6 @@ const PRODUCTS = [
   // ── iPhone 16e ──
   {cat:'iPhone',name:'iPhone 16e 6.1"',spec:'128GB',color:'黑',pid:'256229',mpn:'MD1Q4',price:21900},
   {cat:'iPhone',name:'iPhone 16e 6.1"',spec:'128GB',color:'白',pid:'256230',mpn:'MD1R4',price:21900},
-  {cat:'iPhone',name:'iPhone 16e 6.1"',spec:'256GB',color:'黑',pid:'256231',mpn:'MD1T4',price:21900},
-  {cat:'iPhone',name:'iPhone 16e 6.1"',spec:'256GB',color:'白',pid:'256232',mpn:'MD1W4',price:21900},
-  {cat:'iPhone',name:'iPhone 16e 6.1"',spec:'512GB',color:'黑',pid:'256233',mpn:'MD1X4',price:28900},
-  {cat:'iPhone',name:'iPhone 16e 6.1"',spec:'512GB',color:'白',pid:'256234',mpn:'MD274',price:28900},
   // ── iPhone 17e ──
   {cat:'iPhone',name:'iPhone 17e 6.1"',spec:'256GB',color:'黑',pid:'267282',mpn:'MHRV4',price:25900},
   {cat:'iPhone',name:'iPhone 17e 6.1"',spec:'256GB',color:'白',pid:'267283',mpn:'MHRW4',price:25900},
@@ -456,8 +452,8 @@ const PRODUCTS = [
   {cat:'Watch',name:'Apple Watch S11 46mm LTE 不鏽鋼米蘭',spec:'米蘭錶帶',color:'金色 S/M',pid:'262359',mpn:'MFD74',price:24900},
   {cat:'Watch',name:'Apple Watch S11 46mm LTE 不鏽鋼米蘭',spec:'米蘭錶帶',color:'金色 M/L',pid:'262360',mpn:'MFD84',price:24900},
   // ── Apple Watch Ultra 3 ──
-  {cat:'Watch',name:'Apple Watch Ultra 3 49mm LTE',spec:'海洋錶帶',color:'原 錨藍',pid:'262361',mpn:'MEWH4',price:24800},
-  {cat:'Watch',name:'Apple Watch Ultra 3 49mm LTE',spec:'海洋錶帶',color:'黑 黑',pid:'262362',mpn:'MF0J4',price:24800},
+  {cat:'Watch',name:'Apple Watch Ultra 3 49mm 鈦 LTE',spec:'海洋錶帶',color:'原 錨藍',pid:'262361',mpn:'MEWH4',price:24800},
+  {cat:'Watch',name:'Apple Watch Ultra 3 49mm 鈦 LTE',spec:'海洋錶帶',color:'黑 黑',pid:'262362',mpn:'MF0J4',price:24800},
   {cat:'Watch',name:'Apple Watch Ultra 3 49mm 鈦 LTE',spec:'高山錶環',color:'黑 S',pid:'262363',mpn:'MF0Q4',price:24800},
   {cat:'Watch',name:'Apple Watch Ultra 3 49mm 鈦 LTE',spec:'高山錶環',color:'黑 M',pid:'262364',mpn:'MF0V4',price:24800},
   {cat:'Watch',name:'Apple Watch Ultra 3 49mm 鈦 LTE',spec:'高山錶環',color:'黑 L',pid:'262365',mpn:'MF0X4',price:24800},
