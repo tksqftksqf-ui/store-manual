@@ -1,4 +1,4 @@
-const PRODUCTS_VERSION = '20260910v4';
+const PRODUCTS_VERSION = '20260910v5';
 const PRODUCTS = [
   // ── MacBook Neo ──
   {cat:'Mac',name:'MacBook Neo',spec:'A18 Pro/6CPU/5GPU/8GB/256GB',color:'胭粉',pid:'267442',mpn:'MHFH4',price:22900},
@@ -471,6 +471,38 @@ const PRODUCTS = [
   {cat:'Watch',name:'Apple Watch Ultra 3 49mm 鈦米蘭 LTE',spec:'米蘭錶帶',color:'黑 S',pid:'262376',mpn:'MF1N4',price:27800},
   {cat:'Watch',name:'Apple Watch Ultra 3 49mm 鈦米蘭 LTE',spec:'米蘭錶帶',color:'黑 M',pid:'262377',mpn:'MF1Q4',price:27800},
   {cat:'Watch',name:'Apple Watch Ultra 3 49mm 鈦米蘭 LTE',spec:'米蘭錶帶',color:'黑 L',pid:'262378',mpn:'MF1T4',price:27800},
+  // ── AirPods ──
+  {cat:'配件',name:'AirPods 4',spec:'',color:'',pid:'252141',mpn:'MXP63',price:3790},
+  {cat:'配件',name:'AirPods 4 主動式降噪',spec:'',color:'',pid:'252142',mpn:'MXP93',price:4790},
+  {cat:'配件',name:'AirPods Pro 第三代',spec:'',color:'',pid:'262379',mpn:'MFHP4',price:7490},
+  {cat:'配件',name:'AirPods Max 2',spec:'',color:'午夜',pid:'267952',mpn:'MHWK4',price:17990},
+  {cat:'配件',name:'AirPods Max 2',spec:'',color:'星光',pid:'267953',mpn:'MHWL4',price:17990},
+  {cat:'配件',name:'AirPods Max 2',spec:'',color:'藍',pid:'267954',mpn:'MHWM4',price:17990},
+  {cat:'配件',name:'AirPods Max 2',spec:'',color:'橙',pid:'267955',mpn:'MHWN4',price:17990},
+  {cat:'配件',name:'AirPods Max 2',spec:'',color:'紫',pid:'267956',mpn:'MHWF4',price:17990},
+  // ── Beats ──
+  {cat:'配件',name:'PowerBeats Pro 2',spec:'',color:'流沙金',pid:'255759',mpn:'MX733',price:8790},
+  {cat:'配件',name:'PowerBeats Pro 2',spec:'',color:'電光橙',pid:'255760',mpn:'MX743',price:8790},
+  {cat:'配件',name:'PowerBeats Pro 2',spec:'',color:'曜動紫',pid:'255761',mpn:'MX753',price:8790},
+  // ── Apple TV ──
+  {cat:'配件',name:'Apple TV 4K 64GB (2022)',spec:'',color:'',pid:'234915',mpn:'MN873',price:6900},
+  {cat:'配件',name:'Apple TV 4K 128GB (2022)',spec:'',color:'',pid:'234916',mpn:'MN893',price:8500},
+  {cat:'配件',name:'Siri Remote',spec:'',color:'',pid:'250980',mpn:'MW5G3',price:1790},
+  // ── Apple Pencil ──
+  {cat:'配件',name:'Apple Pencil 筆尖4件裝',spec:'',color:'',pid:'254434',mpn:'MX763',price:590},
+  {cat:'配件',name:'Apple Pencil (USB-C)',spec:'',color:'',pid:'243982',mpn:'MUWA3',price:2690},
+  {cat:'配件',name:'Apple Pencil 第一代',spec:'',color:'',pid:'256001',mpn:'MYQW3',price:3290},
+  {cat:'配件',name:'Apple Pencil 第二代',spec:'',color:'',pid:'256000',mpn:'MXN43',price:4390},
+  {cat:'配件',name:'Apple Pencil Pro',spec:'',color:'',pid:'248675',mpn:'MX2D3',price:4390},
+  // ── Studio Display ──
+  {cat:'配件',name:'Studio Display 標準玻璃 可調斜度支架',spec:'',color:'',pid:'267411',mpn:'MFEX4',price:52900},
+  {cat:'配件',name:'Studio Display 標準玻璃 可調斜度高度支架',spec:'',color:'',pid:'267412',mpn:'MFEW4',price:64900},
+  {cat:'配件',name:'Studio Display 標準玻璃 VESA吊架',spec:'',color:'',pid:'267413',mpn:'MFEY4',price:52900},
+  {cat:'配件',name:'Studio Display Nano texture 可調斜度支架 CTO',spec:'',color:'',pid:'267414',mpn:'MFF14',price:62900},
+  {cat:'配件',name:'Studio Display Nano texture 可調斜度高度支架 CTO',spec:'',color:'',pid:'267415',mpn:'MFF04',price:74900},
+  {cat:'配件',name:'Studio Display Nano texture VESA吊架 CTO',spec:'',color:'',pid:'267416',mpn:'MFF24',price:62900},
+  {cat:'配件',name:'Studio Display XDR 標準玻璃 可調斜度高度支架 CTO',spec:'',color:'',pid:'267417',mpn:'MFEL4',price:109900},
+  {cat:'配件',name:'Studio Display XDR 標準玻璃 VESA吊架 CTO',spec:'',color:'',pid:'267418',mpn:'MFEN4',price:97900},
   // ── Mac 配件 ──
   {cat:'配件',name:'Apple Magic Mouse',spec:'',color:'黑',pid:'253491',mpn:'MXK63',price:2990},
   {cat:'配件',name:'Apple Magic Mouse',spec:'',color:'白',pid:'253492',mpn:'MXK53',price:2290},
@@ -481,15 +513,6 @@ const PRODUCTS = [
   {cat:'配件',name:'Magic Keyboard 含TouchID與數字鍵盤 繁中',spec:'',color:'黑',pid:'253496',mpn:'MXK83',price:5890},
   {cat:'配件',name:'Magic Keyboard 含TouchID與數字鍵盤 繁中',spec:'',color:'白',pid:'253497',mpn:'MXK73',price:5290},
   {cat:'配件',name:'Magic Keyboard 含Touch ID 繁中',spec:'',color:'',pid:'253498',mpn:'MXCK3',price:4390},
-  // ── Studio Display ──
-  {cat:'配件',name:'Studio Display 標準玻璃 可調斜度支架',spec:'',color:'',pid:'267411',mpn:'MFEX4',price:52900},
-  {cat:'配件',name:'Studio Display 標準玻璃 可調斜度高度支架',spec:'',color:'',pid:'267412',mpn:'MFEW4',price:64900},
-  {cat:'配件',name:'Studio Display 標準玻璃 VESA吊架',spec:'',color:'',pid:'267413',mpn:'MFEY4',price:52900},
-  {cat:'配件',name:'Studio Display Nano texture 可調斜度支架 CTO',spec:'',color:'',pid:'267414',mpn:'MFF14',price:62900},
-  {cat:'配件',name:'Studio Display Nano texture 可調斜度高度支架 CTO',spec:'',color:'',pid:'267415',mpn:'MFF04',price:74900},
-  {cat:'配件',name:'Studio Display Nano texture VESA吊架 CTO',spec:'',color:'',pid:'267416',mpn:'MFF24',price:62900},
-  {cat:'配件',name:'Studio Display XDR 標準玻璃 可調斜度高度支架 CTO',spec:'',color:'',pid:'267417',mpn:'MFEL4',price:109900},
-  {cat:'配件',name:'Studio Display XDR 標準玻璃 VESA吊架 CTO',spec:'',color:'',pid:'267418',mpn:'MFEN4',price:97900},
   // ── EarPods / Lightning ──
   {cat:'配件',name:'EarPods (3.5mm耳機接頭)',spec:'',color:'',pid:'250066',mpn:'MWU53',price:590},
   {cat:'配件',name:'EarPods (Lightning 連接器)',spec:'',color:'',pid:'250065',mpn:'MWTY3',price:590},
@@ -497,10 +520,6 @@ const PRODUCTS = [
   {cat:'配件',name:'Lightning 對 USB 連接線 (1m)',spec:'',color:'',pid:'246574',mpn:'MUQW3',price:590},
   {cat:'配件',name:'Lightning 數位 AV 轉接器',spec:'',color:'',pid:'250060',mpn:'MW2P3',price:1690},
   {cat:'配件',name:'Lightning 對 USB 3 相機轉接器',spec:'',color:'',pid:'250062',mpn:'MX5J3',price:1290},
-  // ── Apple TV ──
-  {cat:'配件',name:'Apple TV 4K 64GB (2022)',spec:'',color:'',pid:'234915',mpn:'MN873',price:6900},
-  {cat:'配件',name:'Apple TV 4K 128GB (2022)',spec:'',color:'',pid:'234916',mpn:'MN893',price:8500},
-  {cat:'配件',name:'Siri Remote',spec:'',color:'',pid:'250980',mpn:'MW5G3',price:1790},
   // ── Watch 配件 ──
   {cat:'配件',name:'磁性充電器對 USB-C線 (1m)',spec:'Watch配件',color:'',pid:'243998',mpn:'MT0H3',price:990},
   // ── USB-C 相關配件 ──
@@ -529,21 +548,6 @@ const PRODUCTS = [
   {cat:'配件',name:'70W USB-C 電源轉接器',spec:'',color:'',pid:'267419',mpn:'MHXY4',price:1790},
   {cat:'配件',name:'96W USB-C 電源轉接器',spec:'',color:'',pid:'250810',mpn:'MW2L3',price:2290},
   {cat:'配件',name:'140W USB-C 電源轉接器',spec:'',color:'',pid:'267420',mpn:'MHY14',price:2990},
-  // ── Apple Pencil ──
-  {cat:'配件',name:'Apple Pencil 筆尖4件裝',spec:'',color:'',pid:'254434',mpn:'MX763',price:590},
-  {cat:'配件',name:'Apple Pencil (USB-C)',spec:'',color:'',pid:'243982',mpn:'MUWA3',price:2690},
-  {cat:'配件',name:'Apple Pencil 第一代',spec:'',color:'',pid:'256001',mpn:'MYQW3',price:3290},
-  {cat:'配件',name:'Apple Pencil 第二代',spec:'',color:'',pid:'256000',mpn:'MXN43',price:4390},
-  {cat:'配件',name:'Apple Pencil Pro',spec:'',color:'',pid:'248675',mpn:'MX2D3',price:4390},
-  // ── AirPods ──
-  {cat:'配件',name:'AirPods 4',spec:'',color:'',pid:'252141',mpn:'MXP63',price:3790},
-  {cat:'配件',name:'AirPods 4 主動式降噪',spec:'',color:'',pid:'252142',mpn:'MXP93',price:4790},
-  {cat:'配件',name:'AirPods Pro 第三代',spec:'',color:'',pid:'262379',mpn:'MFHP4',price:7490},
-  {cat:'配件',name:'AirPods Max 2',spec:'',color:'午夜',pid:'267952',mpn:'MHWK4',price:17990},
-  {cat:'配件',name:'AirPods Max 2',spec:'',color:'星光',pid:'267953',mpn:'MHWL4',price:17990},
-  {cat:'配件',name:'AirPods Max 2',spec:'',color:'藍',pid:'267954',mpn:'MHWM4',price:17990},
-  {cat:'配件',name:'AirPods Max 2',spec:'',color:'橙',pid:'267955',mpn:'MHWN4',price:17990},
-  {cat:'配件',name:'AirPods Max 2',spec:'',color:'紫',pid:'267956',mpn:'MHWF4',price:17990},
   // ── HomePod ──
   {cat:'配件',name:'HomePod mini',spec:'',color:'午夜色',pid:'250679',mpn:'MY5G2',price:3990},
   {cat:'配件',name:'HomePod mini',spec:'',color:'白',pid:'212358',mpn:'MY5H2',price:3990},
@@ -557,10 +561,6 @@ const PRODUCTS = [
   {cat:'配件',name:'AirTag 4件裝',spec:'',color:'',pid:'217387',mpn:'MX542',price:3390},
   {cat:'配件',name:'AirTag 2 1件裝',spec:'',color:'',pid:'266323',mpn:'MFE94',price:990},
   {cat:'配件',name:'AirTag 2 4件裝',spec:'',color:'',pid:'266324',mpn:'MFEA4',price:3390},
-  // ── Beats ──
-  {cat:'配件',name:'PowerBeats Pro 2',spec:'',color:'流沙金',pid:'255759',mpn:'MX733',price:8790},
-  {cat:'配件',name:'PowerBeats Pro 2',spec:'',color:'電光橙',pid:'255760',mpn:'MX743',price:8790},
-  {cat:'配件',name:'PowerBeats Pro 2',spec:'',color:'曜動紫',pid:'255761',mpn:'MX753',price:8790},
   // ── iPad 聰穎系列 & 巧控鍵盤 ──
   {cat:'配件',name:'iPad mini 聰穎雙面夾',spec:'',color:'丹寧藍',pid:'253209',mpn:'MC2U4',price:1940},
   {cat:'配件',name:'iPad mini 聰穎雙面夾',spec:'',color:'鼠尾草',pid:'253211',mpn:'MC2V4',price:1940},
