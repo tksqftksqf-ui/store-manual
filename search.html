@@ -37,7 +37,7 @@
 
 <div class="main" id="mc"></div>
 
-<script src="shared/products.js?v=20260910v6"></script>
+<script src="shared/products.js?v=20260912v8"></script>
 <script>
 document.getElementById('products-updated').textContent = '貨號表版本：' + (typeof PRODUCTS_VERSION !== 'undefined' ? PRODUCTS_VERSION : '—');
 let searchQuery = '';
@@ -50,7 +50,7 @@ const SERIES_ORDER = {
   'Mac': ['MacBook Neo','MacBook Air','MacBook Pro','Mac mini','iMac','Mac Studio'],
   'iPad': ['iPad mini','iPad A16','iPad Air','iPad Pro'],
   'iPhone': ['iPhone 16e','iPhone 17e','iPhone 16','iPhone 16 Plus','iPhone Air','iPhone 17','iPhone 17 Pro','iPhone 17 Pro Max','iPhone 18 Pro','iPhone 18 Pro Max','iPhone Duo'],
-  'Watch': ['Apple Watch SE3','Apple Watch S11','Apple Watch Ultra 3'],
+  'Watch': ['Apple Watch SE3','Apple Watch S11','Apple Watch S12','Apple Watch Ultra 3','Apple Watch Ultra 4'],
 };
 function getSeries(cat, name){
   if(cat==='Mac'){
@@ -82,7 +82,9 @@ function getSeries(cat, name){
   }
   if(cat==='Watch'){
     if(name.includes('SE3')) return 'Apple Watch SE3';
+    if(name.includes('Ultra 4')) return 'Apple Watch Ultra 4';
     if(name.includes('Ultra 3')) return 'Apple Watch Ultra 3';
+    if(name.includes('S12')) return 'Apple Watch S12';
     if(name.includes('S11')) return 'Apple Watch S11';
   }
   return null;
@@ -96,7 +98,7 @@ const ACCESSORY_GROUP = {
   'Apple TV 4K 64GB (2022)':'Apple TV/週邊','Apple TV 4K 128GB (2022)':'Apple TV/週邊','Siri Remote':'Apple TV/週邊',
   '磁性充電器對 USB-C線 (1m)':'充電器/電源','60W USB-C 充電連接線 (1m)':'充電器/電源','240W USB-C 充電連接線 (2m)':'充電器/電源','USB-C 對 Lightning 線 (1m)':'充電器/電源','USB-C 對 Lightning 線 (2m)':'充電器/電源','iPhone Air MagSafe電池':'充電器/電源','MagSafe 充電器 (1m)':'充電器/電源','MagSafe 充電器 (2m)':'充電器/電源','85W MagSafe 2 電源轉換器':'充電器/電源','USB-C對MagSafe 3 連接線 (2m)':'充電器/電源','20W USB-C 電源轉接器':'充電器/電源','35W 雙 USB-C 埠小型電源轉接器':'充電器/電源','35W 雙 USB-C 埠電源轉接器':'充電器/電源','40W 動態電源轉接器':'充電器/電源','70W USB-C 電源轉接器':'充電器/電源','96W USB-C 電源轉接器':'充電器/電源','140W USB-C 電源轉接器':'充電器/電源',
   'Apple Pencil 筆尖4件裝':'Apple Pencil','Apple Pencil (USB-C)':'Apple Pencil','Apple Pencil 第一代':'Apple Pencil','Apple Pencil 第二代':'Apple Pencil','Apple Pencil Pro':'Apple Pencil',
-  'AirPods 4':'AirPods/耳機','AirPods 4 主動式降噪':'AirPods/耳機','AirPods Pro 第三代':'AirPods/耳機','AirPods Max':'AirPods/耳機','AirPods Max 2':'AirPods/耳機','PowerBeats Pro 2':'AirPods/耳機',
+  'AirPods 4':'AirPods/耳機','AirPods 4 主動式降噪':'AirPods/耳機','AirPods 5':'AirPods/耳機','AirPods 5（配備無線充電盒）':'AirPods/耳機','AirPods Pro 第三代':'AirPods/耳機','AirPods Max':'AirPods/耳機','AirPods Max 2':'AirPods/耳機','PowerBeats Pro 2':'AirPods/耳機',
   'HomePod mini':'HomePod','HomePod (2023)':'HomePod','HomePod':'HomePod',
   'AirTag 1件裝':'AirTag','AirTag 4件裝':'AirTag','AirTag 2 1件裝':'AirTag','AirTag 2 4件裝':'AirTag',
   'iPad mini 聰穎雙面夾':'iPad鍵盤/保護','iPad A16 聰穎雙面夾':'iPad鍵盤/保護','iPad A16 巧控鍵盤雙面夾':'iPad鍵盤/保護','iPad Air 11吋 M3 巧控鍵盤':'iPad鍵盤/保護','iPad Air 13吋 M3 巧控鍵盤':'iPad鍵盤/保護','iPad Pro 11吋 M4 巧控鍵盤':'iPad鍵盤/保護','iPad Pro 13吋 M4 巧控鍵盤':'iPad鍵盤/保護','iPad Air 13吋 M2 聰穎雙面夾':'iPad鍵盤/保護','iPad Pro 11吋 M4 聰穎雙面夾':'iPad鍵盤/保護','iPad Pro 13吋 M4 聰穎雙面夾':'iPad鍵盤/保護',
@@ -939,6 +941,9 @@ const ACTIVITY_PROMO = {
   '262379':[{period:'A',d:800,g:null,m:null}],
   '252141':[{period:'A',d:null,g:null,m:'皆是賣降價後價格（現有庫存售完為止）'}],
   '252142':[{period:'A',d:null,g:null,m:'皆是賣降價後價格（現有庫存售完為止）'}],
+  // AirPods 5 & Apple Watch S12預購.pdf「AirPods 5」區
+  '273346':[{period:'A',d:null,g:'預購送市價359快充線（貨號242498，拆200）',m:null}],
+  '273347':[{period:'A',d:null,g:'預購送市價359快充線（貨號242498，拆200）',m:null}],
   '252143':[{period:'A',d:3991,g:null,m:null}],
   '252145':[{period:'A',d:3991,g:null,m:null}],
   '252147':[{period:'A',d:3991,g:null,m:null}],
