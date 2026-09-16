@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026 NPI 新品快學</title>
+<link rel="stylesheet" href="shared/style.css">
+<style>
+.npi-timeline{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px}
+.npi-time-item{flex:1;min-width:200px;background:var(--white);border-radius:12px;padding:14px 16px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.npi-time-item .t-name{font-size:13px;font-weight:700;margin-bottom:6px}
+.npi-time-item .t-date{font-size:12px;color:var(--gray)}
+.npi-price-row{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 4px}
+.npi-hl{list-style:none;padding:0;margin:0}
+.npi-hl li{position:relative;padding:5px 0 5px 18px;font-size:13.5px;line-height:1.55}
+.npi-hl li::before{content:'●';position:absolute;left:0;top:5px;color:var(--blue);font-size:8px}
+.npi-box{background:var(--light);border-radius:10px;padding:12px 14px;font-size:13px;line-height:1.6;margin:10px 0}
+.npi-box-title{font-size:12px;font-weight:700;color:var(--gray);margin-bottom:6px}
+.npi-quote{border-left:3px solid var(--blue);padding:8px 12px;font-size:13.5px;color:var(--text);background:var(--blue-bg);border-radius:0 8px 8px 0;margin:8px 0}
+.npi-qa{border-bottom:1px solid var(--light);padding:10px 0}
+.npi-qa:last-child{border-bottom:none}
+.npi-qa .q{font-size:13.5px;font-weight:700;margin-bottom:4px}
+.npi-qa .a-ok{font-size:13px;color:var(--green);margin-bottom:2px}
+.npi-qa .a-no{font-size:13px;color:var(--red)}
+.section-tag{font-size:11px;font-weight:700;color:var(--gray);margin:2px 0 10px;letter-spacing:.3px}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-left">
+    <span class="hdr-logo"></span>
+    <div>
+      <div class="hdr-title">2026 NPI 新品快學</div>
+      <div class="hdr-sub">Apple Specialist Store · Three Table Shop</div>
+    </div>
+  </div>
+  <a href="index.html" class="hdr-date" style="text-decoration:none">← 工具箱首頁</a>
+</div>
+
+<div class="main" id="mc"></div>
+
+<script>
+const NPI_TIMELINE = [
+  {name:'iOS 27 正式版', date:'9/14 推出'},
+  {name:'iPhone 18 Pro系列／AW S12＆Ultra 4／AirPods 5', date:'9/11–12 預購・9/18 發售'},
+  {name:'iPhone Duo 摺疊機', date:'10/16 晚間8點預購・10/23 發售'},
+];
+
+const NPI_PRODUCTS = [
+  {
+    key: 'p18pro',
+    icon: '📱',
+    name: 'iPhone 18 Pro／18 Pro Max',
+    prices: ['18 Pro NT$44,900 起', '18 Pro Max NT$49,900 起'],
+    date: '9/18 發售（9/12 預購）',
+    highlights: [
+      '<b>新增色系：</b>勃根地紅色、冰川藍色、黑色、銀色，256GB／512GB／1TB／2TB',
+      '<b>尺寸不變：</b>6.3吋iPhone 18 Pro／6.9吋iPhone 18 Pro Max，採用亮眼的超Retina XDR顯示器，具備最高達120Hz的ProMotion技術，與3000尼特峰值亮度',
+      '<b>台積電2奈米製程：</b>A20 Pro晶片，配備6核心CPU、7核心GPU、雙16核心神經網路引擎，記憶體頻寬提升50％',
+      '<b>散熱升級：</b>新一代均溫板，散熱表面積增加至三倍，A20 Pro採用蒸發冷卻，持續效能表現最高可提升40%',
+      '<b>主相機可變光圈：</b>4800萬像素融合主相機具備可變光圈（ƒ/1.48、ƒ/1.8、ƒ/2.8、ƒ/4.0），支援Pro控制項目（可變動白平衡、鏡頭光圈、快門速度）與攝影風格3（可柔化肌膚細節，或打造底片風格）；另配4800萬像素融合超廣角相機、4800萬像素融合望遠相機，8倍光學品質變焦',
+      '<b>續航升級：</b>iPhone 18 Pro影片播放時間最長可達34小時（17 Pro為31小時），iPhone 18 Pro Max影片播放時間最長可達43小時（17 Pro Max為37小時），充電15分鐘可達50％電量',
+      '<b>動態島重新設計：</b>縮小約25–30％，最多可顯示3項即時動態，更多資訊一目了然',
+    ],
+    upgrade: [
+      '<b>iPhone 15 Pro以下用戶</b>：升級感「極度強烈」——晶片、散熱、可變光圈、續航全面躍升',
+      '<b>iPhone 17 Pro用戶</b>：官方數據顯示速度提升最快達40%、持續效能表現最高提升40%，若非重度攝影或極致續航需求，可視預算再評估',
+    ],
+    extraBody: 'aperture',
+  },
+  {
+    key: 'watch',
+    icon: '⌚️',
+    name: 'Apple Watch Series 12 ＆ Ultra 4',
+    prices: ['Series 12 NT$13,900 起', 'Ultra 4 NT$27,900 起'],
+    date: '9/18 發售（9/11 預購）',
+    highlights: [
+      '<b>新色與尺寸：</b>Series 12｜42mm／46mm，精密陶瓷（珍珠白色／夜藍色）、鋁金屬（深古銅色／淺金色／黑色／太空灰色）、鈦金屬（燦金色／原色）共8款外觀；Ultra 4｜49公釐鈦金屬錶殼（黑色／原色），可選海洋錶帶、越野錶環、高山錶環、米蘭式錶環',
+      '<b>晶片：</b>搭載S11晶片',
+      '<b>健康感測升級：</b>全新健康感測系統，背景心率讀取頻率提升60倍（每5秒讀取一次）、心率變異讀取頻率提升24倍（每5分鐘一次），新增「準備指數」',
+      '<b>語音智慧：</b>聲音辨識、Shazam自動音樂識別，Siri AI更聰明；官方聲明相關音訊內容絕不會被錄音或保留',
+      '<b>Series 12續航：</b>精密陶瓷錶殼「光潔細緻」，一般使用最長可達24小時，低耗電模式最長可達38小時，快充15分鐘可再用12小時',
+      '<b>Ultra 4續航：</b>一般使用最長可達50小時，低耗電模式最長可達84小時，標準體能訓練最長18小時、長時間體能訓練最長45小時，快充15分鐘可再用18小時',
+      '<b>Ultra 4專屬功能：</b>動作按鈕、啟用警笛（聲音遠達180公尺／600呎）、SOS緊急服務、跌倒偵測、車禍偵測',
+    ],
+  },
+  {
+    key: 'airpods',
+    icon: '🎧',
+    name: 'AirPods 5',
+    tag: '全場CP值王者',
+    prices: ['一般充電盒版 NT$4,490', '無線充電盒版 NT$5,190'],
+    date: '9/18 發售（9/11 預購）',
+    highlights: [
+      '<b>版本：</b>一般充電盒版、無線充電盒版',
+      '<b>設計與降噪：</b>開放式半入耳設計，全系標配主動降噪（ANC），降噪效果提升50%',
+      '<b>音訊功能：</b>支援適應性音訊、通透模式、即時跨語言翻譯（Live Translation）',
+      '<b>一般充電盒版續航：</b>降噪續航4小時（含盒20小時）',
+      '<b>無線充電盒版續航：</b>降噪續航5小時（含盒22小時），新增耳機柄滑動調節音量，支援Qi與Apple Watch磁吸充電',
+    ],
+    upgrade: ['以NT$4,490／5,190的售價換來大幅升級的降噪與即時翻譯，是本次發表會公認「加量不加價」的性價比王者'],
+  },
+  {
+    key: 'duo',
+    icon: '📖',
+    name: 'iPhone Duo（摺疊機）',
+    prices: ['256GB $74,900', '512GB $81,900', '1TB $96,900', '2TB $118,900'],
+    date: '10/23 發售（10/16 晚8點預購）',
+    highlights: [
+      '<b>容量與顏色：</b>256GB／512GB／1TB／2TB，星光白、夜空',
+      '<b>摺疊設計：</b>Apple史上首款摺疊智慧型手機，護照大小造型；外螢幕5.4吋、內螢幕7.6吋（顯示面積比18 Pro Max大50%）',
+      '<b>機身結構：</b>展開厚度5.2mm／合起11.3mm，重量254g；五級鈦金屬機身＋3D列印鈦金屬鉸鏈蓋，IP68防塵防水',
+      '<b>晶片與通訊：</b>A20 Pro晶片＋專用Display Engine雙螢幕驅動引擎＋自研C2 5G Modem；全機取消實體SIM，全eSIM設計',
+      '<b>相機：</b>4800萬畫素Fusion主鏡頭（固定F1.6）＋4800萬畫素超廣角，內螢幕採螢幕下隱藏式FaceTime鏡頭',
+      '<b>解鎖與配件：</b>側邊按鈕整合Touch ID（無Face ID），支援Apple Pencil（USB-C版）',
+      '<b>無摺痕工程：</b>內螢幕10層以上超薄結構＋Nano Texture奈米紋理霧面塗層、雷射填平工藝、可變扭力鉸鏈（100+精密零件）',
+    ],
+    prosCons: {
+      pros: '7.6吋超大視野、Nano Texture抗眩光低折痕、iOS 27側邊多工＋Split View、支援Apple Pencil、IP68防塵防水',
+      cons: '售價高、合起254g／11.3mm偏厚、無Face ID（改Touch ID）、全eSIM無實體卡槽、無望遠鏡頭與可變光圈',
+    },
+    audience: '預算非常充裕、極度仰賴大螢幕影音多工與創作者族群',
+    body: 'duoqa',
+  },
+];
+
+function toggleNpi(key){
+  const body = document.getElementById('nbody-' + key);
+  const tog  = document.getElementById('ntog-' + key);
+  if(body.style.display === 'none'){
+    body.style.display = 'block';
+    tog.textContent = '▲';
+  } else {
+    body.style.display = 'none';
+    tog.textContent = '▼';
+  }
+}
+
+function apertureTalkBody(){
+  return `
+    <div class="npi-box">
+      <div class="npi-box-title">開場話術（依客人類型任選一句）</div>
+      <div class="npi-quote">給不懂相機的客人：「這代最大的差別是鏡頭會自己開合，跟單眼同一個原理」</div>
+      <div class="npi-quote">給上班族／業務／餐飲：「以前拍菜、拍文件邊邊會糊，這代縮一點光圈就整張都清楚」</div>
+      <div class="npi-quote">給懂規格的客人：「暗的開到ƒ/1.48進光，人多的縮到ƒ/4讓大家都清楚，它自己會判斷」</div>
+    </div>
+    <div class="npi-box">
+      <div class="npi-box-title">生活化比喻（依客人性別挑一種說法）</div>
+      <ul class="npi-hl">
+        <li><b>給男生：</b>就像沒辦法打檔的車子，不管是爬坡還是開高速公路都只能用同一種檔——這代可以自動切換檔位，他們聽完應該很能體會</li>
+        <li><b>給女生：</b>木頭情人跟神隊友的差別——木頭情人就是永遠多喝水多休息，神隊友則會根據不同環境切換不同的對待方式</li>
+      </ul>
+    </div>
+  `;
+}
+
+function duoQaBody(){
+  return `
+    <div class="npi-qa">
+      <div class="q">Q：有摺痕嗎？</div>
+      <div class="a-ok">✓ 只能講結構用料（Nano Texture塗層、雷射填平工藝）</div>
+      <div class="a-no">✕ 不能保證「幾乎看不到摺痕」</div>
+    </div>
+    <div class="npi-qa">
+      <div class="q">Q：沒有Face ID怎麼辦？</div>
+      <div class="a-ok">✓ 只能講Touch ID的功能</div>
+      <div class="a-no">✕ 不能保證「比Face ID更快更好用」</div>
+    </div>
+    <div class="npi-qa">
+      <div class="q">Q：沒有實體SIM卡？</div>
+      <div class="a-ok">✓ 先確認客人門號能否開通eSIM，不確定就轉主管或電信業者確認</div>
+    </div>
+    <div class="npi-qa">
+      <div class="q">Q：相機是不是比Pro系列差？</div>
+      <div class="a-ok">✓ 強調Duo的「雙面預覽、智慧拍攝」</div>
+      <div class="a-no">✕ 不要拿長焦鏡頭來比較（Duo沒有望遠鏡頭）</div>
+    </div>
+  `;
+}
+
+function renderNpi(){
+  const timeline = NPI_TIMELINE.map(t => `
+    <div class="npi-time-item">
+      <div class="t-name">${t.name}</div>
+      <div class="t-date">${t.date}</div>
+    </div>
+  `).join('');
+
+  const cards = NPI_PRODUCTS.map(p => {
+    const priceBadges = (p.prices || []).map(pr => `<span class="badge badge-blue">${pr}</span>`).join('');
+    const dateBadge = p.date ? `<span class="badge badge-orange">${p.date}</span>` : '';
+    const tagBadge = p.tag ? `<span class="badge badge-green">${p.tag}</span>` : '';
+
+    let bodyHtml = '';
+    {
+      if (p.highlights) {
+        bodyHtml += `<ul class="npi-hl">${p.highlights.map(h => `<li>${h}</li>`).join('')}</ul>`;
+      }
+      if (p.prosCons) {
+        bodyHtml += `
+          <div class="npi-box">
+            <div class="npi-box-title">優點</div>${p.prosCons.pros}
+          </div>
+          <div class="npi-box">
+            <div class="npi-box-title">缺點／限制</div>${p.prosCons.cons}
+          </div>`;
+      }
+      if (p.audience) {
+        bodyHtml += `<div class="npi-box"><div class="npi-box-title">適合族群</div>${p.audience}</div>`;
+      }
+      if (p.upgrade) {
+        bodyHtml += `<div class="npi-box"><div class="npi-box-title">換機評估建議</div><ul class="npi-hl">${p.upgrade.map(u => `<li>${u}</li>`).join('')}</ul></div>`;
+      }
+      if (p.extraBody === 'aperture') {
+        bodyHtml += `<div class="section-tag" style="margin-top:14px">可變光圈｜門市話術</div>${apertureTalkBody()}`;
+      }
+      if (p.body === 'duoqa') {
+        bodyHtml += `<div class="section-tag" style="margin-top:14px">客人常見疑問應對（可以講 vs 不要保證）</div>${duoQaBody()}`;
+      }
+    }
+
+    return `
+      <div class="plan-card">
+        <div class="plan-hdr" onclick="toggleNpi('${p.key}')">
+          <div>
+            <span class="plan-label">${p.icon} ${p.name}</span>
+            <div class="npi-price-row">${priceBadges}${dateBadge}${tagBadge}</div>
+          </div>
+          <span class="plan-toggle" id="ntog-${p.key}">▼</span>
+        </div>
+        <div class="plan-body" id="nbody-${p.key}" style="display:none;padding:16px 20px">
+          ${bodyHtml}
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  document.getElementById('mc').innerHTML = `
+    <div class="sec-hdr">
+      <div>
+        <div class="sec-title">2026 Apple 秋季發表會・新品快學</div>
+        <div class="sec-sub">「智慧個人中心」主題發表 · 涵蓋 18 Pro系列／AW S12＆Ultra 4／AirPods 5／iPhone Duo · 最後更新：2026-09-16</div>
+      </div>
+    </div>
+    <div class="npi-timeline">${timeline}</div>
+    <div style="font-size:14px;font-weight:700;color:var(--red);margin-bottom:14px">
+      ⚠️ 2026年9月僅推出以下機型，<u>沒有 iPhone 18（雙鏡頭標準版）</u>
+    </div>
+    ${cards}
+  `;
+}
+
+renderNpi();
+</script>
+</body>
+</html>
