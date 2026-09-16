@@ -102,6 +102,29 @@ const NPI_PRODUCTS = [
     upgrade: ['以NT$4,490／5,190的售價換來大幅升級的降噪與即時翻譯，是本次發表會公認「加量不加價」的性價比王者'],
   },
   {
+    key: 'macmini',
+    icon: '💻',
+    name: 'Mac mini M6 ＆ M5 Pro',
+    prices: ['M6 NT$29,900 起', 'M5 Pro NT$59,900 起'],
+    date: '08/27–09/20 開放預購',
+    highlights: [
+      '<b>規格與售價對應：</b>M6｜12核心CPU/12核心GPU，16G/256G $29,900、16G/512G $36,900、24G/512G $43,900；M5 Pro｜15核心CPU/16核心GPU，24G/512G $59,900',
+      '<b>CPU升級：</b>M6配備12核心CPU（2超級核心＋4效能核心＋6節能核心），首度導入三層式CPU架構，整體CPU效能比M4提升40%',
+      '<b>GPU升級：</b>12核心GPU內建繪圖神經加速器，圖形與遊戲速度翻倍，硬體加速光追遊戲效能達2倍',
+      '<b>AI運算：</b>雙16核心神經網路引擎，AI效能達4倍，LM Studio本地大型語言模型提示詞處理速度提升達4.8倍',
+      '<b>記憶體隱藏門檻：</b>16GB起跳最高32GB，記憶體頻寬153GB/s或170GB/s——170GB/s僅限24GB與32GB配置，16GB入門配置僅153GB/s',
+      '<b>連線升級：</b>採蘋果N1無線晶片，支援Wi-Fi 7、藍牙6.0、Thread；標準2.5Gbps有線網路（可選配10Gbps）',
+      '<b>專業影音：</b>首度支援Genlock影音幀同步，可精確同步顯示器與相機畫面時序，適合多機位、虛擬棚與直播',
+      '<b>Thunderbolt：</b>維持3組Thunderbolt 4，未升級TB5（TB5僅M5 Pro版本提供）；若由M4 Pro降級為M6基礎版，連接埠頻寬反而縮水',
+      '<b>M5 Pro專屬：</b>支援Thunderbolt 5，且可選配48GB／64GB以上大容量記憶體（M6版本最高僅32GB）',
+      '<b>外觀不變：</b>12.7×12.7×5.0公分，重量0.67公斤，前置維持2個USB-C（USB 3）與耳機孔',
+    ],
+    upgrade: [
+      '<b>強烈推薦M6：</b>開發者、AI創作者，或需要本地跑LLM（LM Studio）、高頻寬Wi-Fi 7、超高速2.5Gb Ethernet（NAS傳輸）的專業人士；建議加價選24G／32G記憶體才能解鎖170GB/s完整頻寬',
+      '<b>推薦續留M4或選一般文書用途：</b>一般文書辦公、影像新手、輕度剪輯或多媒體串流娛樂使用者，M4效能仍完全過剩，M6起步價已比M4貴NT$10,000',
+    ],
+  },
+  {
     key: 'duo',
     icon: '📖',
     name: 'iPhone Duo（摺疊機）',
@@ -240,7 +263,7 @@ function renderNpi(){
     <div class="sec-hdr">
       <div>
         <div class="sec-title">2026 Apple 秋季發表會・新品快學</div>
-        <div class="sec-sub">「智慧個人中心」主題發表 · 涵蓋 18 Pro系列／AW S12＆Ultra 4／AirPods 5／iPhone Duo · 最後更新：2026-09-16</div>
+        <div class="sec-sub">「智慧個人中心」主題發表 · 涵蓋 18 Pro系列／AW S12＆Ultra 4／AirPods 5／Mac mini M6＆M5 Pro／iPhone Duo · 最後更新：2026-09-17</div>
       </div>
     </div>
     <div class="npi-timeline">${timeline}</div>
