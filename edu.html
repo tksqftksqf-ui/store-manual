@@ -36,7 +36,7 @@ const EDU_ITEMS = [
   {cat:'Mac', name:'MacBook Pro 16.2"', spec:'M5 Pro 全系列', discount:6710, code:'267543'},
   {cat:'Mac', name:'MacBook Pro 16.2"', spec:'M5 Max 18CPU / 40CPU', discount:9910, code:'270811'},
   {cat:'Mac', name:'MacBook Neo 13"', spec:'A18 Pro 全系列', discount:3000, code:'200056'},
-  {cat:'Mac', name:'Mac mini', spec:'M4 / M4 Pro 全系列', discount:3410, code:'270807'},
+  {cat:'Mac', name:'Mac mini', spec:'M4 512GB以上 / M4 Pro 全系列', discount:3410, code:'270807'},
   {cat:'Mac', name:'Mac mini M6', spec:'M6 全系列', discount:3310, code:'267540'},
   {cat:'Mac', name:'Mac mini M6', spec:'M5 Pro', discount:3510, code:'272707'},
   {cat:'Mac', name:'iMac 24"', spec:'M4 8CPU', discount:1710, code:'270806'},
@@ -46,9 +46,10 @@ const EDU_ITEMS = [
   {cat:'Mac', name:'Mac Studio M5', spec:'M5 Max', discount:6810, code:'270808'},
   {cat:'Mac', name:'Mac Studio M5', spec:'M5 Ultra', discount:14510, code:'272708'},
   {cat:'Mac', name:'Studio Display', spec:'標準玻璃 可調整斜度 / VESA', discount:3300, code:'240067'},
-  {cat:'Mac', name:'Studio Display', spec:'標準玻璃 可調整高斜度', discount:3300, code:'240067'},
+  {cat:'Mac', name:'Studio Display', spec:'標準玻璃 可調整高斜度', discount:3200, code:'185269'},
   {cat:'Mac', name:'Studio Display', spec:'Nano texture 可調整斜度 / VESA', discount:3300, code:'240067'},
-  {cat:'Mac', name:'Pro Display XDR', spec:'標準玻璃 (CTO)', discount:3300, code:'240067'},
+  {cat:'Mac', name:'Studio Display XDR', spec:'標準玻璃 可調整高斜度支架 (CTO)', discount:3300, code:'240067'},
+  {cat:'Mac', name:'Studio Display XDR', spec:'標準玻璃 VESA吊架 (CTO)', discount:3400, code:'244394'},
   {cat:'iPad', name:'iPad mini 7th', spec:'Wi-Fi / Wi-Fi+LTE 全系列', discount:1700, code:'194188'},
   {cat:'iPad', name:'iPad 11吋 A16', spec:'Wi-Fi / Wi-Fi+LTE 全系列', discount:700, code:'187533'},
   {cat:'iPad', name:'iPad Air 11吋 M4', spec:'Wi-Fi / Wi-Fi+LTE 全系列', discount:1700, code:'194188'},
@@ -57,9 +58,15 @@ const EDU_ITEMS = [
   {cat:'iPad', name:'iPad Pro 13吋 M5', spec:'Wi-Fi / Wi-Fi+LTE 全系列', discount:3400, code:'234851'},
   {cat:'Watch', name:'Apple Watch SE3', spec:'GPS 全系列', discount:600, code:'270813'},
   {cat:'Watch', name:'Apple Watch SE3', spec:'LTE 全系列', discount:1000, code:'269618'},
-  {cat:'Watch', name:'Apple Watch S11', spec:'GPS/LTE 鋁金屬', discount:1300, code:'270814'},
+  {cat:'Watch', name:'Apple Watch S11', spec:'GPS 鋁金屬', discount:1300, code:'270814'},
+  {cat:'Watch', name:'Apple Watch S11', spec:'LTE 鋁金屬', discount:1500, code:'269619'},
   {cat:'Watch', name:'Apple Watch S11', spec:'LTE 鈦金屬 / 不鏽鋼', discount:2500, code:'269620'},
+  {cat:'Watch', name:'Apple Watch S12', spec:'GPS 鋁金屬 (含米蘭錶環)', discount:1400, code:'273450'},
+  {cat:'Watch', name:'Apple Watch S12', spec:'LTE 鋁金屬 (含米蘭錶環)', discount:1600, code:'273451'},
+  {cat:'Watch', name:'Apple Watch S12', spec:'LTE 陶瓷', discount:3300, code:'273453'},
+  {cat:'Watch', name:'Apple Watch S12', spec:'LTE 鈦金屬 (含米蘭錶環)', discount:2500, code:'269620'},
   {cat:'Watch', name:'Apple Watch Ultra 3', spec:'全系列', discount:2700, code:'270815'},
+  {cat:'Watch', name:'Apple Watch Ultra 4', spec:'全系列', discount:2900, code:'273452'},
   {cat:'配件', name:'Apple Pencil 第一代', spec:'附轉接器', discount:370, code:'234807'},
   {cat:'配件', name:'Apple Pencil 第二代', spec:'', discount:390, code:'248825'},
   {cat:'配件', name:'Apple Pencil Pro', spec:'', discount:390, code:'248825'},
@@ -71,7 +78,7 @@ const EDU_ITEMS = [
   {cat:'配件', name:'iPad Air 11" 鍵盤式聰穎雙面夾', spec:'中文', discount:780, code:'234808'},
   {cat:'配件', name:'iPad Air 13" 鍵盤式聰穎雙面夾', spec:'中文', discount:770, code:'234809'},
   {cat:'配件', name:'Studio Display 標準玻璃', spec:'可調整斜度 / VESA 吊架', discount:3300, code:'240067'},
-  {cat:'配件', name:'Studio Display 標準玻璃', spec:'可調整高斜度', discount:3300, code:'240067'},
+  {cat:'配件', name:'Studio Display 標準玻璃', spec:'可調整高斜度', discount:3200, code:'185269'},
   {cat:'配件', name:'Studio Display Nano texture', spec:'可調整斜度 / VESA', discount:3300, code:'240067'},
   {cat:'配件', name:'Pro Stand', spec:'CTO', discount:3200, code:'185269'},
   {cat:'配件', name:'VESA 吊架連接器', spec:'CTO', discount:700, code:'185267'},
@@ -126,7 +133,7 @@ function renderEdu(){
   const cats = ['all','Mac','iPad','Watch','配件'];
   const catLabels = {all:'全部', Mac:'Mac', iPad:'iPad', Watch:'Watch', 配件:'配件'};
   document.getElementById('mc').innerHTML = `
-    <div class="sec-hdr"><div><div class="sec-title">教育優惠操作手冊</div><div class="sec-sub">來源：大專院校優惠操作手冊 ver 8.9 · 2026/06/26 · 現役商品 ${EDU_ITEMS.length} 筆</div></div></div>
+    <div class="sec-hdr"><div><div class="sec-title">教育優惠操作手冊</div><div class="sec-sub">來源：大專院校優惠操作手冊 ver 8.9.2 · 2026/09/13 · 現役商品 ${EDU_ITEMS.length} 筆</div></div></div>
     <div class="card" style="padding:14px 20px;margin-bottom:14px;background:#fff7f0;border:1.5px solid #f3c8a0;font-size:13px;line-height:1.8;color:#8a4a1e">
       🔔 <b>提醒</b><br>
       10/1（四）起，大專院校學生辦理教育價資格驗證時，學生證需具備【115學年度上學期註冊章】。<br>
