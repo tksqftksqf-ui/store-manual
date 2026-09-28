@@ -73,7 +73,7 @@ const NPI_PRODUCTS = [
   {
     key: 'watch',
     icon: '⌚️',
-    name: 'Apple Watch Series 12 ＆ Ultra 4',
+    name: 'Apple Watch Series 12 ＆ Ultra 4 ＆ SE3',
     prices: ['Series 12 NT$13,900 起', 'Ultra 4 NT$27,900 起'],
     date: '9/18 發售（9/11 預購）',
     highlights: [
@@ -84,6 +84,14 @@ const NPI_PRODUCTS = [
       '<b>Series 12續航：</b>精密陶瓷錶殼「光潔細緻」，一般使用最長可達24小時，低耗電模式最長可達38小時，快充15分鐘可再用12小時',
       '<b>Ultra 4續航：</b>一般使用最長可達50小時，低耗電模式最長可達84小時，標準體能訓練最長18小時、長時間體能訓練最長45小時，快充15分鐘可再用18小時',
       '<b>Ultra 4專屬功能：</b>動作按鈕、啟用警笛（聲音遠達180公尺／600呎）、SOS緊急服務、跌倒偵測、車禍偵測',
+    ],
+    images: [
+      {label: 'Series 12 鋁金屬（4色）· 貨號速查', img: 'npi-img/aw-s12-aluminum.jpg'},
+      {label: 'Series 12 鋁金屬／陶瓷 · 貨號速查', img: 'npi-img/aw-s12-aluminum-ceramic.jpg'},
+      {label: 'Series 12 鈦金屬（4色）· 貨號速查', img: 'npi-img/aw-s12-titanium.jpg'},
+      {label: 'Ultra 4 原色鈦金屬 · 貨號速查', img: 'npi-img/aw-ultra4-natural-titanium.jpg'},
+      {label: 'Ultra 4 黑色鈦金屬 · 貨號速查', img: 'npi-img/aw-ultra4-black-titanium.jpg'},
+      {label: 'SE3 鋁金屬（2色）· 貨號速查', img: 'npi-img/aw-se3-aluminum.jpg'},
     ],
   },
   {
@@ -152,6 +160,18 @@ const NPI_PRODUCTS = [
 function toggleNpi(key){
   const body = document.getElementById('nbody-' + key);
   const tog  = document.getElementById('ntog-' + key);
+  if(body.style.display === 'none'){
+    body.style.display = 'block';
+    tog.textContent = '▲';
+  } else {
+    body.style.display = 'none';
+    tog.textContent = '▼';
+  }
+}
+
+function toggleNpiImg(id){
+  const body = document.getElementById('nimg-body-' + id);
+  const tog  = document.getElementById('nimg-tog-' + id);
   if(body.style.display === 'none'){
     body.style.display = 'block';
     tog.textContent = '▲';
@@ -241,6 +261,23 @@ function renderNpi(){
       }
       if (p.body === 'duoqa') {
         bodyHtml += `<div class="section-tag" style="margin-top:14px">客人常見疑問應對（可以講 vs 不要保證）</div>${duoQaBody()}`;
+      }
+      if (p.images) {
+        bodyHtml += `<div class="section-tag" style="margin-top:14px">配色與貨號速查</div>`;
+        bodyHtml += p.images.map((im, idx) => {
+          const id = `${p.key}-${idx}`;
+          return `
+            <div class="plan-card" style="margin-bottom:8px">
+              <div class="plan-hdr" onclick="toggleNpiImg('${id}')">
+                <span class="plan-label" style="font-size:13px">${im.label}</span>
+                <span class="plan-toggle" id="nimg-tog-${id}">▼</span>
+              </div>
+              <div class="plan-body" id="nimg-body-${id}" style="display:none">
+                <img src="${im.img}" style="width:100%;display:block" loading="lazy">
+              </div>
+            </div>
+          `;
+        }).join('');
       }
     }
 
