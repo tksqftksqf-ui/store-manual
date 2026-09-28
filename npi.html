@@ -86,12 +86,12 @@ const NPI_PRODUCTS = [
       '<b>Ultra 4專屬功能：</b>動作按鈕、啟用警笛（聲音遠達180公尺／600呎）、SOS緊急服務、跌倒偵測、車禍偵測',
     ],
     images: [
-      {label: 'Series 12 鋁金屬（4色）· 貨號速查', img: 'npi-img/aw-s12-aluminum.jpg'},
-      {label: 'Series 12 鋁金屬／陶瓷 · 貨號速查', img: 'npi-img/aw-s12-aluminum-ceramic.jpg'},
-      {label: 'Series 12 鈦金屬（4色）· 貨號速查', img: 'npi-img/aw-s12-titanium.jpg'},
-      {label: 'Ultra 4 原色鈦金屬 · 貨號速查', img: 'npi-img/aw-ultra4-natural-titanium.jpg'},
-      {label: 'Ultra 4 黑色鈦金屬 · 貨號速查', img: 'npi-img/aw-ultra4-black-titanium.jpg'},
-      {label: 'SE3 鋁金屬（2色）· 貨號速查', img: 'npi-img/aw-se3-aluminum.jpg'},
+      {label: 'Series 12 鋁金屬（4色）配色速查', img: 'npi-img/aw-s12-aluminum.jpg'},
+      {label: 'Series 12 鋁金屬／陶瓷 配色速查', img: 'npi-img/aw-s12-aluminum-ceramic.jpg'},
+      {label: 'Series 12 鈦金屬（4色）配色速查', img: 'npi-img/aw-s12-titanium.jpg'},
+      {label: 'Ultra 4 原色鈦金屬 配色速查', img: 'npi-img/aw-ultra4-natural-titanium.jpg'},
+      {label: 'Ultra 4 黑色鈦金屬 配色速查', img: 'npi-img/aw-ultra4-black-titanium.jpg'},
+      {label: 'SE3 鋁金屬（2色）配色速查', img: 'npi-img/aw-se3-aluminum.jpg'},
     ],
   },
   {
@@ -263,7 +263,7 @@ function renderNpi(){
         bodyHtml += `<div class="section-tag" style="margin-top:14px">客人常見疑問應對（可以講 vs 不要保證）</div>${duoQaBody()}`;
       }
       if (p.images) {
-        bodyHtml += `<div class="section-tag" style="margin-top:14px">配色與貨號速查</div>`;
+        bodyHtml += `<div class="section-tag" style="margin-top:14px">配色速查</div>`;
         bodyHtml += p.images.map((im, idx) => {
           const id = `${p.key}-${idx}`;
           return `
