@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>優惠活動</title>
 <link rel="stylesheet" href="shared/style.css">
+<style>
+@keyframes actIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.act-in{animation:actIn .25s ease-out}
+@media (prefers-reduced-motion:reduce){.act-in{animation:none}}
+</style>
 </head>
 <body>
 
@@ -206,6 +211,8 @@ function renderActivity(){
     </div>
     <div id="activity-results"></div>`;
   updateActivityResults();
+  const _r=document.getElementById('activity-results');
+  if(_r){_r.classList.remove('act-in');void _r.offsetWidth;_r.classList.add('act-in')}
 }
 
 
