@@ -29,10 +29,11 @@ let activityQuery = '';
 let activityCat = 'all';
 let activityPeriod = 'A';
 
-const ACTIVITY_VERSION = '1001-1018操盤';
+const ACTIVITY_VERSION = '1001-1018操盤+1002-1005教育價活動';
 document.getElementById('activity-updated').textContent = '活動版本：' + ACTIVITY_VERSION;
 
 const ACTIVITY_PERIODS = [
+  {key:'B', label:'1002-1005 教育價', range:'2026/10/02–10/05'},
   {key:'A', label:'1001-1018 操盤', range:'2026/10/01–10/18'},
 ];
 
@@ -82,6 +83,41 @@ const ACTIVITY_ITEMS = [
   {period:'A', cat:'配件', series:'AirTag 2', type:'現折', discount:49, pct:null, giftAmt:null, gift:null, desc:'現折49起（2-1件裝49／2-4件裝169）', note:null},
   {period:'A', cat:'配件', series:'Apple TV 4K', type:'現折', discount:345, pct:null, giftAmt:null, gift:null, desc:'現折345起', note:null},
   {period:'A', cat:'配件', series:'HomePod', type:'現折', discount:549, pct:null, giftAmt:null, gift:null, desc:'現折549', note:null},
+  // ══ 1002-1005 教育價活動（period B）══
+  {period:'B', cat:'Mac', series:'MacBook Neo 13', type:'折扣%', discount:null, pct:'5%', giftAmt:null, gift:null, desc:'現折5%', note:null},
+  {period:'B', cat:'Mac', series:'MacBook Air 13 M5', type:'折扣%', discount:null, pct:'4%', giftAmt:null, gift:null, desc:'現折4%', note:null},
+  {period:'B', cat:'Mac', series:'MacBook Air 15 M5', type:'折扣%', discount:null, pct:'5%', giftAmt:null, gift:null, desc:'現折5%', note:null},
+  {period:'B', cat:'Mac', series:'MacBook Pro 14 M5', type:'現折', discount:4543, pct:null, giftAmt:null, gift:null, desc:'現折4543起', note:null},
+  {period:'B', cat:'Mac', series:'MacBook Pro 14 M5 Pro', type:'現折', discount:5943, pct:null, giftAmt:null, gift:null, desc:'現折5943起', note:null},
+  {period:'B', cat:'Mac', series:'MacBook Pro 16 M5 Pro', type:'現折', discount:6993, pct:null, giftAmt:null, gift:null, desc:'現折6993起', note:null},
+  {period:'B', cat:'Mac', series:'Mac mini M4', type:'現折', discount:2034, pct:null, giftAmt:null, gift:null, desc:'現折2034起', note:'已停產，現有庫存售完為止'},
+  {period:'B', cat:'Mac', series:'Mac mini M6', type:'滿萬送配件金', discount:null, pct:null, giftAmt:500, gift:null, desc:'滿萬送500配件金', note:null},
+  {period:'B', cat:'Mac', series:'iMac M4', type:'折扣%', discount:null, pct:'7%', giftAmt:null, gift:null, desc:'現折7%', note:null},
+  {period:'B', cat:'Mac', series:'Mac Studio', type:'滿萬送配件金', discount:null, pct:null, giftAmt:500, gift:null, desc:'滿萬送500配件金', note:null},
+  {period:'B', cat:'Mac', series:'Studio Display', type:'現折', discount:3703, pct:null, giftAmt:null, gift:null, desc:'現折3703起', note:null},
+  {period:'B', cat:'iPad', series:'iPad mini 7th', type:'現折', discount:1393, pct:null, giftAmt:null, gift:null, desc:'現折1393起', note:null},
+  {period:'B', cat:'iPad', series:'iPad 11吋', type:'現折', discount:1192, pct:null, giftAmt:null, gift:null, desc:'現折1192起', note:null},
+  {period:'B', cat:'iPad', series:'iPad Air 11吋 M4', type:'現折', discount:1743, pct:null, giftAmt:null, gift:null, desc:'現折1743起', note:null},
+  {period:'B', cat:'iPad', series:'iPad Air 13吋 M4', type:'現折', discount:2233, pct:null, giftAmt:null, gift:null, desc:'現折2233起', note:null},
+  {period:'B', cat:'iPad', series:'iPad Pro 11吋 M5', type:'現折', discount:2793, pct:null, giftAmt:null, gift:null, desc:'現折2793起', note:null},
+  {period:'B', cat:'iPad', series:'iPad Pro 13吋 M5', type:'現折', discount:3563, pct:null, giftAmt:null, gift:null, desc:'現折3563起', note:null},
+  {period:'B', cat:'原廠配件', series:'原廠配件（全系列）', type:'主機加購折扣', discount:null, pct:'7%', giftAmt:null, gift:null, desc:'主機加購可享7%優惠', note:null},
+  {period:'B', cat:'Apple Watch', series:'Apple Watch SE 3', type:'現折', discount:632, pct:null, giftAmt:null, gift:null, desc:'現折632起', note:'舊貨號 262292~262298'},
+  {period:'B', cat:'Apple Watch', series:'Apple Watch SE 3（新貨號）', type:'現折', discount:237, pct:null, giftAmt:null, gift:null, desc:'現折237起', note:'新貨號 273252~273267（海軍藍/沙色）'},
+  {period:'B', cat:'Apple Watch', series:'Apple Watch S11', type:'現折', discount:512, pct:null, giftAmt:null, gift:null, desc:'現折512起', note:null},
+  {period:'B', cat:'Apple Watch', series:'Apple Watch S12', type:'滿萬送配件金', discount:null, pct:null, giftAmt:500, gift:null, desc:'滿萬送500配件金', note:null},
+  {period:'B', cat:'Apple Watch', series:'Apple Watch Ultra 3', type:'現折', discount:321, pct:null, giftAmt:null, gift:null, desc:'現折321起', note:null},
+  {period:'B', cat:'Apple Watch', series:'Apple Watch Ultra 4', type:'滿萬送配件金', discount:null, pct:null, giftAmt:500, gift:null, desc:'滿萬送500配件金', note:null},
+  {period:'B', cat:'耳機', series:'AirPods Pro 3', type:'現折', discount:800, pct:null, giftAmt:null, gift:null, desc:'現折800', note:null},
+  {period:'B', cat:'耳機', series:'AirPods 4', type:'無活動', discount:null, pct:null, giftAmt:null, gift:null, desc:'無活動', note:'已停產'},
+  {period:'B', cat:'耳機', series:'AirPods 4 降噪', type:'無活動', discount:null, pct:null, giftAmt:null, gift:null, desc:'無活動', note:'已停產'},
+  {period:'B', cat:'耳機', series:'AirPods 5', type:'送配件金', discount:null, pct:null, giftAmt:200, gift:null, desc:'送200配件金（無滿萬門檻）', note:null},
+  {period:'B', cat:'耳機', series:'AirPods Max', type:'現折', discount:3991, pct:null, giftAmt:null, gift:null, desc:'現折3991', note:'已停產'},
+  {period:'B', cat:'耳機', series:'AirPods Max 2', type:'現折', discount:899, pct:null, giftAmt:null, gift:null, desc:'現折899', note:null},
+  {period:'B', cat:'配件', series:'AirTag', type:'現折', discount:746, pct:null, giftAmt:null, gift:null, desc:'現折746（4件裝）', note:'已停產'},
+  {period:'B', cat:'配件', series:'AirTag 2', type:'現折', discount:49, pct:null, giftAmt:null, gift:null, desc:'現折49起（2-1件裝49／2-4件裝169）', note:null},
+  {period:'B', cat:'配件', series:'Apple TV 4K', type:'現折', discount:345, pct:null, giftAmt:null, gift:null, desc:'現折345起', note:null},
+  {period:'B', cat:'配件', series:'HomePod', type:'現折', discount:549, pct:null, giftAmt:null, gift:null, desc:'現折549', note:null},
 ];
 function updateActivityResults(){
   const q = activityQuery.toLowerCase();
