@@ -5,6 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>門市工具箱</title>
 <link rel="stylesheet" href="shared/style.css">
+<style>
+.cc-bar{display:flex;justify-content:flex-end;margin-bottom:12px}
+.cc-btn{border:1.5px solid var(--border);background:var(--white);color:var(--gray);border-radius:20px;padding:5px 14px;font-size:13px;cursor:pointer}
+.cc-btn:hover{border-color:var(--blue);color:var(--blue)}
+.cc-panel{display:none;background:var(--white);border-radius:14px;padding:16px 20px;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:14px}
+.cc-panel.open{display:block}
+.cc-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px 16px;margin:10px 0 14px}
+.cc-list label{display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer}
+.cc-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.cc-actions button{border:1.5px solid var(--border);background:var(--light);border-radius:8px;padding:5px 14px;font-size:13px;cursor:pointer}
+.cc-actions .cc-reset{color:var(--red);border-color:var(--red)}
+.cc-note{font-size:12px;color:var(--gray)}
+</style>
 </head>
 <body>
 
@@ -20,6 +33,15 @@
 </div>
 
 <div class="main">
+  <div class="cc-bar"><button class="cc-btn" id="cc-toggle" type="button">⚙️ 自訂卡片</button></div>
+  <div class="cc-panel" id="cc-panel">
+    <strong>選擇要顯示的卡片</strong>
+    <div class="cc-list" id="cc-list"></div>
+    <div class="cc-actions">
+      <button type="button" class="cc-reset" id="cc-reset">↩ 還原預設（全部顯示）</button>
+      <span class="cc-note">設定只存在這台裝置的瀏覽器，不影響其他同事</span>
+    </div>
+  </div>
   <div class="entry-grid">
     <a class="entry-card" href="search.html">
       <div class="entry-icon">🔍</div>
@@ -87,6 +109,36 @@
 <script>
 document.getElementById('today-date').textContent =
   new Date().toLocaleDateString('zh-TW', {year:'numeric', month:'long', day:'numeric'});
+
+// ── 卡片開關（localStorage，key = 卡片連結；存「隱藏清單」，新增卡片預設顯示）──
+(function(){
+  var KEY='toolbox-hidden-cards';
+  var cards=[].slice.call(document.querySelectorAll('.entry-card'));
+  function load(){try{return JSON.parse(localStorage.getItem(KEY))||[]}catch(e){return []}}
+  function save(a){try{a.length?localStorage.setItem(KEY,JSON.stringify(a)):localStorage.removeItem(KEY)}catch(e){}}
+  function id(c){return c.getAttribute('href')}
+  function apply(){
+    var h=load();
+    cards.forEach(function(c){c.style.display=h.indexOf(id(c))>-1?'none':''});
+    [].forEach.call(document.querySelectorAll('#cc-list input'),function(i){i.checked=h.indexOf(i.value)<0});
+  }
+  var list=document.getElementById('cc-list');
+  cards.forEach(function(c){
+    var l=document.createElement('label'),i=document.createElement('input');
+    i.type='checkbox';i.value=id(c);
+    i.onchange=function(){
+      var h=load().filter(function(x){return x!==i.value});
+      if(!i.checked)h.push(i.value);
+      save(h);apply();
+    };
+    l.appendChild(i);
+    l.appendChild(document.createTextNode(c.querySelector('.entry-icon').textContent+' '+c.querySelector('.entry-title').textContent));
+    list.appendChild(l);
+  });
+  document.getElementById('cc-toggle').onclick=function(){document.getElementById('cc-panel').classList.toggle('open')};
+  document.getElementById('cc-reset').onclick=function(){save([]);apply()};
+  apply();
+})();
 </script>
 </body>
 </html>
