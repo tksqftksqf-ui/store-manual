@@ -17,6 +17,20 @@
 .srs-toggle{font-size:12px;color:var(--gray);font-weight:600}
 .srs-body{display:none}
 .srs-body.open{display:block}
+.spec-blk{border-top:1px solid var(--border);padding:12px 18px 14px;background:var(--white)}
+.spec-blk:nth-child(even){background:#f8fafd}
+.spec-title{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;font-size:14px;font-weight:800;margin-bottom:8px}
+.spec-title small{font-size:12px;font-weight:600;color:var(--gray)}
+.spec-info{display:flex;flex-wrap:wrap;gap:6px 18px;margin-bottom:10px}
+.spec-info>div{display:flex;flex-direction:column;gap:2px;min-width:70px}
+.spec-info .lbl{font-size:11px;font-weight:700;color:var(--gray);letter-spacing:.3px}
+.spec-info .val{font-size:15px;font-weight:700}
+.spec-info .val.gift{font-size:13px;font-weight:500;max-width:360px}
+.pid-table{border-collapse:collapse;font-size:15px;min-width:220px}
+.pid-table th{font-size:11px;font-weight:700;color:var(--gray);text-align:left;padding:4px 14px 4px 0;white-space:nowrap}
+.pid-table td{padding:6px 14px 6px 0;border-top:1px solid var(--light);vertical-align:top}
+.pid-table td.pid{font-family:ui-monospace,monospace;font-weight:700;color:var(--blue);font-size:16px;white-space:nowrap}
+.pid-wrap{overflow-x:auto}
 </style>
 </head>
 <body>
@@ -44,6 +58,10 @@ let searchQuery = '';
 let searchCat = 'all';
 let searchSeries = 'all';
 let searchSub = 'all';
+let searchCap = 'all';
+// 容量＝規格裡最後一個 GB/TB（Mac 的 16GB 記憶體不算；Watch／配件沒有容量就不顯示容量列）
+function getCap(p){ const m = p.spec.match(/(\d+(?:GB|TB))(?!.*\d+(?:GB|TB))/); return m ? m[1] : null; }
+function capSortKey(c){ const n = parseInt(c,10); return c.endsWith('TB') ? n*1024 : n; }
 const searchOpen = new Set();
 
 const SERIES_ORDER = {
@@ -130,20 +148,26 @@ function selectCat(c){
   searchCat = c;
   searchSeries = 'all';
   searchSub = 'all';
+  searchCap = 'all';
   renderSeriesMenu();
   renderSubMenu();
+  renderCapMenu();
   updateSearchResults();
 }
 function selectSeries(s){
   searchSeries = s;
   searchSub = 'all';
+  searchCap = 'all';
   renderSeriesMenu();
   renderSubMenu();
+  renderCapMenu();
   updateSearchResults();
 }
 function selectSub(s){
   searchSub = s;
+  searchCap = 'all';
   renderSubMenu();
+  renderCapMenu();
   updateSearchResults();
 }
 function toggleSearchGroup(name){
@@ -183,6 +207,25 @@ function renderSubMenu(){
     const on = s === searchSub;
     btn.style.cssText = `padding:4px 12px;border-radius:16px;border:1.5px solid ${on?'var(--green)':'var(--border)'};background:${on?'var(--green-bg)':'var(--white)'};color:${on?'var(--green)':'var(--gray)'};font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .13s`;
     btn.addEventListener('click', () => selectSub(s));
+    el.appendChild(btn);
+  }
+}
+
+function renderCapMenu(){
+  const el = document.getElementById('cap-row');
+  if(!el) return;
+  el.innerHTML = '';
+  const narrowed = searchSeries !== 'all' || (searchSub !== 'all' && searchCat !== '配件');
+  const caps = narrowed ? [...new Set(PRODUCTS.filter(p => (searchCat==='all'||p.cat===searchCat) && matchesSeries(p) && matchesSub(p)).map(getCap).filter(Boolean))].sort((a,b)=>capSortKey(a)-capSortKey(b)) : [];
+  if(caps.length < 2){ el.style.display = 'none'; if(searchCap!=='all'){ searchCap='all'; } return; }
+  el.style.display = 'flex';
+  for(const c of ['all', ...caps]){
+    const btn = document.createElement('button');
+    btn.className = 'cap-btn';
+    btn.textContent = c === 'all' ? '全部容量' : c;
+    const on = c === searchCap;
+    btn.style.cssText = `padding:4px 12px;border-radius:16px;border:1.5px solid ${on?'var(--orange)':'var(--border)'};background:${on?'var(--orange-bg)':'var(--white)'};color:${on?'var(--orange)':'var(--gray)'};font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .13s`;
+    btn.addEventListener('click', () => { searchCap = c; renderCapMenu(); updateSearchResults(); });
     el.appendChild(btn);
   }
 }
@@ -1139,6 +1182,7 @@ function updateSearchResults(){
     if(!matchCat) return false;
     if(!matchesSeries(p)) return false;
     if(!matchesSub(p)) return false;
+    if(searchCap !== 'all' && getCap(p) !== searchCap) return false;
     if(!searchQuery) return true;
     const q = searchQuery.toLowerCase();
     return [p.name,p.spec,p.color,p.pid,p.mpn,String(p.price)].some(v=>v.toLowerCase().includes(q));
@@ -1183,20 +1227,6 @@ function updateSearchResults(){
     for(const name of groups.keys()) searchOpen.add(name);
   }
 
-  const theadHtml = `
-    <thead>
-      <tr style="background:var(--light);border-bottom:1px solid var(--border)">
-        <th class="search-thead-th" style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">貨號</th>
-        <th class="search-thead-th" style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">顏色</th>
-        <th class="search-thead-th" style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px">規格</th>
-        <th class="search-thead-th" style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">售價</th>
-        <th class="search-thead-th" style="padding:10px 4px 10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap;width:90px;max-width:90px">活動折扣</th>
-        <th class="search-thead-th" style="padding:10px 8px 10px 4px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">促銷價<br><span style="font-size:9px;font-weight:400;text-transform:none;letter-spacing:0;color:var(--gray)">未含教育折扣</span></th>
-        <th class="search-thead-th" style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">贈品</th>
-        <th class="search-thead-th" style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">教育折抵</th>
-      </tr>
-    </thead>`;
-
   const SRS_PALETTE = ['#ffffff', '#eaf2ff', '#fdeef0', '#eef8ec', '#f3ecfb'];
 
   function actValue(a){
@@ -1210,16 +1240,9 @@ function updateSearchResults(){
   }
 
   const cards = [...groups.entries()].map(([name, prods], idx) => {
-    let rows = '';
-    let prevSpec = null, specToggle = 0;
     const groupOtherPeriods = new Set();
-
-    for(const p of prods){
-      if(p.spec !== prevSpec){
-        prevSpec = p.spec;
-        specToggle ^= 1;
-      }
-      const bg = specToggle ? '#f4f7fb' : 'var(--white)';
+    // 每個貨號先算好各欄位的顯示內容（HTML），之後同規格內相同的欄位合併成一行
+    const cell = p => {
       const edu = EDU_DISCOUNT[p.pid];
       const acts = ACTIVITY_PROMO[p.pid] || [];
       const act = acts.find(a => a.period === searchPeriod) || null;
@@ -1244,16 +1267,36 @@ function updateSearchResults(){
         const periodLabels = otherActs.map(a=>ACTIVITY_PERIODS[a.period]?.label||a.period).join('、');
         return `<span title="${periodLabels}也有活動" style="display:inline-block;margin-left:5px;padding:1px 5px;border-radius:4px;font-size:9px;font-weight:700;color:var(--gray);background:var(--light);white-space:nowrap;cursor:help">另有活動</span>`;
       })();
-      rows += `<tr class="search-row" style="border-bottom:1px solid var(--border);background:${bg}" onmouseover="this.style.background='var(--blue-bg)'" onmouseout="this.style.background='${bg}'">
-        <td data-label="貨號" style="padding:10px 8px;font-family:ui-monospace,monospace;font-weight:700;color:var(--blue);font-size:16px;white-space:nowrap">${p.pid}</td>
-        <td data-label="顏色" style="padding:10px 8px;white-space:nowrap">${p.color||'—'}</td>
-        <td data-label="規格" style="padding:10px 8px;white-space:nowrap;color:var(--gray);font-size:13px">${p.spec}</td>
-        <td data-label="售價" style="padding:10px 8px;text-align:left;font-weight:600;white-space:nowrap">$${p.price.toLocaleString()}</td>
-        <td data-label="活動折扣" style="padding:10px 4px 10px 8px;text-align:left;font-weight:700;width:90px;max-width:90px;white-space:normal;${actStyle}">${actVal}${otherTag}</td>
-        <td data-label="促銷價(未含教育折扣)" style="padding:10px 8px 10px 4px;text-align:left;white-space:nowrap">${promo!=null?`<span style="display:inline-block;padding:3px 9px;border-radius:6px;background:var(--green-bg);color:var(--green);font-weight:700;font-size:14px">$${promo.toLocaleString()}</span>`:'<span style="color:var(--border)">—</span>'}</td>
-        <td data-label="贈品" style="padding:10px 8px;font-size:13px;color:var(--text)">${act?.g||'—'}</td>
-        <td data-label="教育折抵" style="padding:10px 8px;text-align:left;font-weight:700;white-space:nowrap;${edu?'color:var(--red)':'color:var(--border)'}">${edu?'-$'+edu.toLocaleString():'—'}</td>
-      </tr>`;
+      return {
+        price: `<span>$${p.price.toLocaleString()}</span>`,
+        act: `<span style="${actStyle}">${actVal}</span>${otherTag}`,
+        promo: promo!=null ? `<span style="display:inline-block;padding:2px 8px;border-radius:6px;background:var(--green-bg);color:var(--green)">$${promo.toLocaleString()}</span>` : '<span style="color:var(--border)">—</span>',
+        gift: act?.g ? `<span>${act.g}</span>` : '<span style="color:var(--border)">—</span>',
+        edu: `<span style="${edu?'color:var(--red)':'color:var(--border)'}">${edu?'-$'+edu.toLocaleString():'—'}</span>`,
+      };
+    };
+    const FIELDS = [['price','售價'],['act','活動折扣'],['promo','促銷價（未含教育折扣）'],['gift','贈品'],['edu','教育折抵']];
+
+    // 依規格分組（保留原本順序）
+    const specs = new Map();
+    for(const p of prods){
+      if(!specs.has(p.spec)) specs.set(p.spec, []);
+      specs.get(p.spec).push({p, c: cell(p)});
+    }
+    let blocks = '';
+    for(const [spec, items] of specs){
+      const shared = FIELDS.filter(([k]) => items.every(x => x.c[k] === items[0].c[k]));
+      const varying = FIELDS.filter(f => !shared.includes(f));
+      const info = shared.map(([k,l]) => `<div><span class="lbl">${l}</span><span class="val${k==='gift'?' gift':''}">${items[0].c[k]}</span></div>`).join('');
+      const head = `<tr><th>貨號</th><th>顏色</th>${varying.map(([,l])=>`<th>${l}</th>`).join('')}</tr>`;
+      const body = items.map(({p,c}) => `<tr><td class="pid">${p.pid}</td><td>${p.color||'—'}</td>${varying.map(([k])=>`<td style="font-weight:${k==='gift'?500:700};font-size:${k==='gift'?13:15}px">${c[k]}</td>`).join('')}</tr>`).join('');
+      const note = varying.length ? `<div style="font-size:11px;color:var(--orange);font-weight:600;margin:-4px 0 6px">⚠️ 這個規格的${varying.map(([,l])=>l.replace(/（.*）/,'')).join('、')}依顏色不同，請看下表</div>` : '';
+      blocks += `<div class="spec-blk">
+        <div class="spec-title">${spec}<small>${items.length > 1 ? items.length+' 色' : ''}</small></div>
+        ${info ? `<div class="spec-info">${info}</div>` : ''}
+        ${note}
+        <div class="pid-wrap"><table class="pid-table"><thead>${head}</thead><tbody>${body}</tbody></table></div>
+      </div>`;
     }
 
     // series-level activity summary for the card header
@@ -1320,12 +1363,7 @@ function updateSearchResults(){
         <span class="srs-toggle">${open ? '收合明細 ▲' : '查看貨號、售價、活動折扣、贈品明細 ▼'}</span>
       </div>
       <div class="srs-body ${open ? 'open' : ''}">
-        <div class="search-table-wrap" style="overflow-x:auto">
-          <table class="search-table" style="width:auto;min-width:100%;border-collapse:collapse;font-size:15px">
-            ${theadHtml}
-            <tbody>${rows}</tbody>
-          </table>
-        </div>
+        ${blocks}
       </div>
     </div>`;
   }).join('');
@@ -1356,11 +1394,13 @@ function renderSearch(){
       </div>
       <div id="series-row" style="display:none;gap:6px;flex-wrap:wrap;margin-top:8px;padding-top:8px;border-top:1px dashed var(--border)"></div>
       <div id="sub-cat-row" style="display:none;gap:6px;flex-wrap:wrap;margin-top:8px;padding-top:8px;border-top:1px dashed var(--border)"></div>
+      <div id="cap-row" style="display:none;gap:6px;flex-wrap:wrap;margin-top:8px;padding-top:8px;border-top:1px dashed var(--border)"></div>
     </div>
     <div id="search-results"></div>`;
 
   renderSeriesMenu();
   renderSubMenu();
+  renderCapMenu();
   updateSearchResults();
 }
 
