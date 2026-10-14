@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>使用統計</title>
+<link rel="stylesheet" href="shared/style.css">
+<style>
+.stat-hero{font-size:56px;font-weight:700;letter-spacing:-1.5px;line-height:1}
+.stat-unit{font-size:16px;font-weight:600;color:var(--gray);margin-left:6px}
+.stat-row{display:grid;grid-template-columns:92px 1fr 36px;gap:10px;align-items:center;margin:7px 0}
+.stat-label{font-size:13px;color:var(--gray)}
+.stat-track{height:8px;background:var(--light);border-radius:99px;overflow:hidden}
+.stat-bar{height:100%;background:var(--blue);border-radius:99px;width:0}
+.stat-num{text-align:right;font-variant-numeric:tabular-nums;font-weight:650}
+.stat-note{font-size:12px;color:var(--gray);line-height:1.7}
+.stat-note + .stat-note{margin-top:4px}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-left">
+    <span class="hdr-logo"></span>
+    <div>
+      <div class="hdr-title">使用統計</div>
+      <div class="hdr-sub">同一瀏覽器、同一天算 1 人</div>
+    </div>
+  </div>
+  <div class="hdr-right">
+    <span class="hdr-date" id="today-date"></span>
+    <a href="index.html" class="hdr-date" style="text-decoration:none">← 工具箱首頁</a>
+  </div>
+</div>
+
+<div class="main">
+  <div class="card">
+    <div class="card-title">今天</div>
+    <div><span class="stat-hero" id="today-count">—</span><span class="stat-unit">人</span></div>
+    <p class="stat-note" id="today-note">讀取中</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">今天各頁</div>
+    <div id="pages">讀取中</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">近 14 天</div>
+    <div id="days">讀取中</div>
+  </div>
+
+  <p class="stat-note">數字從這次更新上線後才開始累積，更早的日期沒有紀錄。</p>
+  <p class="stat-note">教育優惠確認單、價格牌裁切、發表時間查詢是別的網站，不會出現在這裡。</p>
+  <p class="stat-note">打開這頁本身不計入人數。共用同一台門市平板會被算成同一人。</p>
+</div>
+
+<script src="shared/usage.js"></script>
+<script>
+(function () {
+  var U = window.ToolboxUsage;
+  var today = U.taipeiDay(new Date());
+  document.getElementById('today-date').textContent =
+    new Date().toLocaleDateString('zh-TW', { timeZone: 'Asia/Taipei', year: 'numeric', month: 'long', day: 'numeric' });
+
+  function sleep(ms) {
+    return new Promise(function (resolve) { setTimeout(resolve, ms); });
+  }
+
+  function readCount(key) {
+    return fetch(U.counterUrl('get', key), { method: 'GET', mode: 'cors' }).then(function (res) {
+      if (res.status === 404) return 0;
+      if (!res.ok) throw new Error('status ' + res.status);
+      return res.json().then(function (data) {
+        return typeof data.value === 'number' ? data.value : 0;
+      });
+    });
+  }
+
+  function readAll(keys) {
+    var out = [];
+    var i = 0;
+    function next() {
+      if (i >= keys.length) return Promise.resolve(out);
+      var key = keys[i];
+      i += 1;
+      return readCount(key).then(function (value) {
+        out.push(value);
+        return sleep(360);
+      }).then(next);
+    }
+    return next();
+  }
+
+  function rows(target, items, max) {
+    var peak = Math.max.apply(null, [1].concat(items.map(function (item) { return item.value; })));
+    target.innerHTML = '';
+    if (!items.length) {
+      target.textContent = '沒有頁面資料';
+      return;
+    }
+    items.forEach(function (item) {
+      var row = document.createElement('div');
+      row.className = 'stat-row';
+      var label = document.createElement('div');
+      label.className = 'stat-label';
+      label.textContent = item.label;
+      var track = document.createElement('div');
+      track.className = 'stat-track';
+      var bar = document.createElement('div');
+      bar.className = 'stat-bar';
+      bar.style.width = Math.round((item.value / (max || peak)) * 100) + '%';
+      track.appendChild(bar);
+      var num = document.createElement('div');
+      num.className = 'stat-num';
+      num.textContent = String(item.value);
+      row.appendChild(label);
+      row.appendChild(track);
+      row.appendChild(num);
+      target.appendChild(row);
+    });
+  }
+
+  function fail(err) {
+    document.getElementById('today-count').textContent = '—';
+    document.getElementById('today-note').textContent = '讀取失敗，請稍後再開一次。';
+    document.getElementById('pages').textContent = '讀取失敗';
+    document.getElementById('days').textContent = '讀取失敗';
+  }
+
+  var dayKeys = U.recentDays(new Date(), 14);
+  var pageKeys = U.PAGES.map(function (pair) { return today + '__' + pair[0]; });
+
+  readAll([today].concat(pageKeys).concat(dayKeys)).then(function (values) {
+    var todayValue = values[0];
+    var pageValues = values.slice(1, 1 + U.PAGES.length);
+    var dayValues = values.slice(1 + U.PAGES.length);
+    document.getElementById('today-count').textContent = String(todayValue);
+    document.getElementById('today-note').textContent = todayValue
+      ? '今天到目前為止的不同瀏覽器數。'
+      : '今天還沒有人進來，或這次更新還沒套用到正式站。';
+    rows(document.getElementById('pages'), U.PAGES.map(function (pair, index) {
+      return { label: pair[1], value: pageValues[index] };
+    }));
+    rows(document.getElementById('days'), dayKeys.map(function (day, index) {
+      var parts = day.split('-');
+      return { label: parts[1] + '/' + parts[2], value: dayValues[index] };
+    }));
+  }).catch(fail);
+})();
+</script>
+</body>
+</html>
