@@ -62,7 +62,9 @@ let searchCap = 'all';
 // 容量＝規格裡最後一個 GB/TB（Mac 的 16GB 記憶體不算；Watch／配件沒有容量就不顯示容量列）
 function getCap(p){ const m = p.spec.match(/(\d+(?:GB|TB))(?!.*\d+(?:GB|TB))/); return m ? m[1] : null; }
 function capSortKey(c){ const n = parseInt(c,10); return c.endsWith('TB') ? n*1024 : n; }
-const searchOpen = new Set();
+// 預設展開規則：選了類別（或在搜尋）就全部展開；「全部」類別且沒搜尋時預設折疊
+// searchToggled 只記使用者在目前畫面手動切換過的系列；換類別／系列／機型／容量時清空
+const searchToggled = new Set();
 
 const SERIES_ORDER = {
   'Mac': ['MacBook Neo','MacBook Air','MacBook Pro','Mac mini','iMac','Mac Studio'],
@@ -146,6 +148,7 @@ function matchesSub(p){
 }
 function selectCat(c){
   searchCat = c;
+  searchToggled.clear();
   searchSeries = 'all';
   searchSub = 'all';
   searchCap = 'all';
@@ -156,6 +159,7 @@ function selectCat(c){
 }
 function selectSeries(s){
   searchSeries = s;
+  searchToggled.clear();
   searchSub = 'all';
   searchCap = 'all';
   renderSeriesMenu();
@@ -165,13 +169,14 @@ function selectSeries(s){
 }
 function selectSub(s){
   searchSub = s;
+  searchToggled.clear();
   searchCap = 'all';
   renderSubMenu();
   renderCapMenu();
   updateSearchResults();
 }
 function toggleSearchGroup(name){
-  if(searchOpen.has(name)) searchOpen.delete(name); else searchOpen.add(name);
+  if(searchToggled.has(name)) searchToggled.delete(name); else searchToggled.add(name);
   updateSearchResults();
 }
 function renderSeriesMenu(){
@@ -225,7 +230,7 @@ function renderCapMenu(){
     btn.textContent = c === 'all' ? '全部容量' : c;
     const on = c === searchCap;
     btn.style.cssText = `padding:4px 12px;border-radius:16px;border:1.5px solid ${on?'var(--orange)':'var(--border)'};background:${on?'var(--orange-bg)':'var(--white)'};color:${on?'var(--orange)':'var(--gray)'};font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .13s`;
-    btn.addEventListener('click', () => { searchCap = c; renderCapMenu(); updateSearchResults(); });
+    btn.addEventListener('click', () => { searchCap = c; searchToggled.clear(); renderCapMenu(); updateSearchResults(); });
     el.appendChild(btn);
   }
 }
@@ -1223,9 +1228,7 @@ function updateSearchResults(){
   }
 
   const q = searchQuery.trim();
-  if(q){
-    for(const name of groups.keys()) searchOpen.add(name);
-  }
+  const defaultOpen = searchCat !== 'all' || !!q;
 
   const SRS_PALETTE = ['#ffffff', '#eaf2ff', '#fdeef0', '#eef8ec', '#f3ecfb'];
 
@@ -1346,7 +1349,7 @@ function updateSearchResults(){
       return `<span title="${[...groupOtherPeriods].map(k=>ACTIVITY_PERIODS[k]?.label||k).join('、')}也有活動" style="display:inline-block;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:700;color:var(--gray);background:var(--light);white-space:nowrap;cursor:help">另有活動</span>`;
     })();
 
-    const open = searchOpen.has(name);
+    const open = defaultOpen !== searchToggled.has(name);
     const cardBg = SRS_PALETTE[idx % SRS_PALETTE.length];
     return `
     <div class="srs-card" style="background:${cardBg}">
