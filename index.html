@@ -139,6 +139,12 @@ document.getElementById('today-date').textContent =
   document.getElementById('cc-reset').onclick=function(){save([]);apply()};
   apply();
 })();
+// ── 卡片點擊統計（只送卡片連結與名稱，不含任何個資）──
+document.querySelector('.entry-grid').addEventListener('click',function(e){
+  var c=e.target.closest('.entry-card');
+  if(!c||!navigator.sendBeacon)return;
+  try{navigator.sendBeacon('https://store-click-stats.tksqftksqf.workers.dev/hit',JSON.stringify({c:c.getAttribute('href'),t:c.querySelector('.entry-title').textContent}))}catch(err){}
+});
 </script>
 </body>
 </html>
