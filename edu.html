@@ -120,7 +120,7 @@ function updateEduResults(){
             <th style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px">規格</th>
             <th style="padding:10px 8px;text-align:right;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">折抵金額</th>
             <th style="padding:10px 14px;text-align:center;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">優惠代碼</th>
-            <th style="padding:10px 14px;text-align:center;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">方案B 活動＋折抵</th>
+            <th style="padding:10px 14px;text-align:center;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">方案B 檔期活動＋折抵</th>
           </tr>
         </thead>
         <tbody>
@@ -131,7 +131,7 @@ function updateEduResults(){
               <td data-label="規格" style="padding:10px 14px;color:var(--gray);font-size:13px">${p.spec}</td>
               <td data-label="折抵金額" style="padding:10px 8px;text-align:right;font-weight:700;color:var(--red);white-space:nowrap">-$${p.discount.toLocaleString()}</td>
               <td data-label="優惠代碼" style="padding:10px 14px;text-align:center;font-family:ui-monospace,monospace;font-weight:700;color:var(--blue);font-size:16px;white-space:nowrap">${p.code}</td>
-              <td data-label="方案B 活動＋折抵" style="padding:10px 14px;text-align:center;white-space:nowrap">${planB(p)}</td>
+              <td data-label="方案B 檔期活動＋折抵" style="padding:10px 14px;text-align:center;white-space:nowrap">${planB(p)}</td>
             </tr>`).join('')}
         </tbody>
       </table>
