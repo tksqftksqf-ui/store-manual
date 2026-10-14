@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>教育優惠</title>
 <link rel="stylesheet" href="shared/style.css">
+<style>
+/* 手機卡片：方案A／C 標題較長，讓標題換行、金額＋貨號維持同一行 */
+.search-table tr.search-row td[data-label^="方案"]::before{flex-shrink:1;white-space:pre-line;text-align:left;line-height:1.5;margin-right:10px}
+.search-table tr.search-row td[data-label^="方案"]>span{white-space:nowrap;flex-shrink:0}
+</style>
 </head>
 <body>
 
@@ -118,7 +123,7 @@ function updateEduResults(){
             <th style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">類別</th>
             <th style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px">商品名稱</th>
             <th style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px">規格</th>
-            <th style="padding:10px 14px;text-align:center;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">方案A 全額折抵</th>
+            <th style="padding:10px 14px;text-align:center;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">方案A 原價＋全額折抵<br>方案C 檔期活動＋全額折抵</th>
             <th style="padding:10px 14px;text-align:center;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">方案B 檔期活動＋折抵</th>
           </tr>
         </thead>
@@ -128,7 +133,7 @@ function updateEduResults(){
               <td data-label="類別" style="padding:10px 8px;white-space:nowrap"><span class="badge ${badgeCls(p.cat)}">${p.cat}</span></td>
               <td data-label="商品名稱" style="padding:10px 8px;font-weight:500">${p.name}</td>
               <td data-label="規格" style="padding:10px 14px;color:var(--gray);font-size:13px">${p.spec}</td>
-              <td data-label="方案A 全額折抵" style="padding:10px 14px;text-align:center;white-space:nowrap"><span><span style="font-weight:700;color:var(--red)">-$${p.discount.toLocaleString()}</span>　<span style="font-family:ui-monospace,monospace;font-weight:700;color:var(--blue);font-size:16px">${p.code}</span></span></td>
+              <td data-label="方案A 原價＋全額折抵&#10;方案C 檔期活動＋全額折抵" style="padding:10px 14px;text-align:center;white-space:nowrap"><span><span style="font-weight:700;color:var(--red)">-$${p.discount.toLocaleString()}</span>　<span style="font-family:ui-monospace,monospace;font-weight:700;color:var(--blue);font-size:16px">${p.code}</span></span></td>
               <td data-label="方案B 檔期活動＋折抵" style="padding:10px 14px;text-align:center;white-space:nowrap">${planB(p)}</td>
             </tr>`).join('')}
         </tbody>
@@ -162,9 +167,9 @@ function renderEdu(){
     <div class="card" style="padding:16px 20px">
       <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--border)">三種方案怎麼選（系統會跳出 2～3 種，選金額最低的給客人）</div>
       <div style="display:flex;flex-direction:column;gap:8px;font-size:13px;line-height:1.6">
-        <div style="padding:8px 12px;background:var(--light);border-radius:8px"><b>A 原價全額折抵</b>　直接用教育價，<span style="color:var(--red)">不能搭促案</span>，key「方案A」的貨號</div>
+        <div style="padding:8px 12px;background:var(--light);border-radius:8px"><b>A 原價＋全額折抵</b>　直接用教育價，<span style="color:var(--red)">不能搭促案</span>，key「方案A」的貨號</div>
         <div style="padding:8px 12px;background:var(--light);border-radius:8px"><b>B 檔期活動＋折抵</b>　促案價再折固定金額（多數 <b>$2,000</b>，MacBook Neo <b>$1,500</b>），key「方案B」的貨號；<b>只有 Mac</b>，iPad／Apple Watch 沒有，iMac M4 8 核（折抵 $1,710）也沒有</div>
-        <div style="padding:8px 12px;background:var(--light);border-radius:8px"><b>C 當期活動＋全額折抵</b>　促案價再折全額，key「方案A」的貨號（同 A）</div>
+        <div style="padding:8px 12px;background:var(--light);border-radius:8px"><b>C 檔期活動＋全額折抵</b>　促案價再折全額，key「方案A」的貨號（同 A）</div>
       </div>
       <div style="margin-top:10px;font-size:12px;color:var(--gray)">促案折很大時 B 或 C 通常比較便宜；沒什麼促案時 A 比較便宜。</div>
     </div>
