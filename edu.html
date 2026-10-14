@@ -25,31 +25,32 @@
 let eduQuery = '';
 let eduCat = 'all';
 
+// b = 方案 B（當期活動＋教育折抵固定金額）：只有 Mac（含 Studio Display）有；'none' = 沒有方案 B；'pending' = 貨號待確認（2026-10-14 教育優惠門市速查表）
 const EDU_ITEMS = [
-  {cat:'Mac', name:'MacBook Air 13.6"', spec:'M5 全系列', discount:3310, code:'267540'},
-  {cat:'Mac', name:'MacBook Air 15.3"', spec:'M5 全系列', discount:3310, code:'267540'},
-  {cat:'Mac', name:'MacBook Pro 14.2"', spec:'M5 基本款 10CPU', discount:3210, code:'267539'},
-  {cat:'Mac', name:'MacBook Pro 14.2"', spec:'M5 Pro 15CPU / 1TB', discount:5110, code:'267541'},
-  {cat:'Mac', name:'MacBook Pro 14.2"', spec:'M5 Pro 15CPU / 2TB', discount:6860, code:'270810'},
-  {cat:'Mac', name:'MacBook Pro 14.2"', spec:'M5 Pro 18CPU / 2TB', discount:6910, code:'267544'},
-  {cat:'Mac', name:'MacBook Pro 14.2"', spec:'M5 Max 18CPU / 36G', discount:10210, code:'270812'},
-  {cat:'Mac', name:'MacBook Pro 16.2"', spec:'M5 Pro 全系列', discount:6710, code:'267543'},
-  {cat:'Mac', name:'MacBook Pro 16.2"', spec:'M5 Max 18CPU / 40CPU', discount:9910, code:'270811'},
-  {cat:'Mac', name:'MacBook Neo 13"', spec:'A18 Pro 全系列', discount:3000, code:'200056'},
-  {cat:'Mac', name:'Mac mini', spec:'M4 512GB以上 / M4 Pro 全系列', discount:3410, code:'270807'},
-  {cat:'Mac', name:'Mac mini M6', spec:'M6 全系列', discount:3310, code:'267540'},
-  {cat:'Mac', name:'Mac mini M6', spec:'M5 Pro', discount:3510, code:'272707'},
-  {cat:'Mac', name:'iMac 24"', spec:'M4 8CPU', discount:1710, code:'270806'},
-  {cat:'Mac', name:'iMac 24"', spec:'M4 10CPU 全系列', discount:3410, code:'270807'},
-  {cat:'Mac', name:'Mac Studio', spec:'M4 Max', discount:6810, code:'270808'},
-  {cat:'Mac', name:'Mac Studio', spec:'M3 Ultra', discount:14010, code:'270809'},
-  {cat:'Mac', name:'Mac Studio M5', spec:'M5 Max', discount:6810, code:'270808'},
-  {cat:'Mac', name:'Mac Studio M5', spec:'M5 Ultra', discount:14510, code:'272708'},
-  {cat:'Mac', name:'Studio Display', spec:'標準玻璃 可調整斜度 / VESA', discount:3300, code:'240067'},
-  {cat:'Mac', name:'Studio Display', spec:'標準玻璃 可調整高斜度', discount:3200, code:'185269'},
-  {cat:'Mac', name:'Studio Display', spec:'Nano texture 可調整斜度 / VESA', discount:3300, code:'240067'},
-  {cat:'Mac', name:'Studio Display XDR', spec:'標準玻璃 可調整高斜度支架 (CTO)', discount:3300, code:'240067'},
-  {cat:'Mac', name:'Studio Display XDR', spec:'標準玻璃 VESA吊架 (CTO)', discount:3400, code:'244394'},
+  {cat:'Mac', name:'MacBook Air 13.6"', spec:'M5 全系列', discount:3310, code:'267540', b:{d:2000,code:'209321'}},
+  {cat:'Mac', name:'MacBook Air 15.3"', spec:'M5 全系列', discount:3310, code:'267540', b:{d:2000,code:'209321'}},
+  {cat:'Mac', name:'MacBook Pro 14.2"', spec:'M5 基本款 10CPU', discount:3210, code:'267539', b:{d:2000,code:'209321'}},
+  {cat:'Mac', name:'MacBook Pro 14.2"', spec:'M5 Pro 15CPU / 1TB', discount:5110, code:'267541', b:{d:2000,code:'209321'}},
+  {cat:'Mac', name:'MacBook Pro 14.2"', spec:'M5 Pro 15CPU / 2TB', discount:6860, code:'270810', b:{d:2000,code:'209321'}},
+  {cat:'Mac', name:'MacBook Pro 14.2"', spec:'M5 Pro 18CPU / 2TB', discount:6910, code:'267544', b:{d:2000,code:'209321'}},
+  {cat:'Mac', name:'MacBook Pro 14.2"', spec:'M5 Max 18CPU / 36G', discount:10210, code:'270812', b:{d:2000,code:'209321'}},
+  {cat:'Mac', name:'MacBook Pro 16.2"', spec:'M5 Pro 全系列', discount:6710, code:'267543', b:{d:2000,code:'209321'}},
+  {cat:'Mac', name:'MacBook Pro 16.2"', spec:'M5 Max 18CPU / 40CPU', discount:9910, code:'270811', b:{d:2000,code:'209321'}},
+  {cat:'Mac', name:'MacBook Neo 13"', spec:'A18 Pro 全系列', discount:3000, code:'200056', b:{d:1500,code:'194185'}},
+  {cat:'Mac', name:'Mac mini', spec:'M4 512GB以上 / M4 Pro 全系列', discount:3410, code:'270807', b:{d:2000,code:'209321'}},
+  {cat:'Mac', name:'Mac mini M6', spec:'M6 全系列', discount:3310, code:'267540', b:'pending'},
+  {cat:'Mac', name:'Mac mini M6', spec:'M5 Pro', discount:3510, code:'272707', b:'pending'},
+  {cat:'Mac', name:'iMac 24"', spec:'M4 8CPU', discount:1710, code:'270806', b:'none'},
+  {cat:'Mac', name:'iMac 24"', spec:'M4 10CPU 全系列', discount:3410, code:'270807', b:{d:2000,code:'209321'}},
+  {cat:'Mac', name:'Mac Studio', spec:'M4 Max', discount:6810, code:'270808', b:{d:2000,code:'209321'}},
+  {cat:'Mac', name:'Mac Studio', spec:'M3 Ultra', discount:14010, code:'270809', b:{d:2000,code:'209321'}},
+  {cat:'Mac', name:'Mac Studio M5', spec:'M5 Max', discount:6810, code:'270808', b:'pending'},
+  {cat:'Mac', name:'Mac Studio M5', spec:'M5 Ultra', discount:14510, code:'272708', b:'pending'},
+  {cat:'Mac', name:'Studio Display', spec:'標準玻璃 可調整斜度 / VESA', discount:3300, code:'240067', b:{d:2000,code:'209321'}},
+  {cat:'Mac', name:'Studio Display', spec:'標準玻璃 可調整高斜度', discount:3200, code:'185269', b:'pending'},
+  {cat:'Mac', name:'Studio Display', spec:'Nano texture 可調整斜度 / VESA', discount:3300, code:'240067', b:'pending'},
+  {cat:'Mac', name:'Studio Display XDR', spec:'標準玻璃 可調整高斜度支架 (CTO)', discount:3300, code:'240067', b:{d:2000,code:'209321'}},
+  {cat:'Mac', name:'Studio Display XDR', spec:'標準玻璃 VESA吊架 (CTO)', discount:3400, code:'244394', b:{d:2000,code:'209321'}},
   {cat:'iPad', name:'iPad mini 7th', spec:'Wi-Fi / Wi-Fi+LTE 全系列', discount:1700, code:'194188'},
   {cat:'iPad', name:'iPad 11吋 A16', spec:'Wi-Fi / Wi-Fi+LTE 全系列', discount:700, code:'187533'},
   {cat:'iPad', name:'iPad Air 11吋 M4', spec:'Wi-Fi / Wi-Fi+LTE 全系列', discount:1700, code:'194188'},
@@ -77,19 +78,25 @@ const EDU_ITEMS = [
   {cat:'配件', name:'iPad A16 巧控鍵盤雙面夾', spec:'中文', discount:711, code:'235141'},
   {cat:'配件', name:'iPad Air 11" 鍵盤式聰穎雙面夾', spec:'中文', discount:780, code:'234808'},
   {cat:'配件', name:'iPad Air 13" 鍵盤式聰穎雙面夾', spec:'中文', discount:770, code:'234809'},
-  {cat:'配件', name:'Studio Display 標準玻璃', spec:'可調整斜度 / VESA 吊架', discount:3300, code:'240067'},
-  {cat:'配件', name:'Studio Display 標準玻璃', spec:'可調整高斜度', discount:3200, code:'185269'},
-  {cat:'配件', name:'Studio Display Nano texture', spec:'可調整斜度 / VESA', discount:3300, code:'240067'},
+  {cat:'配件', name:'Studio Display 標準玻璃', spec:'可調整斜度 / VESA 吊架', discount:3300, code:'240067', b:{d:2000,code:'209321'}},
+  {cat:'配件', name:'Studio Display 標準玻璃', spec:'可調整高斜度', discount:3200, code:'185269', b:'pending'},
+  {cat:'配件', name:'Studio Display Nano texture', spec:'可調整斜度 / VESA', discount:3300, code:'240067', b:'pending'},
   {cat:'配件', name:'Pro Stand', spec:'CTO', discount:3200, code:'185269'},
   {cat:'配件', name:'VESA 吊架連接器', spec:'CTO', discount:700, code:'185267'},
 ];
+function planB(p){
+  if(!p.b) return '<span style="color:var(--border)">—</span>';
+  if(p.b === 'none') return '<span style="color:var(--gray);font-size:12px">無（未達 $2,000）</span>';
+  if(p.b === 'pending') return '<span style="color:var(--orange);font-size:12px;font-weight:600">貨號待確認</span>';
+  return `<span><span style="font-weight:700;color:var(--red)">-$${p.b.d.toLocaleString()}</span>　<span style="font-family:ui-monospace,monospace;font-weight:700;color:var(--blue);font-size:16px">${p.b.code}</span></span>`;
+}
 function updateEduResults(){
   const filtered = EDU_ITEMS.filter(p => {
     const matchCat = eduCat === 'all' || p.cat === eduCat;
     if(!matchCat) return false;
     if(!eduQuery) return true;
     const q = eduQuery.toLowerCase();
-    return [p.name, p.spec, p.code, String(p.discount)].some(v => v.toLowerCase().includes(q));
+    return [p.name, p.spec, p.code, String(p.discount), p.b?.code || ''].some(v => v.toLowerCase().includes(q));
   });
   document.querySelectorAll('.edu-cat-btn').forEach(btn => {
     const c = btn.dataset.cat;
@@ -113,6 +120,7 @@ function updateEduResults(){
             <th style="padding:10px 8px;text-align:left;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px">規格</th>
             <th style="padding:10px 8px;text-align:right;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">折抵金額</th>
             <th style="padding:10px 14px;text-align:center;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">優惠代碼</th>
+            <th style="padding:10px 14px;text-align:center;font-weight:700;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap">方案B 活動＋折抵</th>
           </tr>
         </thead>
         <tbody>
@@ -123,6 +131,7 @@ function updateEduResults(){
               <td data-label="規格" style="padding:10px 14px;color:var(--gray);font-size:13px">${p.spec}</td>
               <td data-label="折抵金額" style="padding:10px 8px;text-align:right;font-weight:700;color:var(--red);white-space:nowrap">-$${p.discount.toLocaleString()}</td>
               <td data-label="優惠代碼" style="padding:10px 14px;text-align:center;font-family:ui-monospace,monospace;font-weight:700;color:var(--blue);font-size:16px;white-space:nowrap">${p.code}</td>
+              <td data-label="方案B 活動＋折抵" style="padding:10px 14px;text-align:center;white-space:nowrap">${planB(p)}</td>
             </tr>`).join('')}
         </tbody>
       </table>
@@ -152,6 +161,15 @@ function renderEdu(){
       </div>
     </div>
     <div id="edu-results" class="card" style="padding:0;overflow:hidden"></div>
+    <div class="card" style="padding:16px 20px">
+      <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--border)">三種方案怎麼選（系統會跳出 2～3 種，選金額最低的給客人）</div>
+      <div style="display:flex;flex-direction:column;gap:8px;font-size:13px;line-height:1.6">
+        <div style="padding:8px 12px;background:var(--light);border-radius:8px"><b>A 原價全額折抵</b>　直接用教育價，<span style="color:var(--red)">不能搭促案</span>，key「優惠代碼」</div>
+        <div style="padding:8px 12px;background:var(--light);border-radius:8px"><b>B 當期活動＋教育折抵</b>　促案價再折固定金額（多數 <b>$2,000</b>，MacBook Neo <b>$1,500</b>），key「方案B」貨號；<b>只有 Mac</b>，iPad／Apple Watch 沒有，iMac M4 8 核（折抵 $1,710）也沒有</div>
+        <div style="padding:8px 12px;background:var(--light);border-radius:8px"><b>C 當期活動＋全額折抵</b>　促案價再折全額，key「優惠代碼」</div>
+      </div>
+      <div style="margin-top:10px;font-size:12px;color:var(--gray)">促案折很大時 B 或 C 通常比較便宜；沒什麼促案時 A 比較便宜。</div>
+    </div>
     <div class="two-col-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:0">
       <div class="card">
         <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border)">每年度購買數量限制</div>
