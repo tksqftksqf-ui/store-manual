@@ -8,6 +8,8 @@
 <style>
 .cc-tip{background:var(--white);border-radius:14px;padding:12px 16px;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:10px;font-size:14px;line-height:1.7}
 .cc-tip b{color:var(--blue);white-space:nowrap}
+.cc-tip-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:4px}
+.cc-tip-close{flex-shrink:0;border:1.5px solid var(--border);background:var(--light);border-radius:14px;padding:3px 10px;font-size:12px;color:var(--gray);cursor:pointer}
 .cc-bar{display:flex;justify-content:flex-end;margin-bottom:12px}
 .cc-btn{border:1.5px solid var(--border);background:var(--white);color:var(--gray);border-radius:20px;padding:5px 14px;font-size:13px;cursor:pointer}
 .cc-btn:hover{border-color:var(--blue);color:var(--blue)}
@@ -38,7 +40,7 @@
 </div>
 
 <div class="main">
-  <div class="cc-tip">💡 首頁可以照自己的習慣調整，點下方 <b>⚙️ 自訂卡片</b>：<br>・取消勾選 → 隱藏用不到的卡片<br>・按 ↑↓ → 把常用的卡片排到前面<br><span class="cc-note">設定只存在這台裝置，不會影響其他同事</span></div>
+  <div class="cc-tip" id="cc-tip">💡 首頁可以照自己的習慣調整，點下方 <b>⚙️ 自訂卡片</b>：<br>・取消勾選 → 隱藏用不到的卡片<br>・按 ↑↓ → 把常用的卡片排到前面<div class="cc-tip-foot"><span class="cc-note">設定只存在這台裝置，不會影響其他同事</span><button type="button" class="cc-tip-close" id="cc-tip-close" aria-label="關閉說明，之後不再顯示">知道了 ✕</button></div></div>
   <div class="cc-bar"><button class="cc-btn" id="cc-toggle" type="button" aria-expanded="false" aria-controls="cc-panel">⚙️ 自訂卡片（點一下開啟）</button></div>
   <div class="cc-panel" id="cc-panel">
     <strong>選擇要顯示的卡片・用 ↑↓ 調整順序</strong>
@@ -170,7 +172,12 @@ document.getElementById('today-date').textContent =
     this.textContent=open?'⚙️ 自訂卡片（再點一下收起）':'⚙️ 自訂卡片（點一下開啟）';
     this.setAttribute('aria-expanded',open);
   };
-  document.getElementById('cc-reset').onclick=function(){save(HKEY,[]);save(OKEY,[]);apply()};
+  // 說明區塊：按「知道了 ✕」後這台裝置不再顯示；按「還原預設」會再出現
+  var TKEY='toolbox-tip-dismissed',tip=document.getElementById('cc-tip');
+  function tipSeen(){try{return localStorage.getItem(TKEY)==='1'}catch(e){return false}}
+  if(tipSeen())tip.style.display='none';
+  document.getElementById('cc-tip-close').onclick=function(){try{localStorage.setItem(TKEY,'1')}catch(e){}tip.style.display='none'};
+  document.getElementById('cc-reset').onclick=function(){save(HKEY,[]);save(OKEY,[]);try{localStorage.removeItem(TKEY)}catch(e){}tip.style.display='';apply()};
   apply();
 })();
 // ── 卡片點擊統計（只送卡片連結與名稱，不含任何個資）──
