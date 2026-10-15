@@ -1,4 +1,4 @@
-const PRODUCTS_VERSION = '20260912v8';
+const PRODUCTS_VERSION = '20261015v1';
 const PRODUCTS = [
   // ── MacBook Neo ──
   {cat:'Mac',name:'MacBook Neo',spec:'A18 Pro/6CPU/5GPU/8GB/256GB',color:'胭粉',pid:'267442',mpn:'MHFH4',price:22900},
@@ -592,6 +592,11 @@ const PRODUCTS = [
   {cat:'配件',name:'PowerBeats Pro 2',spec:'',color:'流沙金',pid:'255759',mpn:'MX733',price:8790},
   {cat:'配件',name:'PowerBeats Pro 2',spec:'',color:'電光橙',pid:'255760',mpn:'MX743',price:8790},
   {cat:'配件',name:'PowerBeats Pro 2',spec:'',color:'曜動紫',pid:'255761',mpn:'MX753',price:8790},
+  {cat:'配件',name:'Beats USB-C對USB-C編織線 1.5M',spec:'',color:'閃電黑',pid:'258261',mpn:'MDGA4',price:590},
+  {cat:'配件',name:'Beats USB-C對USB-C編織線 1.5M',spec:'',color:'風馳灰',pid:'258262',mpn:'MDGD4',price:590},
+  {cat:'配件',name:'Beats USB-C對USB-C編織線 1.5M',spec:'',color:'氮燃藍',pid:'258263',mpn:'MDGE4',price:590},
+  {cat:'配件',name:'Beats USB-C對Lightning編織線 1.5M',spec:'',color:'閃電黑',pid:'258264',mpn:'MDGK4',price:590},
+  {cat:'配件',name:'Beats USB-C對Lightning編織線 1.5M',spec:'',color:'風馳灰',pid:'258265',mpn:'MDGL4',price:590},
   // ── Apple TV ──
   {cat:'配件',name:'Apple TV 4K 64GB (2022)',spec:'',color:'',pid:'234915',mpn:'MN873',price:6900},
   {cat:'配件',name:'Apple TV 4K 128GB (2022)',spec:'',color:'',pid:'234916',mpn:'MN893',price:8500},
@@ -616,6 +621,7 @@ const PRODUCTS = [
   {cat:'配件',name:'Apple Magic Mouse',spec:'',color:'白',pid:'253492',mpn:'MXK53',price:2290},
   {cat:'配件',name:'Magic Trackpad',spec:'',color:'黑',pid:'253493',mpn:'MXKA3',price:4390},
   {cat:'配件',name:'Magic Trackpad',spec:'',color:'白',pid:'253494',mpn:'MXK93',price:3790},
+  {cat:'配件',name:'Magic Trackpad',spec:'',color:'黑(停產舊款)',pid:'226010',mpn:'MMMP3',price:4390},
   {cat:'配件',name:'Magic Keyboard 繁中',spec:'',color:'',pid:'253495',mpn:'MXCL3',price:2990},
   {cat:'配件',name:'Magic Keyboard 繁中 含數字鍵',spec:'',color:'',pid:'255999',mpn:'MXCJ3',price:3790},
   {cat:'配件',name:'Magic Keyboard 含TouchID與數字鍵盤 繁中',spec:'',color:'黑',pid:'253496',mpn:'MXK83',price:5890},
@@ -749,6 +755,12 @@ const PRODUCTS = [
   {cat:'配件',name:'精細織紋卡套',spec:'',color:'午夜紫',pid:'262432',mpn:'MGH84',price:1890},
   {cat:'配件',name:'精細織紋卡套',spec:'',color:'海軍藍',pid:'262433',mpn:'MGH94',price:1890},
   {cat:'配件',name:'精細織紋卡套',spec:'',color:'黑色',pid:'262434',mpn:'MGHA4',price:1890},
+  {cat:'配件',name:'斜背掛繩',spec:'',color:'橙色',pid:'262396',mpn:'MGGD4',price:1890},
+  {cat:'配件',name:'斜背掛繩',spec:'',color:'藍色',pid:'262399',mpn:'MGGG4',price:1890},
+  {cat:'配件',name:'斜背掛繩',spec:'',color:'淡藍色',pid:'262400',mpn:'MGGH4',price:1890},
+  {cat:'配件',name:'斜背掛繩',spec:'',color:'小麥色',pid:'262402',mpn:'MGGK4',price:1890},
+  {cat:'配件',name:'斜背掛繩',spec:'',color:'黑色',pid:'262403',mpn:'MGGL4',price:1890},
+  {cat:'配件',name:'斜背掛繩',spec:'',color:'赭褐色',pid:'262405',mpn:'MGGN4',price:1890},
   // ── 軟體 ──
   {cat:'軟體',name:'Office 2024 家用版 盒裝',spec:'',color:'',pid:'252791',mpn:'',price:5690},
   {cat:'軟體',name:'Office 2024 家用版 下載版',spec:'',color:'',pid:'254549',mpn:'',price:5690},

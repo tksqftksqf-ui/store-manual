@@ -52,7 +52,7 @@
 
 <div class="main" id="mc"></div>
 
-<script src="shared/products.js?v=20260912v8"></script>
+<script src="shared/products.js?v=20261015v1"></script>
 <script>
 document.getElementById('products-updated').textContent = '貨號表版本：' + (typeof PRODUCTS_VERSION !== 'undefined' ? PRODUCTS_VERSION : '—');
 let searchQuery = '';
@@ -117,13 +117,13 @@ const ACCESSORY_GROUP = {
   'Studio Display 標準玻璃 可調斜度支架':'Studio Display','Studio Display 標準玻璃 可調斜度高度支架':'Studio Display','Studio Display 標準玻璃 VESA吊架':'Studio Display','Studio Display Nano texture 可調斜度支架 CTO':'Studio Display','Studio Display Nano texture 可調斜度高度支架 CTO':'Studio Display','Studio Display Nano texture VESA吊架 CTO':'Studio Display','Studio Display XDR 標準玻璃 可調斜度高度支架 CTO':'Studio Display','Studio Display XDR 標準玻璃 VESA吊架 CTO':'Studio Display',
   'EarPods (3.5mm耳機接頭)':'耳機轉接/連接線','EarPods (Lightning 連接器)':'耳機轉接/連接線','EarPods (USB-C)':'耳機轉接/連接線','Lightning 對 USB 連接線 (1m)':'耳機轉接/連接線','Lightning 數位 AV 轉接器':'耳機轉接/連接線','Lightning 對 USB 3 相機轉接器':'耳機轉接/連接線','USB-C 對 3.5mm耳機插孔轉接器':'耳機轉接/連接線','USB-C 對 3.5mm 音訊連接線 (1.2m)':'耳機轉接/連接線','USB-C 對 USB 轉接器':'耳機轉接/連接線','USB-C 對 SD 卡讀卡機':'耳機轉接/連接線','USB-C Digital AV 多埠轉接器':'耳機轉接/連接線','Thunderbolt 4 Pro連接線 (3m)':'耳機轉接/連接線','Thunderbolt 5 Pro連接線 (1m)':'耳機轉接/連接線',
   'Apple TV 4K 64GB (2022)':'Apple TV/週邊','Apple TV 4K 128GB (2022)':'Apple TV/週邊','Siri Remote':'Apple TV/週邊',
-  '磁性充電器對 USB-C線 (1m)':'充電器/電源','60W USB-C 充電連接線 (1m)':'充電器/電源','240W USB-C 充電連接線 (2m)':'充電器/電源','USB-C 對 Lightning 線 (1m)':'充電器/電源','USB-C 對 Lightning 線 (2m)':'充電器/電源','iPhone Air MagSafe電池':'充電器/電源','MagSafe 充電器 (1m)':'充電器/電源','MagSafe 充電器 (2m)':'充電器/電源','85W MagSafe 2 電源轉換器':'充電器/電源','USB-C對MagSafe 3 連接線 (2m)':'充電器/電源','20W USB-C 電源轉接器':'充電器/電源','35W 雙 USB-C 埠小型電源轉接器':'充電器/電源','35W 雙 USB-C 埠電源轉接器':'充電器/電源','40W 動態電源轉接器':'充電器/電源','70W USB-C 電源轉接器':'充電器/電源','96W USB-C 電源轉接器':'充電器/電源','140W USB-C 電源轉接器':'充電器/電源',
+  'Beats USB-C對USB-C編織線 1.5M':'充電器/電源','Beats USB-C對Lightning編織線 1.5M':'充電器/電源','磁性充電器對 USB-C線 (1m)':'充電器/電源','60W USB-C 充電連接線 (1m)':'充電器/電源','240W USB-C 充電連接線 (2m)':'充電器/電源','USB-C 對 Lightning 線 (1m)':'充電器/電源','USB-C 對 Lightning 線 (2m)':'充電器/電源','iPhone Air MagSafe電池':'充電器/電源','MagSafe 充電器 (1m)':'充電器/電源','MagSafe 充電器 (2m)':'充電器/電源','85W MagSafe 2 電源轉換器':'充電器/電源','USB-C對MagSafe 3 連接線 (2m)':'充電器/電源','20W USB-C 電源轉接器':'充電器/電源','35W 雙 USB-C 埠小型電源轉接器':'充電器/電源','35W 雙 USB-C 埠電源轉接器':'充電器/電源','40W 動態電源轉接器':'充電器/電源','70W USB-C 電源轉接器':'充電器/電源','96W USB-C 電源轉接器':'充電器/電源','140W USB-C 電源轉接器':'充電器/電源',
   'Apple Pencil 筆尖4件裝':'Apple Pencil','Apple Pencil (USB-C)':'Apple Pencil','Apple Pencil 第一代':'Apple Pencil','Apple Pencil 第二代':'Apple Pencil','Apple Pencil Pro':'Apple Pencil',
   'AirPods 4':'AirPods/耳機','AirPods 4 主動式降噪':'AirPods/耳機','AirPods 5':'AirPods/耳機','AirPods 5（配備無線充電盒）':'AirPods/耳機','AirPods Pro 第三代':'AirPods/耳機','AirPods Max':'AirPods/耳機','AirPods Max 2':'AirPods/耳機','PowerBeats Pro 2':'AirPods/耳機',
   'HomePod mini':'HomePod','HomePod (2023)':'HomePod','HomePod':'HomePod',
   'AirTag 1件裝':'AirTag','AirTag 4件裝':'AirTag','AirTag 2 1件裝':'AirTag','AirTag 2 4件裝':'AirTag',
   'iPad mini 聰穎雙面夾':'iPad鍵盤/保護','iPad A16 聰穎雙面夾':'iPad鍵盤/保護','iPad A16 巧控鍵盤雙面夾':'iPad鍵盤/保護','iPad Air 11吋 M3 巧控鍵盤':'iPad鍵盤/保護','iPad Air 13吋 M3 巧控鍵盤':'iPad鍵盤/保護','iPad Pro 11吋 M4 巧控鍵盤':'iPad鍵盤/保護','iPad Pro 13吋 M4 巧控鍵盤':'iPad鍵盤/保護','iPad Air 13吋 M2 聰穎雙面夾':'iPad鍵盤/保護','iPad Pro 11吋 M4 聰穎雙面夾':'iPad鍵盤/保護','iPad Pro 13吋 M4 聰穎雙面夾':'iPad鍵盤/保護',
-  'iPhone 16e 矽膠保護殼':'iPhone保護殼/卡套','iPhone 16e MagSafe 透明保護殼':'iPhone保護殼/卡套','iPhone 17e 矽膠保護殼':'iPhone保護殼/卡套','iPhone Air MagSafe保護殼':'iPhone保護殼/卡套','iPhone Air 防護邊框':'iPhone保護殼/卡套','iPhone 17 MagSafe 透明保護殼':'iPhone保護殼/卡套','iPhone 17 MagSafe 矽膠保護殼':'iPhone保護殼/卡套','iPhone 17 Pro MagSafe 透明保護殼':'iPhone保護殼/卡套','iPhone 17 Pro MagSafe 矽膠保護殼':'iPhone保護殼/卡套','iPhone 17 Pro MagSafe 科技織紋':'iPhone保護殼/卡套','iPhone 17 Pro Max MagSafe 透明保護殼':'iPhone保護殼/卡套','iPhone 17 Pro Max MagSafe 矽膠保護殼':'iPhone保護殼/卡套','iPhone 17 Pro Max MagSafe 科技織紋':'iPhone保護殼/卡套','精細織紋卡套':'iPhone保護殼/卡套',
+  '斜背掛繩':'iPhone保護殼/卡套','iPhone 16e 矽膠保護殼':'iPhone保護殼/卡套','iPhone 16e MagSafe 透明保護殼':'iPhone保護殼/卡套','iPhone 17e 矽膠保護殼':'iPhone保護殼/卡套','iPhone Air MagSafe保護殼':'iPhone保護殼/卡套','iPhone Air 防護邊框':'iPhone保護殼/卡套','iPhone 17 MagSafe 透明保護殼':'iPhone保護殼/卡套','iPhone 17 MagSafe 矽膠保護殼':'iPhone保護殼/卡套','iPhone 17 Pro MagSafe 透明保護殼':'iPhone保護殼/卡套','iPhone 17 Pro MagSafe 矽膠保護殼':'iPhone保護殼/卡套','iPhone 17 Pro MagSafe 科技織紋':'iPhone保護殼/卡套','iPhone 17 Pro Max MagSafe 透明保護殼':'iPhone保護殼/卡套','iPhone 17 Pro Max MagSafe 矽膠保護殼':'iPhone保護殼/卡套','iPhone 17 Pro Max MagSafe 科技織紋':'iPhone保護殼/卡套','精細織紋卡套':'iPhone保護殼/卡套',
 };
 function getSubOptions(cat){
   if(cat==='配件') return ACCESSORY_GROUP_ORDER;
@@ -1216,7 +1216,6 @@ const ACTIVITY_PROMO = {
   '252142':[{period:'A',d:null,g:null,m:'已停產'}],
   '273346':[{period:'A',d:null,g:'送200配件金',m:null}],
   '273347':[{period:'A',d:null,g:'送200配件金',m:null}],
-  '252143':[{period:'A',d:3991,g:null,m:'已停產'}],
   '267952':[{period:'A',d:899,g:null,m:null}],
   '267953':[{period:'A',d:899,g:null,m:null}],
   '267954':[{period:'A',d:899,g:null,m:null}],
