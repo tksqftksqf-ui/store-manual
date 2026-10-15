@@ -10,6 +10,12 @@
 .npi-time-item{flex:1;min-width:200px;background:var(--white);border-radius:12px;padding:14px 16px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
 .npi-time-item .t-name{font-size:13px;font-weight:700;margin-bottom:6px}
 .npi-time-item .t-date{font-size:12px;color:var(--gray)}
+.npi-time-link{cursor:pointer;transition:box-shadow .15s,transform .15s}
+.npi-time-link:hover{box-shadow:0 3px 10px rgba(0,0,0,.12);transform:translateY(-1px)}
+.npi-time-item .t-go{font-size:11.5px;color:var(--blue);margin-top:6px;font-weight:600}
+.plan-card[id^=ncard-]{scroll-margin-top:72px}
+.npi-flash{animation:npiflash 1.4s ease}
+@keyframes npiflash{0%,60%{box-shadow:0 0 0 3px var(--blue)}100%{box-shadow:none}}
 .npi-price-row{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 4px}
 .npi-hl{list-style:none;padding:0;margin:0}
 .npi-hl li{position:relative;padding:5px 0 5px 18px;font-size:13.5px;line-height:1.55}
@@ -42,10 +48,12 @@
 
 <script>
 const NPI_TIMELINE = [
-  {name:'iOS 27 正式版', date:'9/14 推出'},
-  {name:'iPhone 18 Pro系列／AW S12＆Ultra 4／AirPods 5', date:'9/11–12 預購・9/18 發售'},
-  {name:'Mac mini M6＆M5 Pro', date:'8/27–9/20 預購・9/22 發售'},
-  {name:'iPhone Duo 摺疊機', date:'10/16 晚間8點預購・10/23 發售'},
+  {keys:['p18pro','watch','airpods'], name:'iPhone 18 Pro系列／AW S12＆Ultra 4／AirPods 5', date:'9/11–12 預購・9/18 發售'},
+  {keys:['macmini'], name:'Mac mini M6＆M5 Pro', date:'8/27–9/20 預購・9/22 發售'},
+  {keys:['duo'], name:'iPhone Duo 摺疊機', date:'10/16 晚間8點預購・10/23 發售'},
+  {keys:['homepod'], name:'HomePod mini 2', date:'10/15 預購・10/30 發售'},
+  {keys:['appletv'], name:'Apple TV 4K（第 4 代）', date:'10/15 預購・11/13 發售'},
+  {keys:['homeview','homecoll'], name:'Apple HomeView／Home Collection', date:'台灣上市時間未定（無台幣價）'},
 ];
 
 const NPI_PRODUCTS = [
@@ -56,6 +64,7 @@ const NPI_PRODUCTS = [
     prices: ['18 Pro NT$44,900 起', '18 Pro Max NT$49,900 起'],
     date: '9/18 發售（9/12 預購）',
     highlights: [
+      '<b>⚠️ 機型提醒：</b>2026年9月僅推出以下機型，<u>沒有 iPhone 18（雙鏡頭標準版）</u>',
       '<b>新增色系：</b>勃根地紅色、冰川藍色、黑色、銀色，256GB／512GB／1TB／2TB',
       '<b>尺寸不變：</b>6.3吋iPhone 18 Pro／6.9吋iPhone 18 Pro Max，採用亮眼的超Retina XDR顯示器，具備最高達120Hz的ProMotion技術，與3000尼特峰值亮度',
       '<b>台積電2奈米製程：</b>A20 Pro晶片，配備6核心CPU、7核心GPU、雙16核心神經網路引擎，記憶體頻寬提升50％',
@@ -155,6 +164,107 @@ const NPI_PRODUCTS = [
     audience: '預算非常充裕、極度仰賴大螢幕影音多工與創作者族群',
     body: 'duoqa',
   },
+  {
+    key: 'homepod',
+    icon: '🔊',
+    name: 'HomePod mini 2',
+    prices: ['NT$4,790'],
+    date: '10/15 預購・10/30 發售',
+    highlights: [
+      '<b>定價：</b>NT$4,790，微幅調整 NT$800（原因：新機加強了晶片運算、燈光與 Mac 連結生態）',
+      '<b>⚠️ 預購時間：</b>台灣官網 10/15（四）開放預購，10/30（五）發售',
+      '<b>晶片：</b>S10 晶片（舊款為 S5，與 Apple Watch S5 同級），運算音訊能力大幅提升，系統反應與家庭控制更快更即時',
+      '<b>機身：</b>335 公克（舊款 345 公克，輕 10 公克），體積維持 84.3 × 97.9 mm，內部結構與聲學組件更精緻',
+      '<b>配色：</b>白、粉紅、綠、藍、午夜色（舊款：太空灰、白、黃、橙、藍）——⚠️ 黃色、橙色已取消，新增全新粉紅與綠色，黑色系調整為午夜色',
+      '<b>麥克風：</b>3 麥克風陣列（舊款 4 麥克風），減少 1 個硬體麥克風，但藉由 S10 計算音訊達到更佳的遠距收音與除噪',
+      '<b>🌟 頂部光效：</b>聲波光暈（Sound Glow），光效隨專輯封面色彩即時律動，並可展示放鬆雨聲等聲景（舊款為傳統圓形白光／多彩 Siri 光暈）',
+      '<b>🌟 Mac 音訊整合：</b>Wi-Fi 6E 架構，可直接作為相容 Mac 的系統預設喇叭，超低延遲、連線更穩定（舊款走 AirPlay，切歌或影片易延遲）',
+      '<b>無線與連線：</b>Wi-Fi 6E、藍牙 6、Thread（舊款 Wi-Fi 4／802.11n、藍牙 5.0、Thread）；另有超寬頻晶片，需 U1 的 iPhone 且依國家地區而異，<u>台灣不要保證超寬頻可用</u>',
+      '<b>軟體與沿用功能：</b>HomePod 27.2；360 度音場、立體聲配對、多室音訊都還在；盒內有 20W 電源轉接器；可當 Wi-Fi 6E 或更新 Mac 的預設喇叭（單顆或立體聲一對）',
+      '<b>家庭功能：</b>家庭中樞；聲音辨識（煙霧／一氧化碳，不能當緊急設備）；臉部辨識播報門鈴訪客（需 HomeKit 安全錄影＋臉部辨識）；語音控制需已開 Apple Intelligence 的 iPhone、最新軟體',
+      '<b>Siri AI：</b>日後以軟體更新提供、先上英文，國家名單（美、澳、加、印度、紐、新加坡、南非、英國）<u>沒有台灣</u>，不要主動承諾',
+      '<b>家庭劇院環繞：</b>支援 Apple TV 4K 第 4 代四聲道，前後各放一對組成 3D 包覆環繞音場（舊款不支援四揚聲器電視環繞）',
+      '<b>⚠️ 立體聲配對限制：</b>必須是完全相同機型且同一代（兩台 mini 2，或兩台舊 mini），新舊兩代不可混搭；mini 2 與大 HomePod（第 2 代）也不能組立體聲，僅能放在同房間同時播放多室音訊',
+      '<b>四揚聲器電視環繞條件：</b>主機必須是 Apple TV 4K（第 4 代）；前方一對、後方一對，同一對必須同機型——可用四顆 mini 2、四顆 HomePod（第 2 代），或前方一對 HomePod（第 2 代）＋後方一對 mini 2；舊 HomePod mini 組不出這個配置，前方左右各放舊 mini 與 mini 2 也不行',
+    ],
+    quotes: [
+      '「舊款已停止在官網販售，新機加強了晶片運算、燈光與 Mac 連結生態。」',
+      '客人問「我家有舊的能買一顆新的湊一對立體聲嗎？」→ 答案：不行！必須兩台同代同款。',
+    ],
+  },
+  {
+    key: 'appletv',
+    icon: '📺',
+    name: 'Apple TV 4K（第 4 代）',
+    prices: ['NT$9,900', '128GB・單一款'],
+    date: '10/15 預購・11/13 發售',
+    highlights: [
+      '<b>機型與售價：</b>第 4 代只有單一旗艦款 NT$9,900，不再區分容量、Wi-Fi 款／乙太網路款',
+      '<b>⚠️ 預購時間：</b>台灣官網 10/15（四）開放預購，11/13（五）發售',
+      '<b>儲存容量：</b>標配 128GB（舊款 64GB 或 128GB），下載高畫質 Arcade 遊戲或 4K 影片快取更充裕',
+      '<b>核心處理器：</b>A19 旗艦晶片（舊款 A15 仿生），CPU 快 50%、GPU 快達 2 倍，內建專用 AV1 硬體解碼器',
+      '<b>網路連線：</b>Wi-Fi 7（802.11be）＋標配 Gigabit 乙太網路（舊款 Wi-Fi 6＋可選乙太網路）；Wi-Fi 7 具備 2x2 MIMO，串流超高碼率 4K/8K 內容更順暢',
+      '<b>智慧家庭中樞：</b>全機標配 Thread＋Matter 中樞，不論接有線或無線都是最高規格中樞（舊款 Thread 僅限乙太網路高階款）',
+      '<b>🌟 免持語音聲控：</b>主機內建 3 個遠距麥克風，電視播放中也能免拿遙控器直接喊「嘿 Siri」，有語音隔離；產品頁註腳：tvOS 主要語言要設成中文（國語－台灣）、荷、英、芬、法、德、希伯來、挪威或瑞典文——<u>這不是 Siri AI</u>，台灣不要主動承諾 Siri AI；舊款必須按著遙控器麥克風說話',
+      '<b>遙控器：</b>Siri Remote（第 4 代，USB-C），沿用原設計，新增「尋找」功能（內部新增尋找蜂鳴器與 UWB 晶片）；遙控器可單買，相容 Apple TV HD 與 Apple TV 4K',
+      '<b>遙控器尋找：</b>喊「嘿 Siri，找出遙控器」遙控器會發聲，手機還能用箭頭精準引導方向（舊款僅 iPhone 粗略距離指引）',
+      '<b>⚠️ 「精確尋找」限制：</b>要第 4 代遙控器，配 iPhone Duo、iPhone Air，或 iPhone 17 與後續，<u>不含 iPhone 17e</u>，地區另有限制；播放聲音找遙控器只限最新這支；舊款 iPhone 或 17e 僅能使用發聲尋找，無法開啟指針尋找',
+      '<b>🌟 電視音響架構：</b>四揚聲器家庭劇院環繞＋全室音訊，前後各一對（4 顆 HomePod），客廳直接升級電影院（舊款僅支援單顆或一對立體聲）',
+      '<b>四揚聲器環繞條件：</b>兩邊一起成立才有——主機必須是第 4 代 Apple TV 4K（第 3 代組不出），喇叭前方一對、後方一對，同一對必須同機型：可用四顆 HomePod mini 2、四顆 HomePod（第 2 代），或前方一對 HomePod（第 2 代）＋後方一對 mini 2；舊 HomePod mini 組不出這個配置',
+      '<b>盒裝配件：</b>主機、第 4 代 Siri Remote、電源線、說明文件——⚠️ HDMI 線仍未附贈，結帳必主動推薦 Ultra High Speed 2.1 線；重量 217 公克',
+      '<b>其他規格：</b>藍牙 6、Thread、HDMI 2.1、紅外線接收器、內建電源；Wi-Fi 7（2x2 MIMO）需在支援 Wi-Fi 7 的地區才有',
+      '<b>電視上的家庭功能：</b>門鈴通知可上電視，看訪客、講話、解鎖，不用中斷節目；iCloud 照片可只做回憶／人像螢幕保護，不必整庫曝光；螢幕保護可隨機輪播',
+    ],
+    quotes: [
+      '「上一代要 8,500 才有網孔和 Thread，這代直接給頂規全配，不再讓客人陷入選擇困難。」',
+    ],
+  },
+  {
+    key: 'homeview',
+    icon: '🖥️',
+    name: 'Apple HomeView（桌上／壁掛）',
+    tag: '台灣未上市',
+    prices: ['台灣無台幣價（美國 $299）'],
+    date: '台灣上市時間未定',
+    highlights: [
+      '<b>概念：</b>智慧家庭中樞',
+      '<b>檔期：</b>台灣沒有選購頁；美、英、加、澳、紐、印度 11/13 發售；美國標價 $299（美元）；歐盟不賣，原因是 Siri AI 目前無法在歐盟 iOS 使用',
+      '<b>定位：</b>全新家庭中樞；7 吋 Liquid Retina、原彩、亮度 500～0.3 尼特，靠近才展開細節',
+      '<b>桌上型：</b>鋁金屬圓弧底座、不鏽鋼轉軸、同色 USB-C 線；顏色：銀、星光、玫瑰粉、太空灰',
+      '<b>壁掛型：</b>太空灰、銀；聲音是兩顆單體，為壁掛調校',
+      '<b>桌上型聲音：</b>螢幕兩顆全音域（空間音訊）＋底座下射低音＋兩顆力抵消被動輻射器',
+      '<b>鏡頭與晶片：</b>12MP Center Stage 鏡頭（FaceTime 人物居中）、四麥克風；A18 晶片，安全隔離區處理鏡頭與麥克風，系統與 Apple 都讀不到',
+      '<b>多人辨識：</b>最多認 6 個人；個人的訊息、行事曆要「臉對上，而且配對的 iPhone／iPad 在附近、近期解鎖過」',
+      '<b>桌面內容：</b>照片、Flow、史努比、行事曆、天氣、Home Modular、Home Camera（最多 9 路同時看）',
+      '<b>App：</b>沒有獨立 App Store；Apple app 加上 iPhone 上相容的第三方影音 app',
+      '<b>Siri AI：</b>先上英文、有使用量上限；個人情境要配對已開 Apple Intelligence 的 iPhone／iPad；台灣稿支援英文，國家名單沒有台灣',
+      '<b>壁掛配件（Schneider Home，美元，不是台灣價）：</b>USB-C 牆接 $59.95、AC 有線 $79.95 起（即日起）；PoE 有線 $129.95（2027 年初）',
+    ],
+    quotes: [
+      '台灣客人問：「目前台灣還沒有上市、時間未定，客廳建議先以 Apple TV 4K 為核心，之後可以無縫併入。」不要承諾到貨日、不要報台幣價。',
+    ],
+  },
+  {
+    key: 'homecoll',
+    icon: '🔒',
+    name: 'Apple Home Collection（LG／Schneider）',
+    tag: '台灣未上市',
+    prices: ['無台幣價（以下為美國售價）'],
+    date: '12 月起，部分 2027 年初（美國）',
+    highlights: [
+      '<b>概念：</b>智慧家庭配件系列',
+      '<b>合作與配對：</b>Apple 與 LG Electronics、Schneider Electric 合作；iPhone 點一下用 NFC 配對，只走「家庭」app，不另載 app、不另開帳號',
+      '<b>隱私與連線：</b>端對端加密，LG、施耐德、Apple 都讀不到；每台支援 Thread；換 Wi-Fi 會自己更新憑證',
+      '<b>家庭中樞需求：</b>HomeView、HomePod、HomePod mini 或 Apple TV',
+      '<b>台灣狀態：</b>相關產品目前未在台灣上市；下列為美國售價，<u>不要換成台幣</u>',
+      '<b>美國售價起（市場）：</b>LG 有線錄影門鈴 $249.95（美、加、英）｜LG 泛光燈攝影機 $399.95（美、加、英）｜LG 戶外攝影機（插電）$299.95（美、加、英）｜LG 室內攝影機（插電）$199.95（美、加、英）｜LG 智慧鎖舌鎖 $349.95（美、加）｜LG 智慧恆溫器 $199.95（美、加）｜LG 溫度感測器 $39.95（美、加）｜Schneider Home 智慧恆溫器 $199.95（美、加）｜Schneider Home 空間感測器 $39.95（美、加）｜LG C-Wire 轉接器 $24.95｜Schneider 飾板 $14.95｜Schneider C-Wire 轉接器 $24.95',
+      '<b>顏色：</b>LG 門鈴／攝影機／鎖：Essence 石墨、銀；LG 室內攝影機／恆溫器／感測器：Essence 白；Schneider 恆溫器：銀＋白；Schneider 空間感測器：白',
+      '<b>攝影機／門鈴（客人問再講，不要講成台灣買得到）：</b>攝影機最高 2.5K，辨人、熟臉、寵物、車、包裹；門鈴雙鏡頭（前 2.5K、下 Full HD）有聚光燈，提示音走 HomeView／HomePod／HomePod mini；室內攝影機有人用「家庭」查看時鏡頭會抬起、第一位家人回家就低頭停錄；斷 Wi-Fi 仍靠內建儲存錄影',
+      '<b>錄影儲存：</b>事件紀錄進 iCloud+，保留 10 天，沒有另外的攝影機月費；英文註腳：iCloud+ 50GB 一台、200GB 最多五台、2TB 不限台數；影片描述與自然語言搜尋需已開 Apple Intelligence 的 iPhone／iPad、符合資格的 iCloud+、最新系統的家庭中樞',
+      '<b>智慧鎖：</b>超寬頻，走近自動開（要家庭鑰匙的 iPhone／Apple Watch）；也可輕點、數字鍵盤、隱藏鑰匙孔；支援 Matter 與 Aliro；核心開關鎖在本地，沒網路也能用',
+      '<b>恆溫器：</b>LG、Schneider 都有；「適應性溫度」依有人、就寢、外出調整，不用手排時程；可吃獨立感測器，或 HomeView／HomePod／HomePod mini 內建溫濕度',
+    ],
+  },
 ];
 
 function toggleNpi(key){
@@ -167,6 +277,23 @@ function toggleNpi(key){
     body.style.display = 'none';
     tog.textContent = '▼';
   }
+}
+
+function openNpi(key){
+  const body = document.getElementById('nbody-' + key);
+  const tog  = document.getElementById('ntog-' + key);
+  if(!body) return null;
+  body.style.display = 'block';
+  tog.textContent = '▲';
+  return document.getElementById('ncard-' + key);
+}
+
+function gotoNpi(keys){
+  const cards = keys.map(openNpi).filter(Boolean);
+  if(!cards.length) return;
+  cards[0].scrollIntoView({behavior:'smooth', block:'start'});
+  cards.forEach(c => { c.classList.remove('npi-flash'); void c.offsetWidth; c.classList.add('npi-flash'); });
+  history.replaceState(null, '', '#' + keys[0]);
 }
 
 function toggleNpiImg(id){
@@ -225,9 +352,10 @@ function duoQaBody(){
 
 function renderNpi(){
   const timeline = NPI_TIMELINE.map(t => `
-    <div class="npi-time-item">
+    <div class="npi-time-item npi-time-link" onclick='gotoNpi(${JSON.stringify(t.keys)})'>
       <div class="t-name">${t.name}</div>
       <div class="t-date">${t.date}</div>
+      <div class="t-go">點擊查看 ▸</div>
     </div>
   `).join('');
 
@@ -256,6 +384,9 @@ function renderNpi(){
       if (p.upgrade) {
         bodyHtml += `<div class="npi-box"><div class="npi-box-title">換機評估建議</div><ul class="npi-hl">${p.upgrade.map(u => `<li>${u}</li>`).join('')}</ul></div>`;
       }
+      if (p.quotes) {
+        bodyHtml += `<div class="npi-box"><div class="npi-box-title">對客話術／提醒</div>${p.quotes.map(q => `<div class="npi-quote">${q}</div>`).join('')}</div>`;
+      }
       if (p.extraBody === 'aperture') {
         bodyHtml += `<div class="section-tag" style="margin-top:14px">可變光圈｜門市話術</div>${apertureTalkBody()}`;
       }
@@ -282,7 +413,7 @@ function renderNpi(){
     }
 
     return `
-      <div class="plan-card">
+      <div class="plan-card" id="ncard-${p.key}">
         <div class="plan-hdr" onclick="toggleNpi('${p.key}')">
           <div>
             <span class="plan-label">${p.icon} ${p.name}</span>
@@ -301,18 +432,16 @@ function renderNpi(){
     <div class="sec-hdr">
       <div>
         <div class="sec-title">2026 Apple 秋季發表會・新品快學</div>
-        <div class="sec-sub">「智慧個人中心」主題發表 · 涵蓋 18 Pro系列／AW S12＆Ultra 4／AirPods 5／Mac mini M6＆M5 Pro／iPhone Duo · 最後更新：2026-09-17</div>
+        <div class="sec-sub">「智慧個人中心」主題發表 · 涵蓋 18 Pro系列／AW S12＆Ultra 4／AirPods 5／Mac mini M6＆M5 Pro／HomePod mini 2／Apple TV 4K 第 4 代／HomeView／Home Collection／iPhone Duo · 最後更新：2026-10-15</div>
       </div>
     </div>
     <div class="npi-timeline">${timeline}</div>
-    <div style="font-size:14px;font-weight:700;color:var(--red);margin-bottom:14px">
-      ⚠️ 2026年9月僅推出以下機型，<u>沒有 iPhone 18（雙鏡頭標準版）</u>
-    </div>
     ${cards}
   `;
 }
 
 renderNpi();
+if(location.hash.length > 1){ setTimeout(() => gotoNpi([decodeURIComponent(location.hash.slice(1))]), 50); }
 </script>
 </body>
 </html>
