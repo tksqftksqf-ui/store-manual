@@ -96,6 +96,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue"
 .entry-icon{font-size:30px;margin-bottom:12px}
 .entry-title{font-size:16px;font-weight:700;margin-bottom:6px}
 .entry-desc{font-size:13px;color:var(--gray);line-height:1.5}
+.entry-date{font-size:11.5px;color:var(--gray);opacity:.8;margin-top:8px}
 
 @media(max-width:768px){.main{padding:14px 12px 60px}.hdr{padding:12px 14px}.two-col-grid{grid-template-columns:1fr!important}}
 
