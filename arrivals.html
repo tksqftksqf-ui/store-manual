@@ -28,13 +28,116 @@
 <script>
 let arrivalQuery = '';
 let arrivalCat = 'all';
+let arrivalSeries = 'all';
+let arrivalSub = 'all';
+
+// 系列順序比照「檔期活動查詢」，iPhone 16e 雖在該頁隱藏，但到貨頁有貨所以保留（排最後）
+const ARR_SERIES_ORDER = {
+  'Mac': ['MacBook Neo','MacBook Air','MacBook Pro','Mac mini','iMac','Mac Studio'],
+  'iPad': ['iPad mini','iPad A16','iPad Air','iPad Pro'],
+  'iPhone': ['iPhone Duo','iPhone 18 Pro','iPhone 18 Pro Max','iPhone 17 Pro','iPhone 17 Pro Max','iPhone 17','iPhone 17e','iPhone Air','iPhone 16e'],
+  'Watch': ['Apple Watch SE3','Apple Watch S11','Apple Watch S12','Apple Watch Ultra 3','Apple Watch Ultra 4'],
+};
+function arrSeriesOf(a){
+  const n = a.name;
+  if(a.cat==='Mac'){
+    if(n.startsWith('MacBook Air')) return 'MacBook Air';
+    if(n.startsWith('MacBook Pro')) return 'MacBook Pro';
+    if(n.startsWith('MacBook Neo')) return 'MacBook Neo';
+    if(n.startsWith('Mac Mini')) return 'Mac mini';
+    if(n.startsWith('Mac Studio')) return 'Mac Studio';
+    if(n.startsWith('iMac')) return 'iMac';
+  }
+  if(a.cat==='iPad'){
+    if(n.startsWith('iPad mini')) return 'iPad mini';
+    if(n.startsWith('iPad A16')) return 'iPad A16';
+    if(n.startsWith('iPad Pro')) return 'iPad Pro';
+    if(n.startsWith('iPad Air')) return 'iPad Air';
+  }
+  if(a.cat==='iPhone'){
+    if(n.startsWith('iPhone 17e')) return 'iPhone 17e';
+    if(n.startsWith('iPhone 17 Pro Max')) return 'iPhone 17 Pro Max';
+    if(n.startsWith('iPhone 17 Pro')) return 'iPhone 17 Pro';
+    if(n.startsWith('iPhone 17')) return 'iPhone 17';
+    if(n.startsWith('iPhone Air')) return 'iPhone Air';
+    if(n.startsWith('iPhone 16e')) return 'iPhone 16e';
+    if(n.startsWith('iPhone 18 Pro Max')) return 'iPhone 18 Pro Max';
+    if(n.startsWith('iPhone 18 Pro')) return 'iPhone 18 Pro';
+    if(n.startsWith('iPhone Duo')) return 'iPhone Duo';
+  }
+  if(a.cat==='Watch'){
+    if(n.includes('SE3')) return 'Apple Watch SE3';
+    if(n.includes('Ultra 4')) return 'Apple Watch Ultra 4';
+    if(n.includes('Ultra 3')) return 'Apple Watch Ultra 3';
+    if(n.includes('S12')) return 'Apple Watch S12';
+    if(n.includes('S11')) return 'Apple Watch S11';
+  }
+  return null;
+}
+// 第 2 層：系列（只列這次有到貨的系列）
+function arrSeriesOptions(){
+  const order = ARR_SERIES_ORDER[arrivalCat];
+  if(!order) return null;
+  const have = new Set(ARRIVALS.filter(a=>a.cat===arrivalCat).map(arrSeriesOf));
+  return order.filter(x => have.has(x));
+}
+// 第 3 層：該系列底下的品名（配件沒有系列，直接列品名）
+function arrSubOptions(){
+  if(arrivalCat==='all') return null;
+  const seen = new Set(), out = [];
+  for(const a of ARRIVALS){
+    if(a.cat!==arrivalCat) continue;
+    if(arrivalSeries!=='all' && arrSeriesOf(a)!==arrivalSeries) continue;
+    if(!seen.has(a.name)){ seen.add(a.name); out.push(a.name); }
+  }
+  return out;
+}
+function arrMenuBtn(label, on, onclick){
+  const btn = document.createElement('button');
+  btn.textContent = label;
+  btn.style.cssText = `padding:4px 12px;border-radius:16px;border:1.5px solid ${on?'var(--blue)':'var(--border)'};background:${on?'var(--blue-bg)':'var(--white)'};color:${on?'var(--blue)':'var(--gray)'};font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .13s`;
+  btn.addEventListener('click', onclick);
+  return btn;
+}
+function renderArrivalSeriesMenu(){
+  const el = document.getElementById('arr-series-row');
+  if(!el) return;
+  const list = arrSeriesOptions();
+  el.innerHTML = '';
+  if(!list || list.length < 2){ el.style.display = 'none'; if(arrivalSeries!=='all') arrivalSeries='all'; return; }
+  el.style.display = 'flex';
+  for(const x of ['all', ...list]) el.appendChild(arrMenuBtn(x==='all'?'全部系列':x, x===arrivalSeries, () => selectArrivalSeries(x)));
+}
+function renderArrivalSubMenu(){
+  const el = document.getElementById('arr-sub-row');
+  if(!el) return;
+  const list = arrSubOptions();
+  el.innerHTML = '';
+  if(!list || list.length < 2){ el.style.display = 'none'; if(arrivalSub!=='all') arrivalSub='all'; return; }
+  el.style.display = 'flex';
+  for(const x of ['all', ...list]) el.appendChild(arrMenuBtn(x==='all'?'全部品項':x, x===arrivalSub, () => selectArrivalSub(x)));
+}
+function selectArrivalCat(c){
+  arrivalCat = c; arrivalSeries = 'all'; arrivalSub = 'all';
+  document.querySelectorAll('.arr-cat-btn').forEach(b => {
+    const on = b.dataset.cat === c;
+    b.style.borderColor = on ? 'var(--blue)' : 'var(--border)';
+    b.style.background  = on ? 'var(--blue)' : 'var(--white)';
+    b.style.color       = on ? '#fff' : 'var(--gray)';
+  });
+  renderArrivalSeriesMenu(); renderArrivalSubMenu(); updateArrivalResults();
+}
+function selectArrivalSeries(x){
+  arrivalSeries = x; arrivalSub = 'all';
+  renderArrivalSeriesMenu(); renderArrivalSubMenu(); updateArrivalResults();
+}
+function selectArrivalSub(x){
+  arrivalSub = x;
+  renderArrivalSubMenu(); updateArrivalResults();
+}
 
 const ARRIVAL_WEEKS = ['10/8–10/14', '10/15–10/21', '10/22–10/28'];
 const ARRIVALS = [
-  // 配件
-  {cat:'配件',pid:'262379',mpn:'MFHP4TA/A',name:'AirPods Pro 第三代',qty:[0,150,0]},
-  {cat:'配件',pid:'273346',mpn:'MKFW4TA/A',name:'AirPods 5',qty:[0,160,70]},
-  {cat:'配件',pid:'273347',mpn:'MKFT4TA/A',name:'AirPods 5（配備無線充電盒）',qty:[40,140,110]},
   // Mac
   {cat:'Mac',pid:'267442',mpn:'MHFH4TA/A',name:'MacBook Neo',qty:[5,20,0]},
   {cat:'Mac',pid:'267443',mpn:'MHFD4TA/A',name:'MacBook Neo',qty:[0,2,0]},
@@ -95,6 +198,39 @@ const ARRIVALS = [
   {cat:'iPad',pid:'263655',mpn:'MDYJ4TA/A',name:'iPad Pro 13" M5 2025',qty:[0,0,5]},
   {cat:'iPad',pid:'263657',mpn:'MDYL4TA/A',name:'iPad Pro 13" M5 2025',qty:[0,7,0]},
   {cat:'iPad',pid:'263660',mpn:'MDYP4TA/A',name:'iPad Pro 13" M5 2025',qty:[0,1,0]},
+  // iPhone
+  {cat:'iPhone',pid:'273212',mpn:'MJRP4ZP/A',name:'iPhone 18 Pro',qty:[0,60,100]},
+  {cat:'iPhone',pid:'273213',mpn:'MJRR4ZP/A',name:'iPhone 18 Pro',qty:[360,20,190]},
+  {cat:'iPhone',pid:'273214',mpn:'MJRT4ZP/A',name:'iPhone 18 Pro',qty:[20,30,100]},
+  {cat:'iPhone',pid:'273215',mpn:'MJRQ4ZP/A',name:'iPhone 18 Pro',qty:[50,30,10]},
+  {cat:'iPhone',pid:'273216',mpn:'MJRU4ZP/A',name:'iPhone 18 Pro',qty:[140,10,10]},
+  {cat:'iPhone',pid:'273217',mpn:'MJRW4ZP/A',name:'iPhone 18 Pro',qty:[260,0,20]},
+  {cat:'iPhone',pid:'273218',mpn:'MJRX4ZP/A',name:'iPhone 18 Pro',qty:[80,30,30]},
+  {cat:'iPhone',pid:'273219',mpn:'MJRV4ZP/A',name:'iPhone 18 Pro',qty:[190,0,100]},
+  {cat:'iPhone',pid:'273222',mpn:'MJT24ZP/A',name:'iPhone 18 Pro',qty:[10,0,0]},
+  {cat:'iPhone',pid:'273228',mpn:'MJXN4ZP/A',name:'iPhone 18 Pro Max',qty:[90,10,10]},
+  {cat:'iPhone',pid:'273229',mpn:'MJXQ4ZP/A',name:'iPhone 18 Pro Max',qty:[340,10,1080]},
+  {cat:'iPhone',pid:'273230',mpn:'MJXR4ZP/A',name:'iPhone 18 Pro Max',qty:[360,10,0]},
+  {cat:'iPhone',pid:'273231',mpn:'MJXP4ZP/A',name:'iPhone 18 Pro Max',qty:[300,80,80]},
+  {cat:'iPhone',pid:'273232',mpn:'MJXT4ZP/A',name:'iPhone 18 Pro Max',qty:[30,30,60]},
+  {cat:'iPhone',pid:'273233',mpn:'MJXV4ZP/A',name:'iPhone 18 Pro Max',qty:[20,70,110]},
+  {cat:'iPhone',pid:'273234',mpn:'MJXW4ZP/A',name:'iPhone 18 Pro Max',qty:[150,60,0]},
+  {cat:'iPhone',pid:'273235',mpn:'MJXU4ZP/A',name:'iPhone 18 Pro Max',qty:[110,30,0]},
+  {cat:'iPhone',pid:'273237',mpn:'MJY04ZP/A',name:'iPhone 18 Pro Max',qty:[0,10,0]},
+  {cat:'iPhone',pid:'273238',mpn:'MJY14ZP/A',name:'iPhone 18 Pro Max',qty:[0,0,20]},
+  {cat:'iPhone',pid:'273239',mpn:'MJXY4ZP/A',name:'iPhone 18 Pro Max',qty:[0,10,0]},
+  {cat:'iPhone',pid:'273241',mpn:'MJY44ZP/A',name:'iPhone 18 Pro Max',qty:[0,10,0]},
+  {cat:'iPhone',pid:'273242',mpn:'MJY54ZP/A',name:'iPhone 18 Pro Max',qty:[0,10,0]},
+  {cat:'iPhone',pid:'262249',mpn:'MG6J4ZP/A',name:'iPhone 17 6.3"',qty:[150,0,0]},
+  {cat:'iPhone',pid:'262250',mpn:'MG6K4ZP/A',name:'iPhone 17 6.3"',qty:[210,0,0]},
+  {cat:'iPhone',pid:'262251',mpn:'MG6L4ZP/A',name:'iPhone 17 6.3"',qty:[0,30,30]},
+  {cat:'iPhone',pid:'262252',mpn:'MG6M4ZP/A',name:'iPhone 17 6.3"',qty:[80,0,10]},
+  {cat:'iPhone',pid:'262253',mpn:'MG6N4ZP/A',name:'iPhone 17 6.3"',qty:[20,20,0]},
+  {cat:'iPhone',pid:'262254',mpn:'MG6P4ZP/A',name:'iPhone 17 6.3"',qty:[20,0,0]},
+  {cat:'iPhone',pid:'262255',mpn:'MG6Q4ZP/A',name:'iPhone 17 6.3"',qty:[10,0,0]},
+  {cat:'iPhone',pid:'262256',mpn:'MG6T4ZP/A',name:'iPhone 17 6.3"',qty:[10,0,0]},
+  {cat:'iPhone',pid:'256229',mpn:'MD1Q4ZP/A',name:'iPhone 16e 6.1"',qty:[10,10,0]},
+  {cat:'iPhone',pid:'256230',mpn:'MD1R4ZP/A',name:'iPhone 16e 6.1"',qty:[0,10,0]},
   // Apple Watch
   {cat:'Watch',pid:'273252',mpn:'MJKY4TA/A',name:'Apple Watch SE3 40mm GPS 鋁',qty:[0,6,0]},
   {cat:'Watch',pid:'273256',mpn:'MJL74TA/A',name:'Apple Watch SE3 44mm GPS 鋁',qty:[0,6,0]},
@@ -120,39 +256,10 @@ const ARRIVALS = [
   {cat:'Watch',pid:'273341',mpn:'MJA94TA/A',name:'Apple Watch Ultra 4 49mm 鈦米蘭 LTE',qty:[0,6,0]},
   {cat:'Watch',pid:'273342',mpn:'MJAA4TA/A',name:'Apple Watch Ultra 4 49mm 鈦米蘭 LTE',qty:[0,12,0]},
   {cat:'Watch',pid:'273345',mpn:'MJAX4TA/A',name:'Apple Watch Ultra 4 49mm 鈦米蘭 LTE',qty:[0,0,6]},
-  // iPhone
-  {cat:'iPhone',pid:'256229',mpn:'MD1Q4ZP/A',name:'iPhone 16e 6.1"',qty:[10,10,0]},
-  {cat:'iPhone',pid:'256230',mpn:'MD1R4ZP/A',name:'iPhone 16e 6.1"',qty:[0,10,0]},
-  {cat:'iPhone',pid:'262249',mpn:'MG6J4ZP/A',name:'iPhone 17 6.3"',qty:[150,0,0]},
-  {cat:'iPhone',pid:'262250',mpn:'MG6K4ZP/A',name:'iPhone 17 6.3"',qty:[210,0,0]},
-  {cat:'iPhone',pid:'262251',mpn:'MG6L4ZP/A',name:'iPhone 17 6.3"',qty:[0,30,30]},
-  {cat:'iPhone',pid:'262252',mpn:'MG6M4ZP/A',name:'iPhone 17 6.3"',qty:[80,0,10]},
-  {cat:'iPhone',pid:'262253',mpn:'MG6N4ZP/A',name:'iPhone 17 6.3"',qty:[20,20,0]},
-  {cat:'iPhone',pid:'262254',mpn:'MG6P4ZP/A',name:'iPhone 17 6.3"',qty:[20,0,0]},
-  {cat:'iPhone',pid:'262255',mpn:'MG6Q4ZP/A',name:'iPhone 17 6.3"',qty:[10,0,0]},
-  {cat:'iPhone',pid:'262256',mpn:'MG6T4ZP/A',name:'iPhone 17 6.3"',qty:[10,0,0]},
-  {cat:'iPhone',pid:'273212',mpn:'MJRP4ZP/A',name:'iPhone 18 Pro',qty:[0,60,100]},
-  {cat:'iPhone',pid:'273213',mpn:'MJRR4ZP/A',name:'iPhone 18 Pro',qty:[360,20,190]},
-  {cat:'iPhone',pid:'273214',mpn:'MJRT4ZP/A',name:'iPhone 18 Pro',qty:[20,30,100]},
-  {cat:'iPhone',pid:'273215',mpn:'MJRQ4ZP/A',name:'iPhone 18 Pro',qty:[50,30,10]},
-  {cat:'iPhone',pid:'273216',mpn:'MJRU4ZP/A',name:'iPhone 18 Pro',qty:[140,10,10]},
-  {cat:'iPhone',pid:'273217',mpn:'MJRW4ZP/A',name:'iPhone 18 Pro',qty:[260,0,20]},
-  {cat:'iPhone',pid:'273218',mpn:'MJRX4ZP/A',name:'iPhone 18 Pro',qty:[80,30,30]},
-  {cat:'iPhone',pid:'273219',mpn:'MJRV4ZP/A',name:'iPhone 18 Pro',qty:[190,0,100]},
-  {cat:'iPhone',pid:'273222',mpn:'MJT24ZP/A',name:'iPhone 18 Pro',qty:[10,0,0]},
-  {cat:'iPhone',pid:'273228',mpn:'MJXN4ZP/A',name:'iPhone 18 Pro Max',qty:[90,10,10]},
-  {cat:'iPhone',pid:'273229',mpn:'MJXQ4ZP/A',name:'iPhone 18 Pro Max',qty:[340,10,1080]},
-  {cat:'iPhone',pid:'273230',mpn:'MJXR4ZP/A',name:'iPhone 18 Pro Max',qty:[360,10,0]},
-  {cat:'iPhone',pid:'273231',mpn:'MJXP4ZP/A',name:'iPhone 18 Pro Max',qty:[300,80,80]},
-  {cat:'iPhone',pid:'273232',mpn:'MJXT4ZP/A',name:'iPhone 18 Pro Max',qty:[30,30,60]},
-  {cat:'iPhone',pid:'273233',mpn:'MJXV4ZP/A',name:'iPhone 18 Pro Max',qty:[20,70,110]},
-  {cat:'iPhone',pid:'273234',mpn:'MJXW4ZP/A',name:'iPhone 18 Pro Max',qty:[150,60,0]},
-  {cat:'iPhone',pid:'273235',mpn:'MJXU4ZP/A',name:'iPhone 18 Pro Max',qty:[110,30,0]},
-  {cat:'iPhone',pid:'273237',mpn:'MJY04ZP/A',name:'iPhone 18 Pro Max',qty:[0,10,0]},
-  {cat:'iPhone',pid:'273238',mpn:'MJY14ZP/A',name:'iPhone 18 Pro Max',qty:[0,0,20]},
-  {cat:'iPhone',pid:'273239',mpn:'MJXY4ZP/A',name:'iPhone 18 Pro Max',qty:[0,10,0]},
-  {cat:'iPhone',pid:'273241',mpn:'MJY44ZP/A',name:'iPhone 18 Pro Max',qty:[0,10,0]},
-  {cat:'iPhone',pid:'273242',mpn:'MJY54ZP/A',name:'iPhone 18 Pro Max',qty:[0,10,0]},
+  // 配件
+  {cat:'配件',pid:'262379',mpn:'MFHP4TA/A',name:'AirPods Pro 第三代',qty:[0,150,0]},
+  {cat:'配件',pid:'273346',mpn:'MKFW4TA/A',name:'AirPods 5',qty:[0,160,70]},
+  {cat:'配件',pid:'273347',mpn:'MKFT4TA/A',name:'AirPods 5（配備無線充電盒）',qty:[40,140,110]},
 ];
 function renderArrivals(){
   document.getElementById('mc').innerHTML = `
@@ -166,13 +273,16 @@ function renderArrivals(){
         value="${arrivalQuery}"
         oninput="arrivalQuery=this.value;updateArrivalResults()">
       <div style="margin-top:.6em;display:flex;flex-wrap:wrap;gap:.4em">
-        ${['all','Mac','iPad','Watch','iPhone','配件'].map(c=>`<button
-          onclick="arrivalCat='${c}';document.querySelectorAll('.arr-cat-btn').forEach(b=>{b.style.borderColor='var(--border)';b.style.background='var(--white)';b.style.color='var(--gray)'});this.style.borderColor='var(--blue)';this.style.background='var(--blue)';this.style.color='#fff';updateArrivalResults()"
+        ${['all','Mac','iPad','iPhone','Watch','配件'].map(c=>`<button
+          data-cat="${c}"
+          onclick="selectArrivalCat('${c}')"
           class="arr-cat-btn"
           style="padding:.3em .75em;font-size:.8em;border:1px solid ${c===arrivalCat?'var(--blue)':'var(--border)'};border-radius:20px;background:${c===arrivalCat?'var(--blue)':'var(--white)'};color:${c===arrivalCat?'#fff':'var(--gray)'};cursor:pointer;white-space:nowrap">
           ${c==='all'?'全部類別':c}
         </button>`).join('')}
       </div>
+      <div id="arr-series-row" style="display:none;gap:6px;flex-wrap:wrap;margin-top:8px;padding-top:8px;border-top:1px dashed var(--border)"></div>
+      <div id="arr-sub-row" style="display:none;gap:6px;flex-wrap:wrap;margin-top:8px;padding-top:8px;border-top:1px dashed var(--border)"></div>
     </div>
     <div id="arrival-results"></div>`;
   updateArrivalResults();
@@ -181,6 +291,8 @@ function renderArrivals(){
 function updateArrivalResults(){
   const filtered = ARRIVALS.filter(a => {
     if(arrivalCat !== 'all' && a.cat !== arrivalCat) return false;
+    if(arrivalSeries !== 'all' && arrSeriesOf(a) !== arrivalSeries) return false;
+    if(arrivalSub !== 'all' && a.name !== arrivalSub) return false;
     if(!arrivalQuery) return true;
     const q = arrivalQuery.toLowerCase();
     const prod = PRODUCTS.find(x => x.pid === a.pid);
