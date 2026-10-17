@@ -1348,9 +1348,12 @@ function updateSearchResults(){
         gift: act?.g ? `<span>${act.g}</span>` : '<span style="color:var(--border)">—</span>',
         edu: edu ? `<span style="color:var(--red)">-$${edu.toLocaleString()}</span><span class="edu-code">${EDU_CODE[p.pid] ? '貨號 '+EDU_CODE[p.pid] : '貨號待確認'}</span>` : '<span style="color:var(--border)">—</span>',
         eduB: eduPlanB(p.pid, edu),
+        // 折抵後價格：促銷價（沒有活動折扣時用售價）減掉對應的教育折抵
+        eduFinal: edu ? `<span style="display:inline-block;padding:2px 8px;border-radius:6px;background:#fff1f1;color:var(--red)">$${((promo!=null?promo:p.price)-edu).toLocaleString()}</span>` : '<span style="color:var(--border)">—</span>',
+        eduBFinal: (()=>{ if(!edu) return null; const bb=Object.values(EDU_PLAN_B).find(b=>b.pids.includes(p.pid)); return bb ? `<span style="display:inline-block;padding:2px 8px;border-radius:6px;background:#fff1f1;color:var(--red)">$${((promo!=null?promo:p.price)-bb.d).toLocaleString()}</span>` : null; })(),
       };
     };
-    const FIELDS = [['price','售價'],['act','活動折扣'],['promo','促銷價（未含教育折扣）'],['gift','贈品'],['edu','全額教育優惠折抵'],['eduB','併行折抵2000 or 1500']];
+    const FIELDS = [['price','售價'],['act','活動折扣'],['promo','促銷價（未含教育折扣）'],['gift','贈品'],['edu','全額教育優惠折抵'],['eduFinal','全額折抵後價格'],['eduB','併行折抵2000 or 1500'],['eduBFinal','併行折抵後價格']];
 
     // 依規格分組（保留原本順序）
     const specs = new Map();
