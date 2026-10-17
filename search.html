@@ -17,9 +17,10 @@
 .srs-toggle{font-size:12px;color:var(--gray);font-weight:600}
 .srs-body{display:none}
 .srs-body.open{display:block}
-.spec-blk{border-top:1px solid var(--border);padding:12px 18px 14px;background:var(--white)}
+.spec-blk{border-top:2px solid var(--border);border-left:5px solid var(--blue);padding:12px 18px 14px 14px;background:var(--white)}
 .spec-blk:nth-child(even){background:#f8fafd}
-.spec-title{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;font-size:14px;font-weight:800;margin-bottom:8px}
+.spec-title{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.spec-title .spec-chip{font-size:18px;font-weight:800;color:var(--blue);background:var(--blue-bg);padding:3px 12px;border-radius:8px;letter-spacing:.3px}
 .spec-title small{font-size:12px;font-weight:600;color:var(--gray)}
 .spec-info{display:flex;flex-wrap:wrap;gap:6px 18px;margin-bottom:10px}
 .spec-info>div{display:flex;flex-direction:column;gap:2px;min-width:70px}
@@ -1366,7 +1367,7 @@ function updateSearchResults(){
       const body = items.map(({p,c}) => `<tr><td class="pid">${p.pid}</td><td>${p.color||'—'}</td>${varying.map(([k])=>`<td style="font-weight:${k==='gift'?500:700};font-size:${k==='gift'?13:15}px">${c[k] ?? '<span style="color:var(--border)">—</span>'}</td>`).join('')}</tr>`).join('');
       const note = varying.length ? `<div style="font-size:11px;color:var(--orange);font-weight:600;margin:-4px 0 6px">⚠️ 這個規格的${varying.map(([,l])=>l.replace(/（.*）/,'')).join('、')}依顏色不同，請看下表</div>` : '';
       blocks += `<div class="spec-blk">
-        <div class="spec-title">${spec}<small>${items.length > 1 ? items.length+' 色' : ''}</small></div>
+        <div class="spec-title"><span class="spec-chip">${spec}</span><small>${items.length > 1 ? items.length+' 色' : ''}</small></div>
         ${info ? `<div class="spec-info">${info}</div>` : ''}
         ${note}
         <div class="pid-wrap"><table class="pid-table"><thead>${head}</thead><tbody>${body}</tbody></table></div>
