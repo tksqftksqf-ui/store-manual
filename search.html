@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>貨號查詢</title>
+<title>檔期活動查詢</title>
 <link rel="stylesheet" href="shared/style.css">
 <style>
 .srs-card{background:var(--white);border-radius:14px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:12px;border:1.5px solid var(--border)}
@@ -41,7 +41,7 @@
   <div class="hdr-left">
     <span class="hdr-logo"></span>
     <div>
-      <div class="hdr-title">貨號查詢</div>
+      <div class="hdr-title">檔期活動查詢</div>
       <div class="hdr-sub">Apple Specialist Store · Three Table Shop</div>
     </div>
   </div>
@@ -74,7 +74,7 @@ const SERIES_ORDER = {
   'iPhone': ['iPhone Duo','iPhone 18 Pro','iPhone 18 Pro Max','iPhone 17 Pro','iPhone 17 Pro Max','iPhone 17','iPhone 17e','iPhone Air'],
   'Watch': ['Apple Watch SE3','Apple Watch S11','Apple Watch S12','Apple Watch Ultra 3','Apple Watch Ultra 4'],
 };
-// 貨號查詢頁不顯示的系列（資料仍保留在 products.js，其他頁面照常使用）
+// 檔期活動查詢頁不顯示的系列（資料仍保留在 products.js，其他頁面照常使用）
 const HIDDEN_SERIES = new Set(['iPhone 16e','iPhone 16','iPhone 16 Plus']);
 function getSeries(cat, name){
   if(cat==='Mac'){
@@ -1453,7 +1453,7 @@ function renderSearch(){
   const catLabels = {all:'全部',Mac:'Mac',iPad:'iPad',iPhone:'iPhone',Watch:'Watch',配件:'配件',軟體:'軟體'};
 
   document.getElementById('mc').innerHTML = `
-    <div class="sec-hdr"><div><div class="sec-title">貨號查詢</div><div class="sec-sub">共 ${PRODUCTS.length} 筆資料 · 來源：貨號一覽表 20260626</div></div></div>
+    <div class="sec-hdr"><div><div class="sec-title">檔期活動查詢</div><div class="sec-sub">共 ${PRODUCTS.length} 筆資料 · 來源：貨號一覽表 20260626</div></div></div>
     <div class="card" style="padding:16px 20px">
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">
         ${ACTIVITY_PERIOD_ORDER.map(k=>`<button class="period-btn" data-period="${k}" onclick="searchPeriod='${k}';updateSearchResults()" style="padding:.4em .9em;font-size:.85em;font-weight:700;border:1.5px solid ${k===searchPeriod?ACTIVITY_PERIODS[k].color:'var(--border)'};border-radius:20px;background:${k===searchPeriod?ACTIVITY_PERIODS[k].color:'var(--white)'};color:${k===searchPeriod?'#fff':'var(--gray)'};cursor:pointer;white-space:nowrap">${ACTIVITY_PERIODS[k].label}</button>`).join('')}
