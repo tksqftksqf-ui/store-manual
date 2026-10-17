@@ -35,9 +35,11 @@ let searchSub = 'all';
 const SERIES_ORDER = {
   'Mac': ['MacBook Air','MacBook Pro','Mac mini','iMac','Mac Studio','MacBook Neo'],
   'iPad': ['iPad mini','iPad A16','iPad Air','iPad Pro'],
-  'iPhone': ['iPhone 17e','iPhone 17','iPhone Air','iPhone 17 Pro','iPhone 17 Pro Max','iPhone 16e','iPhone 16','iPhone 16 Plus'],
+  'iPhone': ['iPhone Duo','iPhone 18 Pro','iPhone 18 Pro Max','iPhone 17 Pro','iPhone 17 Pro Max','iPhone 17','iPhone 17e','iPhone Air'],
   'Watch': ['Apple Watch SE3','Apple Watch S11','Apple Watch S12','Apple Watch Ultra 3','Apple Watch Ultra 4'],
 };
+// 不顯示的系列（資料仍保留在 products.js，其他頁面照常使用）
+const HIDDEN_SERIES = new Set(['iPhone 16e','iPhone 16','iPhone 16 Plus']);
 function getSeries(cat, name){
   if(cat==='Mac'){
     if(name.startsWith('MacBook Air')) return 'MacBook Air';
@@ -62,6 +64,9 @@ function getSeries(cat, name){
     if(name.startsWith('iPhone 16e')) return 'iPhone 16e';
     if(name.startsWith('iPhone 16 Plus')) return 'iPhone 16 Plus';
     if(name.startsWith('iPhone 16')) return 'iPhone 16';
+    if(name.startsWith('iPhone 18 Pro Max')) return 'iPhone 18 Pro Max';
+    if(name.startsWith('iPhone 18 Pro')) return 'iPhone 18 Pro';
+    if(name.startsWith('iPhone Duo')) return 'iPhone Duo';
   }
   if(cat==='Watch'){
     if(name.includes('SE3')) return 'Apple Watch SE3';
@@ -930,12 +935,21 @@ function updateSearchResults(){
   const filtered = PRODUCTS.filter(p => {
     const matchCat = searchCat === 'all' || p.cat === searchCat;
     if(!matchCat) return false;
+    if(p.cat==='iPhone' && HIDDEN_SERIES.has(getSeries(p.cat,p.name))) return false;
     if(!matchesSeries(p)) return false;
     if(!matchesSub(p)) return false;
     if(!searchQuery) return true;
     const q = searchQuery.toLowerCase();
     return [p.name,p.spec,p.color,p.pid,p.mpn,String(p.price)].some(v=>v.toLowerCase().includes(q));
   });
+
+  // iPhone 依 SERIES_ORDER 排序（只在 iPhone 原本佔的位置內重排，不影響其他類別）
+  {
+    const rank = p => SERIES_ORDER.iPhone.indexOf(getSeries(p.cat,p.name));
+    const sorted = filtered.filter(p => p.cat==='iPhone').sort((x,y) => rank(x)-rank(y));
+    let k = 0;
+    for(let i=0;i<filtered.length;i++) if(filtered[i].cat==='iPhone') filtered[i] = sorted[k++];
+  }
 
   document.querySelectorAll('.cat-btn').forEach(btn => {
     const c = btn.dataset.cat;
