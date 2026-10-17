@@ -23,7 +23,19 @@
 .spec-title .spec-chip{font-size:18px;font-weight:800;color:var(--blue);background:var(--blue-bg);padding:3px 12px;border-radius:8px;letter-spacing:.3px}
 .spec-title small{font-size:12px;font-weight:600;color:var(--gray)}
 .spec-info{display:flex;flex-wrap:wrap;gap:6px 18px;margin-bottom:10px}
-.spec-info>div{display:flex;flex-direction:column;gap:2px;min-width:70px}
+.spec-info .fld{display:flex;flex-direction:column;gap:2px;min-width:70px}
+.spec-info .si-grp,.spec-info .si-sub{display:contents}
+.spec-info .si-title,.spec-info .si-subtitle{display:none}
+@media(max-width:768px){
+  .spec-info{display:block}
+  .spec-info .si-grp{display:block;padding:9px 0;border-top:1px solid var(--border)}
+  .spec-info .si-grp:first-child{border-top:none;padding-top:0}
+  .spec-info .si-flow,.spec-info .si-sub{display:flex;flex-wrap:wrap;gap:6px 18px}
+  .spec-info .si-title{display:block;font-size:12px;font-weight:800;color:var(--blue);margin-bottom:6px}
+  .spec-info .si-sub{margin-bottom:8px}
+  .spec-info .si-sub:last-child{margin-bottom:0}
+  .spec-info .si-subtitle{display:block;flex:0 0 100%;font-size:12px;font-weight:700;color:var(--text)}
+}
 .spec-info .lbl{font-size:11px;font-weight:700;color:var(--gray);letter-spacing:.3px}
 .spec-info .val{font-size:15px;font-weight:700}
 .spec-info .val .edu-code,.pid-table .edu-code{display:block;font-size:12px;font-weight:600;color:var(--blue);font-family:ui-monospace,monospace;margin-top:1px}
@@ -1365,7 +1377,12 @@ function updateSearchResults(){
     for(const [spec, items] of specs){
       const shared = FIELDS.filter(([k]) => items.every(x => x.c[k] === items[0].c[k]));
       const varying = FIELDS.filter(f => !shared.includes(f));
-      const info = shared.filter(([k]) => items[0].c[k] !== null).map(([k,l]) => `<div><span class="lbl">${l}</span><span class="val${k==='gift'?' gift':''}">${items[0].c[k]}</span></div>`).join('');
+      // 同規格內相同的欄位合併成一組；手機版分三段：售價／活動折扣／促銷價 → 贈品 → 教育優惠（全額折抵、併行折抵）
+      const fld = k => { const f = shared.find(x => x[0]===k); return (f && items[0].c[k] !== null) ? `<div class="fld"><span class="lbl">${f[1]}</span><span class="val${k==='gift'?' gift':''}">${items[0].c[k]}</span></div>` : ''; };
+      const grp = (cls, keys) => { const h = keys.map(fld).join(''); return h ? `<div class="si-grp ${cls}">${h}</div>` : ''; };
+      const sub = (title, keys) => { const h = keys.map(fld).join(''); return h ? `<div class="si-sub"><span class="si-subtitle">${title}</span>${h}</div>` : ''; };
+      const eduSubs = sub('全額折抵', ['edu','eduFinal']) + sub('併行折抵', ['eduB','eduBFinal']);
+      const info = grp('si-flow', ['price','act','promo']) + grp('si-flow', ['gift']) + (eduSubs ? `<div class="si-grp"><div class="si-title">教育優惠</div>${eduSubs}</div>` : '');
       const head = `<tr><th>貨號</th><th>顏色</th>${varying.map(([,l])=>`<th>${l}</th>`).join('')}</tr>`;
       const body = items.map(({p,c}) => `<tr><td class="pid">${p.pid}</td><td>${p.color||'—'}</td>${varying.map(([k])=>`<td style="font-weight:${k==='gift'?500:700};font-size:${k==='gift'?13:15}px">${c[k] ?? '<span style="color:var(--border)">—</span>'}</td>`).join('')}</tr>`).join('');
       const note = varying.length ? `<div style="font-size:11px;color:var(--orange);font-weight:600;margin:-4px 0 6px">⚠️ 這個規格的${varying.map(([,l])=>l.replace(/（.*）/,'')).join('、')}依顏色不同，請看下表</div>` : '';
