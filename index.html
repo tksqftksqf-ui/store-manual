@@ -24,6 +24,8 @@
 .cc-actions button{border:1.5px solid var(--border);background:var(--light);border-radius:8px;padding:5px 14px;font-size:13px;cursor:pointer}
 .cc-actions .cc-reset{color:var(--red);border-color:var(--red)}
 .cc-note{font-size:12px;color:var(--gray)}
+.entry-card{position:relative}
+.new-badge{position:absolute;top:14px;right:14px;padding:1px 7px;border-radius:10px;background:var(--red);color:#fff;font-size:11px;font-weight:700}
 </style>
 </head>
 <body>
@@ -205,6 +207,18 @@ document.getElementById('today-date').textContent =
   document.getElementById('cc-reset').onclick=function(){save(HKEY,[]);save(OKEY,[]);try{localStorage.removeItem(TKEY)}catch(e){}tip.style.display='';apply()};
   apply();
 })();
+// ── 卡片「最後更新」日期＋「新更新」標記：讀 updates.json（由 GitHub Action 自動產生）；讀不到就沿用卡片上寫的日期 ──
+fetch('updates.json',{cache:'no-cache'}).then(function(r){return r.ok?r.json():{}}).then(function(u){
+  var NEW_DAYS=3,now=new Date();now.setHours(0,0,0,0);
+  document.querySelectorAll('.entry-card').forEach(function(c){
+    var d=u[c.getAttribute('href')];if(!d)return;
+    var el=c.querySelector('.entry-date');
+    if(!el){el=document.createElement('div');el.className='entry-date';c.appendChild(el)}
+    el.textContent='最後更新：'+d;
+    var days=(now-new Date(d+'T00:00:00'))/864e5;
+    if(days<=NEW_DAYS){var b=document.createElement('span');b.className='new-badge';b.textContent='新更新';c.appendChild(b)}
+  });
+}).catch(function(){});
 // ── 卡片點擊統計（只送卡片連結與名稱，不含任何個資）──
 document.querySelector('.entry-grid').addEventListener('click',function(e){
   var c=e.target.closest('.entry-card');
