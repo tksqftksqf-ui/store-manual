@@ -45,12 +45,12 @@
 .pid-table td{padding:6px 14px 6px 0;border-top:1px solid var(--light);vertical-align:top}
 .pid-table td.pid{font-family:ui-monospace,monospace;font-weight:700;color:var(--blue);font-size:16px;white-space:nowrap}
 .pid-wrap{overflow-x:auto}
-.howto{background:var(--white);border:1.5px solid var(--border);border-radius:14px;margin-bottom:12px;font-size:14px;line-height:1.7}
-.howto summary{cursor:pointer;padding:11px 18px;font-weight:700;font-size:14px;list-style:none}
-.howto summary::-webkit-details-marker{display:none}
-.howto summary::after{content:' ▼';font-size:11px;color:var(--gray);font-weight:600}
-.howto[open] summary::after{content:' ▲'}
-.howto-body{padding:2px 18px 14px;border-top:1px solid var(--border)}
+.howto-bar{display:flex;justify-content:flex-end;margin-bottom:12px}
+.howto-btn{border:1.5px solid var(--border);background:var(--white);color:var(--gray);border-radius:20px;padding:5px 14px;font-size:13px;cursor:pointer;font-family:inherit}
+.howto-btn:hover{border-color:var(--blue);color:var(--blue)}
+.howto{display:none;background:var(--white);border:1.5px solid var(--border);border-radius:14px;margin-bottom:12px;font-size:14px;line-height:1.7}
+.howto.open{display:block}
+.howto-body{padding:6px 18px 14px}
 .howto-body h4{font-size:13px;color:var(--blue);margin:12px 0 4px}
 .howto-body ul{padding-left:20px}
 .howto-body li{margin:2px 0}
@@ -1544,8 +1544,8 @@ function renderSearch(){
 
   document.getElementById('mc').innerHTML = `
     <div class="sec-hdr"><div><div class="sec-title">檔期活動查詢</div><div class="sec-sub">共 ${PRODUCTS.length} 筆資料 · 貨號表版本 ${PRODUCTS_VERSION}</div></div></div>
-    <details class="howto">
-      <summary>📖 這頁怎麼用（點一下展開）</summary>
+    <div class="howto-bar"><button class="howto-btn" id="howto-toggle" type="button" aria-expanded="false" aria-controls="howto-panel">📖 這頁怎麼用（點一下展開）</button></div>
+    <div class="howto" id="howto-panel">
       <div class="howto-body">
         <h4>1. 找機型</h4>
         <ul>
@@ -1572,7 +1572,7 @@ function renderSearch(){
           <li>頁面最上方出現橘色提示，代表目前檔期已結束或今天是最後一天，活動資料請以最新公告為準。</li>
         </ul>
       </div>
-    </details>
+    </div>
     <div id="period-warn" style="display:none;margin-bottom:12px;padding:10px 14px;border-radius:10px;background:var(--orange-bg);color:var(--orange);font-size:13px;font-weight:700"></div>
     <div class="card" style="padding:16px 20px">
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">
@@ -1593,6 +1593,11 @@ function renderSearch(){
     </div>
     <div id="search-results"></div>`;
 
+  document.getElementById('howto-toggle').onclick = function(){
+    const open = document.getElementById('howto-panel').classList.toggle('open');
+    this.textContent = open ? '📖 這頁怎麼用（再點一下收起）' : '📖 這頁怎麼用（點一下展開）';
+    this.setAttribute('aria-expanded', open);
+  };
   renderSeriesMenu();
   renderSubMenu();
   renderCapMenu();
