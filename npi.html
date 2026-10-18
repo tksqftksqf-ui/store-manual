@@ -28,6 +28,7 @@
 .npi-qa .q{font-size:13.5px;font-weight:700;margin-bottom:4px}
 .npi-qa .a-ok{font-size:13px;color:var(--green);margin-bottom:2px}
 .npi-qa .a-no{font-size:13px;color:var(--red)}
+.npi-mark{background:#fde68a;color:inherit;border-radius:3px;padding:0 1px}
 .section-tag{font-size:11px;font-weight:700;color:var(--gray);margin:2px 0 10px;letter-spacing:.3px}
 </style>
 </head>
@@ -48,13 +49,25 @@
 
 <script>
 const NPI_TIMELINE = [
-  {keys:['p18pro','watch','airpods'], name:'iPhone 18 Pro系列／AW S12＆Ultra 4／AirPods 5', date:'9/11–12 預購・9/18 發售'},
-  {keys:['macmini'], name:'Mac mini M6＆M5 Pro', date:'8/27–9/20 預購・9/22 發售'},
-  {keys:['duo'], name:'iPhone Duo 摺疊機', date:'10/16 晚間8點預購・10/23 發售'},
-  {keys:['homepod'], name:'HomePod mini 2', date:'10/15 預購・10/30 發售'},
-  {keys:['appletv'], name:'Apple TV 4K（第 4 代）', date:'10/15 預購・11/13 發售'},
+  {keys:['p18pro','watch','airpods'], name:'iPhone 18 Pro系列／AW S12＆Ultra 4／AirPods 5', date:'9/11–12 預購・9/18 發售', pre:'2026-09-11', launch:'2026-09-18'},
+  {keys:['macmini'], name:'Mac mini M6＆M5 Pro', date:'8/27–9/20 預購・9/22 發售', pre:'2026-08-27', launch:'2026-09-22'},
+  {keys:['duo'], name:'iPhone Duo 摺疊機', date:'10/16 晚間8點預購・10/23 發售', pre:'2026-10-16', launch:'2026-10-23'},
+  {keys:['homepod'], name:'HomePod mini 2', date:'10/15 預購・10/30 發售', pre:'2026-10-15', launch:'2026-10-30'},
+  {keys:['appletv'], name:'Apple TV 4K（第 4 代）', date:'10/15 預購・11/13 發售', pre:'2026-10-15', launch:'2026-11-13'},
   {keys:['homeview','homecoll'], name:'Apple HomeView／Home Collection', date:'台灣上市時間未定（無台幣價）'},
 ];
+
+// 發售狀態：依今天日期自動判斷（pre＝預購開始日、launch＝發售日，格式 YYYY-MM-DD；沒填＝台灣未上市）
+function npiStatus(t){
+  if(!t.launch) return {text:'台灣未上市', cls:'badge-gray'};
+  const now = new Date(); now.setHours(0,0,0,0);
+  const d = s => { const [y,m,dd] = s.split('-').map(Number); return new Date(y, m-1, dd); };
+  if(now >= d(t.launch)) return {text:'已發售', cls:'badge-green'};
+  if(t.pre && now >= d(t.pre)) return {text:'預購中', cls:'badge-orange'};
+  return {text:'即將預購', cls:'badge-blue'};
+}
+const NPI_STATUS_BY_KEY = {};
+NPI_TIMELINE.forEach(t => { if(t.launch) t.keys.forEach(k => NPI_STATUS_BY_KEY[k] = npiStatus(t)); });
 
 const NPI_PRODUCTS = [
   {
@@ -352,9 +365,9 @@ function duoQaBody(){
 
 function renderNpi(){
   const timeline = NPI_TIMELINE.map(t => `
-    <div class="npi-time-item npi-time-link" onclick='gotoNpi(${JSON.stringify(t.keys)})'>
+    <div class="npi-time-item npi-time-link" data-keys="${t.keys.join(',')}" onclick='gotoNpi(${JSON.stringify(t.keys)})'>
       <div class="t-name">${t.name}</div>
-      <div class="t-date">${t.date}</div>
+      <div class="t-date"><span class="badge ${npiStatus(t).cls}" style="margin-right:6px">${npiStatus(t).text}</span>${t.date}</div>
       <div class="t-go">點擊查看 ▸</div>
     </div>
   `).join('');
@@ -362,6 +375,8 @@ function renderNpi(){
   const cards = NPI_PRODUCTS.map(p => {
     const priceBadges = (p.prices || []).map(pr => `<span class="badge badge-blue">${pr}</span>`).join('');
     const dateBadge = p.date ? `<span class="badge badge-orange">${p.date}</span>` : '';
+    const st = NPI_STATUS_BY_KEY[p.key];
+    const statusBadge = st ? `<span class="badge ${st.cls}">${st.text}</span>` : '';
     const tagBadge = p.tag ? `<span class="badge badge-green">${p.tag}</span>` : '';
 
     let bodyHtml = '';
@@ -417,7 +432,7 @@ function renderNpi(){
         <div class="plan-hdr" onclick="toggleNpi('${p.key}')">
           <div>
             <span class="plan-label">${p.icon} ${p.name}</span>
-            <div class="npi-price-row">${priceBadges}${dateBadge}${tagBadge}</div>
+            <div class="npi-price-row">${statusBadge}${priceBadges}${dateBadge}${tagBadge}</div>
           </div>
           <span class="plan-toggle" id="ntog-${p.key}">▼</span>
         </div>
@@ -432,12 +447,82 @@ function renderNpi(){
     <div class="sec-hdr">
       <div>
         <div class="sec-title">2026 Apple 秋季發表會・新品快學</div>
-        <div class="sec-sub">「智慧個人中心」主題發表 · 涵蓋 18 Pro系列／AW S12＆Ultra 4／AirPods 5／Mac mini M6＆M5 Pro／HomePod mini 2／Apple TV 4K 第 4 代／HomeView／Home Collection／iPhone Duo · 最後更新：2026-10-15</div>
+        <div class="sec-sub">「智慧個人中心」主題發表 · 涵蓋 18 Pro系列／AW S12＆Ultra 4／AirPods 5／Mac mini M6＆M5 Pro／HomePod mini 2／Apple TV 4K 第 4 代／HomeView／Home Collection／iPhone Duo</div>
       </div>
+    </div>
+    <div class="card" style="padding:14px 18px;margin-bottom:12px">
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <input id="npi-q" type="search" placeholder="搜尋關鍵字：產品、功能、話術…（如 摺痕、可變光圈、eSIM）" autocomplete="off"
+          style="flex:1;min-width:200px;padding:10px 14px;border-radius:10px;border:1.5px solid var(--border);font-size:16px;font-family:inherit;outline:none;background:var(--light)"
+          oninput="onNpiSearch(this.value)">
+        <button onclick="document.getElementById('npi-q').value='';onNpiSearch('')" style="padding:8px 14px;border-radius:10px;border:1.5px solid var(--border);background:var(--white);font-size:13px;cursor:pointer;font-family:inherit;color:var(--gray)">清除</button>
+      </div>
+      <div id="npi-count" style="font-size:12px;color:var(--gray);font-weight:600;margin-top:8px;display:none"></div>
     </div>
     <div class="npi-timeline">${timeline}</div>
     ${cards}
   `;
+}
+
+// ── 搜尋：多個詞用空格隔開都要符合；符合的卡片自動展開並標示關鍵字，清除後把自動展開的收回去 ──
+let npiTimer, npiAutoOpened = new Set();
+function onNpiSearch(v){ clearTimeout(npiTimer); npiTimer = setTimeout(() => npiSearch(v), 200); }
+function npiClearMarks(root){
+  root.querySelectorAll('mark.npi-mark').forEach(m => m.replaceWith(document.createTextNode(m.textContent)));
+  root.normalize();
+}
+function npiMark(root, terms){
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  const nodes = []; let n;
+  while((n = walker.nextNode())) nodes.push(n);
+  const re = new RegExp('(' + terms.map(t => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|') + ')', 'gi');
+  nodes.forEach(node => {
+    if(!node.nodeValue.trim() || !re.test(node.nodeValue)) { re.lastIndex = 0; return; }
+    re.lastIndex = 0;
+    const frag = document.createDocumentFragment();
+    node.nodeValue.split(re).forEach((part, i) => {
+      if(i % 2){ const m = document.createElement('mark'); m.className = 'npi-mark'; m.textContent = part; frag.appendChild(m); }
+      else if(part) frag.appendChild(document.createTextNode(part));
+    });
+    node.replaceWith(frag);
+  });
+}
+function npiSearch(v){
+  const terms = v.toLowerCase().split(/\s+/).filter(Boolean);
+  const cards = [...document.querySelectorAll('.plan-card[id^=ncard-]')];
+  const countEl = document.getElementById('npi-count');
+  cards.forEach(c => npiClearMarks(c));
+  // 把上一輪自動展開的先收回去（使用者自己展開的不動）
+  npiAutoOpened.forEach(key => {
+    document.getElementById('nbody-' + key).style.display = 'none';
+    document.getElementById('ntog-' + key).textContent = '▼';
+  });
+  npiAutoOpened = new Set();
+  if(!terms.length){
+    cards.forEach(c => c.style.display = '');
+    document.querySelectorAll('.npi-time-item').forEach(t => t.style.display = '');
+    countEl.style.display = 'none';
+    return;
+  }
+  const shown = new Set();
+  cards.forEach(c => {
+    const key = c.id.replace('ncard-', '');
+    const text = c.textContent.toLowerCase();
+    const hit = terms.every(t => text.includes(t));
+    c.style.display = hit ? '' : 'none';
+    if(hit){
+      shown.add(key);
+      const body = document.getElementById('nbody-' + key);
+      if(body.style.display === 'none'){ body.style.display = 'block'; document.getElementById('ntog-' + key).textContent = '▲'; npiAutoOpened.add(key); }
+      // 配色圖片折疊區不展開，只標示文字
+      npiMark(c, terms);
+    }
+  });
+  document.querySelectorAll('.npi-time-item').forEach(t => {
+    t.style.display = t.dataset.keys.split(',').some(k => shown.has(k)) ? '' : 'none';
+  });
+  countEl.style.display = 'block';
+  countEl.textContent = shown.size ? `找到 ${shown.size} 張符合的產品卡片` : '找不到符合的內容';
 }
 
 renderNpi();
