@@ -13,6 +13,8 @@
   --red-bg: #ffe4e6;
   --orange: #d97706;
   --orange-bg: #fef3c7;
+  --purple: #7c3aed;
+  --purple-bg: #ede9fe;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.6}
