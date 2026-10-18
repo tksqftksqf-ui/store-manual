@@ -1358,7 +1358,7 @@ function updateSearchResults(){
   // 方案 B（當期活動＋教育折抵固定金額）：null = 這類商品沒有方案 B，不顯示欄位
   function eduPlanB(pid, edu){
     if(!edu) return null;
-    for(const [code, b] of Object.entries(EDU_PLAN_B)) if(b.pids.includes(pid)) return `<span style="color:var(--purple,#7c3aed)">-$${b.d.toLocaleString()}</span><span class="edu-code" style="color:var(--purple,#7c3aed)">貨號 ${code}</span>`;
+    for(const [code, b] of Object.entries(EDU_PLAN_B)) if(b.pids.includes(pid)) return `<span style="color:var(--purple,#7c3aed)">-$${b.d.toLocaleString()}</span><span class="edu-code">貨號 ${code}</span>`;
     if(EDU_PLAN_B_NONE.includes(pid)) return '<span style="color:var(--gray);font-weight:500;font-size:13px">無（折抵未達 $2,000）</span>';
     if(EDU_PLAN_B_PENDING.includes(pid)) return '<span style="color:var(--orange);font-weight:500;font-size:13px">貨號待確認</span>';
     return null;
@@ -1414,6 +1414,7 @@ function updateSearchResults(){
         eduBFinal: (()=>{ if(!edu) return null; const bb=Object.values(EDU_PLAN_B).find(b=>b.pids.includes(p.pid)); return bb ? `<span style="display:inline-block;padding:2px 8px;border-radius:6px;background:var(--purple-bg,#ede9fe);color:var(--purple,#7c3aed)">$${((promo!=null?promo:p.price)-bb.d).toLocaleString()}</span>` : null; })(),
       };
     };
+    const EDU_KEYS = ['edu','eduFinal','eduB','eduBFinal'];
     const FIELDS = [['price','售價'],['act','活動折扣'],['promo','促銷價（未含教育折扣）'],['gift','贈品'],['edu','全額教育優惠折抵'],['eduFinal','全額折抵後價格'],['eduB','併行折抵2000 or 1500'],['eduBFinal','併行折抵後價格']];
 
     // 依規格分組（保留原本順序）
@@ -1427,12 +1428,12 @@ function updateSearchResults(){
       const shared = FIELDS.filter(([k]) => items.every(x => x.c[k] === items[0].c[k]));
       const varying = FIELDS.filter(f => !shared.includes(f));
       // 同規格內相同的欄位合併成一組；手機版分三段：售價／活動折扣／促銷價 → 贈品 → 教育優惠（全額折抵、併行折抵）
-      const fld = k => { const f = shared.find(x => x[0]===k); return (f && items[0].c[k] !== null) ? `<div class="fld"><span class="lbl">${f[1]}</span><span class="val${k==='gift'?' gift':''}">${items[0].c[k]}</span></div>` : ''; };
+      const fld = k => { const f = shared.find(x => x[0]===k); return (f && items[0].c[k] !== null) ? `<div class="fld"><span class="lbl">${EDU_KEYS.includes(k) ? `<u>${f[1]}</u>` : f[1]}</span><span class="val${k==='gift'?' gift':''}">${items[0].c[k]}</span></div>` : ''; };
       const grp = (cls, keys) => { const h = keys.map(fld).join(''); return h ? `<div class="si-grp ${cls}">${h}</div>` : ''; };
-      const sub = (title, keys, color) => { const h = keys.map(fld).join(''); return h ? `<div class="si-sub"><span class="si-subtitle" style="color:${color}">${title}</span>${h}</div>` : ''; };
-      const eduSubs = sub('全額折抵', ['edu','eduFinal'], 'var(--red)') + sub('併行折抵', ['eduB','eduBFinal'], 'var(--purple,#7c3aed)');
+      const sub = (title, keys) => { const h = keys.map(fld).join(''); return h ? `<div class="si-sub"><span class="si-subtitle" style="text-decoration:underline">${title}</span>${h}</div>` : ''; };
+      const eduSubs = sub('全額折抵', ['edu','eduFinal']) + sub('併行折抵', ['eduB','eduBFinal']);
       const info = grp('si-flow', ['price','act','promo']) + grp('si-flow', ['gift']) + (eduSubs ? `<div class="si-grp"><div class="si-title">教育優惠</div>${eduSubs}</div>` : '');
-      const head = `<tr><th>貨號</th><th>顏色</th>${varying.map(([,l])=>`<th>${l}</th>`).join('')}</tr>`;
+      const head = `<tr><th>貨號</th><th>顏色</th>${varying.map(([k,l])=>`<th>${EDU_KEYS.includes(k) ? `<u>${l}</u>` : l}</th>`).join('')}</tr>`;
       const body = items.map(({p,c}) => `<tr><td class="pid">${p.pid}</td><td>${p.color||'—'}</td>${varying.map(([k])=>`<td style="font-weight:${k==='gift'?500:700};font-size:${k==='gift'?13:15}px">${c[k] ?? '<span style="color:var(--border)">—</span>'}</td>`).join('')}</tr>`).join('');
       const note = varying.length ? `<div style="font-size:11px;color:var(--orange);font-weight:600;margin:-4px 0 6px">⚠️ 這個規格的${varying.map(([,l])=>l.replace(/（.*）/,'')).join('、')}依顏色不同，請看下表</div>` : '';
       blocks += `<div class="spec-blk">
