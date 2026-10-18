@@ -23,7 +23,19 @@
 .spec-title .spec-chip{font-size:18px;font-weight:800;color:var(--blue);background:var(--blue-bg);padding:3px 12px;border-radius:8px;letter-spacing:.3px}
 .spec-title small{font-size:12px;font-weight:600;color:var(--gray)}
 .spec-info{display:flex;flex-wrap:wrap;gap:6px 18px;margin-bottom:10px}
-.spec-info>div{display:flex;flex-direction:column;gap:2px;min-width:70px}
+.spec-info .fld{display:flex;flex-direction:column;gap:2px;min-width:70px}
+.spec-info .si-grp,.spec-info .si-sub{display:contents}
+.spec-info .si-title,.spec-info .si-subtitle{display:none}
+@media(max-width:768px){
+  .spec-info{display:block}
+  .spec-info .si-grp{display:block;padding:9px 0;border-top:1px solid var(--border)}
+  .spec-info .si-grp:first-child{border-top:none;padding-top:0}
+  .spec-info .si-flow,.spec-info .si-sub{display:flex;flex-wrap:wrap;gap:6px 18px}
+  .spec-info .si-title{display:block;font-size:12px;font-weight:800;color:var(--blue);margin-bottom:6px}
+  .spec-info .si-sub{margin-bottom:8px}
+  .spec-info .si-sub:last-child{margin-bottom:0}
+  .spec-info .si-subtitle{display:block;flex:0 0 100%;font-size:12px;font-weight:700;color:var(--text)}
+}
 .spec-info .lbl{font-size:11px;font-weight:700;color:var(--gray);letter-spacing:.3px}
 .spec-info .val{font-size:15px;font-weight:700}
 .spec-info .val .edu-code,.pid-table .edu-code{display:block;font-size:12px;font-weight:600;color:var(--blue);font-family:ui-monospace,monospace;margin-top:1px}
@@ -60,6 +72,45 @@ let searchQuery = '';
 let searchCat = 'all';
 let searchSeries = 'all';
 let searchSub = 'all';
+// 搜尋條件記在網址（?q=&cat=&series=&sub=&p=），重新整理或從別頁返回時還原
+(function(){
+  const q = new URLSearchParams(location.search);
+  searchQuery = q.get('q') || '';
+  searchCat = q.get('cat') || 'all';
+  searchSeries = q.get('series') || 'all';
+  searchSub = q.get('sub') || 'all';
+})();
+function syncUrl(){
+  const q = new URLSearchParams();
+  if(searchQuery) q.set('q', searchQuery);
+  if(searchCat !== 'all') q.set('cat', searchCat);
+  if(searchSeries !== 'all') q.set('series', searchSeries);
+  if(searchSub !== 'all') q.set('sub', searchSub);
+  if(searchPeriod !== ACTIVITY_PERIOD_ORDER[0]) q.set('p', searchPeriod);
+  const qs = q.toString();
+  try{ history.replaceState(null, '', location.pathname + (qs ? '?' + qs : '')); }catch(e){}
+}
+// 輸入關鍵字時稍等 0.25 秒再重畫，避免每打一個字就整頁重算
+let searchTimer;
+function onSearchInput(v){
+  searchQuery = v;
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(updateSearchResults, 250);
+}
+// 檔期標籤（如 1001-1018）是否已過期：回傳 'ended'／'last'（今天最後一天）／null
+function periodStatus(label){
+  const m = /^(\d{2})(\d{2})-(\d{2})(\d{2})$/.exec(label || '');
+  if(!m) return null;
+  const now = new Date(); now.setHours(0,0,0,0);
+  const mk = (y,mo,d) => new Date(y, +mo-1, +d);
+  let y = now.getFullYear(), start = mk(y,m[1],m[2]);
+  if(start > now){ y--; start = mk(y,m[1],m[2]); }
+  let end = mk(y,m[3],m[4]);
+  if(end < start) end = mk(y+1,m[3],m[4]);
+  if(now > end) return 'ended';
+  if(+now === +end) return 'last';
+  return null;
+}
 const searchToggled = new Set();
 function toggleSearchGroup(name){
   if(searchToggled.has(name)) searchToggled.delete(name); else searchToggled.add(name);
@@ -964,8 +1015,15 @@ const ACTIVITY_PERIODS = {
   A:{label:'202608激安操盤',color:'var(--red)',bg:'var(--red-bg)'},
 };
 const ACTIVITY_PERIOD_ORDER = ['A'];
-let searchPeriod = 'A';
+let searchPeriod = (new URLSearchParams(location.search).get('p') in ACTIVITY_PERIODS) ? new URLSearchParams(location.search).get('p') : 'A';
 function updateSearchResults(){
+  syncUrl();
+  const warn = document.getElementById('period-warn');
+  if(warn){
+    const st = periodStatus(ACTIVITY_PERIODS[searchPeriod]?.label);
+    warn.style.display = st ? 'block' : 'none';
+    warn.textContent = st === 'ended' ? '⚠️ 檔期 ' + ACTIVITY_PERIODS[searchPeriod].label + ' 已結束，活動資料待更新，以下活動折扣／贈品僅供參考' : '⏰ 檔期 ' + ACTIVITY_PERIODS[searchPeriod].label + ' 今天是最後一天';
+  }
   const filtered = PRODUCTS.filter(p => {
     const matchCat = searchCat === 'all' || p.cat === searchCat;
     if(!matchCat) return false;
@@ -973,8 +1031,9 @@ function updateSearchResults(){
     if(!matchesSeries(p)) return false;
     if(!matchesSub(p)) return false;
     if(!searchQuery) return true;
-    const q = searchQuery.toLowerCase();
-    return [p.name,p.spec,p.color,p.pid,p.mpn,String(p.price)].some(v=>v.toLowerCase().includes(q));
+    // 空格分開的每個詞都要符合（可跨品名／規格／顏色／貨號），例：iPhone 17 256
+    const hay = [p.name,p.spec,p.color,p.pid,p.mpn,String(p.price)].join(' ').toLowerCase();
+    return searchQuery.toLowerCase().split(/\s+/).filter(Boolean).every(t => hay.includes(t));
   });
 
   // iPhone 依 SERIES_ORDER 排序（只在 iPhone 原本佔的位置內重排，不影響其他類別）
@@ -1044,7 +1103,11 @@ function updateSearchResults(){
     for(const [spec, items] of specs){
       const shared = FIELDS.filter(([k]) => items.every(x => x.c[k] === items[0].c[k]));
       const varying = FIELDS.filter(f => !shared.includes(f));
-      const info = shared.map(([k,l]) => `<div><span class="lbl">${l}</span><span class="val${k==='gift'?' gift':''}">${items[0].c[k]}</span></div>`).join('');
+      // 手機版分三段：售價／活動折扣／促銷價 → 贈品 → 教育優惠（電腦版維持一排）
+      const fld = k => { const f = shared.find(x => x[0]===k); return f ? `<div class="fld"><span class="lbl">${f[1]}</span><span class="val${k==='gift'?' gift':''}">${items[0].c[k]}</span></div>` : ''; };
+      const grp = (cls, keys) => { const h = keys.map(fld).join(''); return h ? `<div class="si-grp ${cls}">${h}</div>` : ''; };
+      const eduH = fld('edu');
+      const info = grp('si-flow', ['price','act','promo']) + grp('si-flow', ['gift']) + (eduH ? `<div class="si-grp"><div class="si-title">教育優惠</div><div class="si-sub">${eduH}</div></div>` : '');
       const head = `<tr><th>貨號</th><th>顏色</th>${varying.map(([,l])=>`<th>${l}</th>`).join('')}</tr>`;
       const body = items.map(({p,c}) => `<tr><td class="pid">${p.pid}</td><td>${p.color||'—'}</td>${varying.map(([k])=>`<td style="font-weight:${k==='gift'?500:700};font-size:${k==='gift'?13:15}px">${c[k]}</td>`).join('')}</tr>`).join('');
       const note = varying.length ? `<div style="font-size:11px;color:var(--orange);font-weight:600;margin:-4px 0 6px">⚠️ 這個規格的${varying.map(([,l])=>l.replace(/（.*）/,'')).join('、')}依顏色不同，請看下表</div>` : '';
@@ -1117,6 +1180,7 @@ function renderSearch(){
       <b>展示機出清另計：</b>展-iPhone 16e 128GB（貨號811928）$11,900、展-15.3吋MBA M3/8CPU/10GPU/16G（貨號811642）$24,900，為門市展示機出清特例，非本表一般貨號，數量有限售完為止。<br>
       <b>本表未列入折扣的系列</b>（iPhone 16e、Mac Studio、一般原廠/副廠配件、軟體）不參與本次激安活動，僅顯示原價。
     </div>
+    <div id="period-warn" style="display:none;margin-bottom:12px;padding:10px 14px;border-radius:10px;background:var(--orange-bg);color:var(--orange);font-size:13px;font-weight:700"></div>
     <div class="card" style="padding:16px 20px">
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">
         ${ACTIVITY_PERIOD_ORDER.map(k=>`<button onclick="searchPeriod='${k}';updateSearchResults()" style="padding:.4em .9em;font-size:.85em;font-weight:700;border:1.5px solid ${k===searchPeriod?ACTIVITY_PERIODS[k].color:'var(--border)'};border-radius:20px;background:${k===searchPeriod?ACTIVITY_PERIODS[k].color:'var(--white)'};color:${k===searchPeriod?'#fff':'var(--gray)'};cursor:pointer;white-space:nowrap">${ACTIVITY_PERIODS[k].label}</button>`).join('')}
@@ -1124,8 +1188,8 @@ function renderSearch(){
       <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center">
         <input id="sq" type="search" value="${searchQuery.replace(/"/g,'&quot;')}" placeholder="輸入關鍵字：貨號 / 型號 / 品名 / 規格 / 顏色 / 價格…" autocomplete="off"
           style="flex:1;min-width:200px;padding:10px 14px;border-radius:10px;border:1.5px solid var(--border);font-size:16px;font-family:inherit;outline:none;background:var(--light)"
-          oninput="searchQuery=this.value;updateSearchResults()" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--border)'">
-        <button onclick="searchQuery='';document.getElementById('sq').value='';updateSearchResults()" style="padding:8px 14px;border-radius:10px;border:1.5px solid var(--border);background:var(--white);font-size:13px;cursor:pointer;font-family:inherit;color:var(--gray)">清除</button>
+          oninput="onSearchInput(this.value)" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--border)'">
+        <button onclick="searchQuery='';document.getElementById('sq').value='';clearTimeout(searchTimer);updateSearchResults()" style="padding:8px 14px;border-radius:10px;border:1.5px solid var(--border);background:var(--white);font-size:13px;cursor:pointer;font-family:inherit;color:var(--gray)">清除</button>
       </div>
       <div style="display:flex;gap:6px;flex-wrap:wrap">
         ${cats.map(c=>`<button class="cat-btn" data-cat="${c}" onclick="selectCat('${c}')" style="padding:5px 14px;border-radius:20px;border:1.5px solid ${searchCat===c?'var(--blue)':'var(--border)'};background:${searchCat===c?'var(--blue)':'var(--white)'};color:${searchCat===c?'#fff':'var(--gray)'};font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .13s">${catLabels[c]}</button>`).join('')}
