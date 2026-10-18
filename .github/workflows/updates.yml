@@ -4,7 +4,7 @@ on:
     branches: [main]
     paths-ignore: ['updates.json']
   schedule:
-    - cron: '0 */6 * * *'   # 每 6 小時檢查一次外部頁面是否有更新
+    - cron: '0 0 * * *'   # 每天檢查一次外部頁面是否有更新（UTC 00:00＝台灣 08:00）
   workflow_dispatch:
 permissions:
   contents: write
