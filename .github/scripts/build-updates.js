@@ -6,7 +6,7 @@ const fs = require('fs');
 const INTERNAL = {
   'search.html':    ['search.html', 'shared/products.js'],
   'npi.html':       ['npi.html', 'npi-img'],
-  'arrivals.html':  ['arrivals.html', 'shared/products.js'],
+  'arrivals.html':  ['arrivals.html', 'shared/products.js', 'shared/arrivals-data.js'],
   'edu.html':       ['edu.html'],
   'bts.html':       ['bts.html'],
   'jiaan.html':     ['jiaan.html', 'shared/products.js'],
