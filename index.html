@@ -219,6 +219,13 @@ fetch('updates.json',{cache:'no-cache'}).then(function(r){return r.ok?r.json():{
     if(days<=NEW_DAYS){var b=document.createElement('span');b.className='new-badge';b.textContent='新更新';c.appendChild(b)}
   });
 }).catch(function(){});
+// ── 首頁瀏覽統計（同一分頁只算一次；只送卡片連結與名稱，用來算點擊率與列出零點擊卡片）──
+(function(){
+  if(!navigator.sendBeacon)return;
+  try{if(sessionStorage.getItem('toolbox-view'))return;sessionStorage.setItem('toolbox-view','1')}catch(e){}
+  var l=[].map.call(document.querySelectorAll('.entry-card'),function(c){return {c:c.getAttribute('href'),t:c.querySelector('.entry-title').textContent}});
+  try{navigator.sendBeacon('https://store-click-stats.tksqftksqf.workers.dev/view',JSON.stringify({cards:l}))}catch(err){}
+})();
 // ── 卡片點擊統計（只送卡片連結與名稱，不含任何個資）──
 document.querySelector('.entry-grid').addEventListener('click',function(e){
   var c=e.target.closest('.entry-card');
