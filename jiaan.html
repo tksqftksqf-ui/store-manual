@@ -180,6 +180,7 @@ const ACCESSORY_GROUP = {
 function getSubOptions(cat){
   if(cat==='配件') return ACCESSORY_GROUP_ORDER;
   if(cat==='Mac'||cat==='iPad'||cat==='iPhone'||cat==='Watch'){
+    if(searchSeries==='all') return null; // 先選系列，機型選項才展開
     const seen = new Set(), out = [];
     for(const p of PRODUCTS){
       if(p.cat!==cat) continue;

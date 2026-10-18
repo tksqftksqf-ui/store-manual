@@ -99,6 +99,8 @@ function arrSeriesOptions(){
 // 第 3 層：該系列底下的品名（配件沒有系列，直接列品名）
 function arrSubOptions(){
   if(arrivalCat==='all') return null;
+  const so = arrSeriesOptions();
+  if(so && so.length >= 2 && arrivalSeries === 'all') return null; // 先選系列，品項選項才展開
   const seen = new Set(), out = [];
   for(const a of ARRIVALS){
     if(a.cat!==arrivalCat) continue;
