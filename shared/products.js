@@ -1,4 +1,4 @@
-const PRODUCTS_VERSION = '20261015v1';
+const PRODUCTS_VERSION = '1019-1105操盤';
 const PRODUCTS = [
   // ── MacBook Neo ──
   {cat:'Mac',name:'MacBook Neo',spec:'A18 Pro/6CPU/5GPU/8GB/256GB',color:'胭粉',pid:'267442',mpn:'MHFH4',price:22900},
@@ -668,8 +668,8 @@ const PRODUCTS = [
   {cat:'配件',name:'HomePod mini',spec:'',color:'藍',pid:'222183',mpn:'MJ2C3',price:3990},
   {cat:'配件',name:'HomePod mini',spec:'',color:'橙',pid:'222184',mpn:'MJ2D3',price:3990},
   {cat:'配件',name:'HomePod mini',spec:'',color:'黃',pid:'222185',mpn:'MJ2E3',price:3990},
-  {cat:'配件',name:'HomePod',spec:'',color:'白色',pid:'264479',mpn:'MDEY4',price:10900},
-  {cat:'配件',name:'HomePod',spec:'',color:'午夜色',pid:'264478',mpn:'MDEW4',price:10900},
+  {cat:'配件',name:'HomePod',spec:'',color:'白色',pid:'264479',mpn:'MDEY4',price:10990},
+  {cat:'配件',name:'HomePod',spec:'',color:'午夜色',pid:'264478',mpn:'MDEW4',price:10990},
   // ── AirTag ──
   {cat:'配件',name:'AirTag 1件裝',spec:'',color:'',pid:'217386',mpn:'MX532',price:990},
   {cat:'配件',name:'AirTag 4件裝',spec:'',color:'',pid:'217387',mpn:'MX542',price:3390},
@@ -755,6 +755,24 @@ const PRODUCTS = [
   {cat:'配件',name:'精細織紋卡套',spec:'',color:'午夜紫',pid:'262432',mpn:'MGH84',price:1890},
   {cat:'配件',name:'精細織紋卡套',spec:'',color:'海軍藍',pid:'262433',mpn:'MGH94',price:1890},
   {cat:'配件',name:'精細織紋卡套',spec:'',color:'黑色',pid:'262434',mpn:'MGHA4',price:1890},
+  {cat:'配件',name:'iPhone 18 Pro MagSafe 透明保護殼',spec:'',color:'',pid:'273348',mpn:'MKDU4',price:1690},
+  {cat:'配件',name:'iPhone 18 Pro MagSafe 矽膠保護殼',spec:'',color:'黑色',pid:'273349',mpn:'MK8Y4',price:1690},
+  {cat:'配件',name:'iPhone 18 Pro MagSafe 矽膠保護殼',spec:'',color:'清爽藍色',pid:'273350',mpn:'MK8W4',price:1690},
+  {cat:'配件',name:'iPhone 18 Pro MagSafe 矽膠保護殼',spec:'',color:'洋紅色',pid:'273351',mpn:'MK8T4',price:1690},
+  {cat:'配件',name:'iPhone 18 Pro MagSafe 矽膠保護殼',spec:'',color:'勃根地紅色',pid:'273352',mpn:'MK8U4',price:1690},
+  {cat:'配件',name:'iPhone 18 Pro MagSafe 矽膠保護殼',spec:'',color:'橄欖色',pid:'273353',mpn:'MK8V4',price:1690},
+  {cat:'配件',name:'iPhone 18 Pro MagSafe 織紋保護殼',spec:'',color:'黑色',pid:'273355',mpn:'MKD64',price:1890},
+  {cat:'配件',name:'iPhone 18 Pro MagSafe 織紋保護殼',spec:'',color:'水手布藍色',pid:'273356',mpn:'MKD54',price:1890},
+  {cat:'配件',name:'iPhone 18 Pro MagSafe 織紋保護殼',spec:'',color:'勃根地紅色',pid:'273357',mpn:'MKD14',price:1890},
+  {cat:'配件',name:'iPhone 18 Pro MagSafe 織紋保護殼',spec:'',color:'桑葚色',pid:'273359',mpn:'MKD24',price:1890},
+  {cat:'配件',name:'iPhone 18 Pro Max MagSafe 透明保護殼',spec:'',color:'',pid:'273361',mpn:'MKDV4',price:1690},
+  {cat:'配件',name:'iPhone 18 Pro Max MagSafe 矽膠保護殼',spec:'',color:'黑色',pid:'273362',mpn:'MK954',price:1690},
+  {cat:'配件',name:'iPhone 18 Pro Max MagSafe 矽膠保護殼',spec:'',color:'清爽藍色',pid:'273363',mpn:'MK934',price:1690},
+  {cat:'配件',name:'iPhone 18 Pro Max MagSafe 矽膠保護殼',spec:'',color:'洋紅色',pid:'273364',mpn:'MK904',price:1690},
+  {cat:'配件',name:'iPhone 18 Pro Max MagSafe 矽膠保護殼',spec:'',color:'勃根地紅色',pid:'273365',mpn:'MK914',price:1690},
+  {cat:'配件',name:'iPhone 18 Pro Max MagSafe 織紋保護殼',spec:'',color:'黑色',pid:'273368',mpn:'MKDT4',price:1890},
+  {cat:'配件',name:'iPhone 18 Pro Max MagSafe 織紋保護殼',spec:'',color:'水手布藍色',pid:'273369',mpn:'MKDR4',price:1890},
+  {cat:'配件',name:'iPhone 18 Pro Max MagSafe 織紋保護殼',spec:'',color:'勃根地紅色',pid:'273371',mpn:'MKDM4',price:1890},
   {cat:'配件',name:'斜背掛繩',spec:'',color:'橙色',pid:'262396',mpn:'MGGD4',price:1890},
   {cat:'配件',name:'斜背掛繩',spec:'',color:'藍色',pid:'262399',mpn:'MGGG4',price:1890},
   {cat:'配件',name:'斜背掛繩',spec:'',color:'淡藍色',pid:'262400',mpn:'MGGH4',price:1890},
