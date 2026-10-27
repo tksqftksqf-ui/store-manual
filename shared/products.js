@@ -1,4 +1,4 @@
-const PRODUCTS_VERSION = '1019-1105操盤+1027新品';
+const PRODUCTS_VERSION = '1019-1105操盤+1027新品v2';
 const PRODUCTS = [
   // ── MacBook Neo ──
   {cat:'Mac',name:'MacBook Neo',spec:'A18 Pro/6CPU/5GPU/8GB/256GB',color:'胭粉',pid:'267442',mpn:'MHFH4',price:22900},
@@ -686,18 +686,18 @@ const PRODUCTS = [
   {cat:'配件',name:'96W USB-C 電源轉接器',spec:'',color:'',pid:'250810',mpn:'MW2L3',price:2290},
   {cat:'配件',name:'140W USB-C 電源轉接器',spec:'',color:'',pid:'267420',mpn:'MHY14',price:2990},
   // ── HomePod ──
-  {cat:'配件',name:'HomePod mini',spec:'',color:'午夜色',pid:'250679',mpn:'MY5G2',price:3990},
-  {cat:'配件',name:'HomePod mini',spec:'',color:'白',pid:'212358',mpn:'MY5H2',price:3990},
-  {cat:'配件',name:'HomePod mini',spec:'',color:'藍',pid:'222183',mpn:'MJ2C3',price:3990},
-  {cat:'配件',name:'HomePod mini',spec:'',color:'橙',pid:'222184',mpn:'MJ2D3',price:3990},
-  {cat:'配件',name:'HomePod mini',spec:'',color:'黃',pid:'222185',mpn:'MJ2E3',price:3990},
+  {cat:'配件',name:'HomePod',spec:'',color:'白色',pid:'264479',mpn:'MDEY4',price:10990},
+  {cat:'配件',name:'HomePod',spec:'',color:'午夜色',pid:'264478',mpn:'MDEW4',price:10990},
   {cat:'配件',name:'HomePod mini 2',spec:'',color:'午夜色',pid:'274302',mpn:'MGHJ4',price:4790},
   {cat:'配件',name:'HomePod mini 2',spec:'',color:'白色',pid:'274303',mpn:'MGHK4',price:4790},
   {cat:'配件',name:'HomePod mini 2',spec:'',color:'綠色',pid:'274304',mpn:'MGHL4',price:4790},
   {cat:'配件',name:'HomePod mini 2',spec:'',color:'藍色',pid:'274305',mpn:'MGHM4',price:4790},
   {cat:'配件',name:'HomePod mini 2',spec:'',color:'粉紅色',pid:'274306',mpn:'MGKR4',price:4790},
-  {cat:'配件',name:'HomePod',spec:'',color:'白色',pid:'264479',mpn:'MDEY4',price:10990},
-  {cat:'配件',name:'HomePod',spec:'',color:'午夜色',pid:'264478',mpn:'MDEW4',price:10990},
+  {cat:'配件',name:'HomePod mini',spec:'',color:'午夜色',pid:'250679',mpn:'MY5G2',price:3990},
+  {cat:'配件',name:'HomePod mini',spec:'',color:'白',pid:'212358',mpn:'MY5H2',price:3990},
+  {cat:'配件',name:'HomePod mini',spec:'',color:'藍',pid:'222183',mpn:'MJ2C3',price:3990},
+  {cat:'配件',name:'HomePod mini',spec:'',color:'橙',pid:'222184',mpn:'MJ2D3',price:3990},
+  {cat:'配件',name:'HomePod mini',spec:'',color:'黃',pid:'222185',mpn:'MJ2E3',price:3990},
   // ── AirTag ──
   {cat:'配件',name:'AirTag 1件裝',spec:'',color:'',pid:'217386',mpn:'MX532',price:990},
   {cat:'配件',name:'AirTag 4件裝',spec:'',color:'',pid:'217387',mpn:'MX542',price:3390},
