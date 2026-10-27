@@ -1,4 +1,4 @@
-const PRODUCTS_VERSION = '1019-1105操盤+1027新品v4';
+const PRODUCTS_VERSION = '1019-1105操盤+1027新品v5';
 const PRODUCTS = [
   // ── MacBook Neo ──
   {cat:'Mac',name:'MacBook Neo',spec:'A18 Pro/6CPU/5GPU/8GB/256GB',color:'胭粉',pid:'267442',mpn:'MHFH4',price:22900},
