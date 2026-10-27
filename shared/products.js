@@ -1,4 +1,4 @@
-const PRODUCTS_VERSION = '1019-1105操盤+1027新品v2';
+const PRODUCTS_VERSION = '1019-1105操盤+1027新品v3';
 const PRODUCTS = [
   // ── MacBook Neo ──
   {cat:'Mac',name:'MacBook Neo',spec:'A18 Pro/6CPU/5GPU/8GB/256GB',color:'胭粉',pid:'267442',mpn:'MHFH4',price:22900},
@@ -619,11 +619,11 @@ const PRODUCTS = [
   {cat:'配件',name:'Beats USB-C對Lightning編織線 1.5M',spec:'',color:'閃電黑',pid:'258264',mpn:'MDGK4',price:590},
   {cat:'配件',name:'Beats USB-C對Lightning編織線 1.5M',spec:'',color:'風馳灰',pid:'258265',mpn:'MDGL4',price:590},
   // ── Apple TV ──
+  {cat:'配件',name:'Apple TV 4K (新款)',spec:'',color:'',pid:'274308',mpn:'MLFF4',price:9900},
   {cat:'配件',name:'Apple TV 4K 64GB (2022)',spec:'',color:'',pid:'234915',mpn:'MN873',price:6900},
   {cat:'配件',name:'Apple TV 4K 128GB (2022)',spec:'',color:'',pid:'234916',mpn:'MN893',price:8500},
-  {cat:'配件',name:'Siri Remote',spec:'',color:'',pid:'250980',mpn:'MW5G3',price:1790},
-  {cat:'配件',name:'Apple TV 4K (新款)',spec:'',color:'',pid:'274308',mpn:'MLFF4',price:9900},
   {cat:'配件',name:'Siri Remote (新款)',spec:'',color:'',pid:'274307',mpn:'MLFC4',price:1990},
+  {cat:'配件',name:'Siri Remote',spec:'',color:'',pid:'250980',mpn:'MW5G3',price:1790},
   // ── Apple Pencil ──
   {cat:'配件',name:'Apple Pencil 筆尖4件裝',spec:'',color:'',pid:'254434',mpn:'MX763',price:590},
   {cat:'配件',name:'Apple Pencil (USB-C)',spec:'',color:'',pid:'243982',mpn:'MUWA3',price:2690},
