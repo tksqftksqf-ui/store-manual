@@ -1,4 +1,4 @@
-const PRODUCTS_VERSION = '1019-1105操盤';
+const PRODUCTS_VERSION = '1019-1105操盤+1027新品';
 const PRODUCTS = [
   // ── MacBook Neo ──
   {cat:'Mac',name:'MacBook Neo',spec:'A18 Pro/6CPU/5GPU/8GB/256GB',color:'胭粉',pid:'267442',mpn:'MHFH4',price:22900},
@@ -118,6 +118,27 @@ const PRODUCTS = [
   {cat:'iPad',name:'iPad mini 8.3" 第7代',spec:'Wi-Fi+LTE 512GB',color:'紫',pid:'253181',mpn:'MYHF3',price:35400},
   {cat:'iPad',name:'iPad mini 8.3" 第7代',spec:'Wi-Fi+LTE 512GB',color:'太空灰',pid:'253182',mpn:'MYHC3',price:35400},
   {cat:'iPad',name:'iPad mini 8.3" 第7代',spec:'Wi-Fi+LTE 512GB',color:'星光',pid:'253183',mpn:'MYHE3',price:35400},
+  // ── iPad mini 第8代 ──
+  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi 128GB',color:'午夜',pid:'274704',mpn:'MJ6F4',price:22900},
+  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi 128GB',color:'星光',pid:'274705',mpn:'MJ6J4',price:22900},
+  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi 256GB',color:'午夜',pid:'274706',mpn:'MJ6Q4',price:26400},
+  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi 256GB',color:'星光',pid:'274707',mpn:'MJ6R4',price:26400},
+  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi 512GB',color:'午夜',pid:'274708',mpn:'MJ6V4',price:33400},
+  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi 512GB',color:'星光',pid:'274709',mpn:'MJ6W4',price:33400},
+  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi+LTE 128GB',color:'午夜',pid:'274710',mpn:'MJ674',price:27900},
+  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi+LTE 128GB',color:'星光',pid:'274711',mpn:'MJ684',price:27900},
+  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi+LTE 256GB',color:'午夜',pid:'274712',mpn:'MJ6C4',price:31400},
+  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi+LTE 256GB',color:'星光',pid:'274713',mpn:'MJ6D4',price:31400},
+  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi+LTE 512GB',color:'午夜',pid:'274714',mpn:'MJ6H4',price:38400},
+  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi+LTE 512GB',color:'星光',pid:'274715',mpn:'MJ6K4',price:38400},
+  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi Nano 256GB',color:'午夜',pid:'274716',mpn:'ML2Q4',price:29900},
+  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi Nano 256GB',color:'星光',pid:'274717',mpn:'ML2T4',price:29900},
+  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi Nano 512GB',color:'午夜',pid:'274718',mpn:'MJ6X4',price:36900},
+  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi Nano 512GB',color:'星光',pid:'274719',mpn:'MJ6Y4',price:36900},
+  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi+LTE Nano 256GB',color:'午夜',pid:'274720',mpn:'ML2W4',price:34900},
+  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi+LTE Nano 256GB',color:'星光',pid:'274721',mpn:'ML2X4',price:34900},
+  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi+LTE Nano 512GB',color:'午夜',pid:'274722',mpn:'MJ6M4',price:41900},
+  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi+LTE Nano 512GB',color:'星光',pid:'274723',mpn:'MJ6P4',price:41900},
   // ── iPad A16 ──
   {cat:'iPad',name:'iPad A16',spec:'Wi-Fi 128GB',color:'銀',pid:'256491',mpn:'MD3Y4',price:14900},
   {cat:'iPad',name:'iPad A16',spec:'Wi-Fi 128GB',color:'藍',pid:'256493',mpn:'MD4A4',price:14900},
@@ -601,6 +622,8 @@ const PRODUCTS = [
   {cat:'配件',name:'Apple TV 4K 64GB (2022)',spec:'',color:'',pid:'234915',mpn:'MN873',price:6900},
   {cat:'配件',name:'Apple TV 4K 128GB (2022)',spec:'',color:'',pid:'234916',mpn:'MN893',price:8500},
   {cat:'配件',name:'Siri Remote',spec:'',color:'',pid:'250980',mpn:'MW5G3',price:1790},
+  {cat:'配件',name:'Apple TV 4K (新款)',spec:'',color:'',pid:'274308',mpn:'MLFF4',price:9900},
+  {cat:'配件',name:'Siri Remote (新款)',spec:'',color:'',pid:'274307',mpn:'MLFC4',price:1990},
   // ── Apple Pencil ──
   {cat:'配件',name:'Apple Pencil 筆尖4件裝',spec:'',color:'',pid:'254434',mpn:'MX763',price:590},
   {cat:'配件',name:'Apple Pencil (USB-C)',spec:'',color:'',pid:'243982',mpn:'MUWA3',price:2690},
@@ -668,6 +691,11 @@ const PRODUCTS = [
   {cat:'配件',name:'HomePod mini',spec:'',color:'藍',pid:'222183',mpn:'MJ2C3',price:3990},
   {cat:'配件',name:'HomePod mini',spec:'',color:'橙',pid:'222184',mpn:'MJ2D3',price:3990},
   {cat:'配件',name:'HomePod mini',spec:'',color:'黃',pid:'222185',mpn:'MJ2E3',price:3990},
+  {cat:'配件',name:'HomePod mini 2',spec:'',color:'午夜色',pid:'274302',mpn:'MGHJ4',price:4790},
+  {cat:'配件',name:'HomePod mini 2',spec:'',color:'白色',pid:'274303',mpn:'MGHK4',price:4790},
+  {cat:'配件',name:'HomePod mini 2',spec:'',color:'綠色',pid:'274304',mpn:'MGHL4',price:4790},
+  {cat:'配件',name:'HomePod mini 2',spec:'',color:'藍色',pid:'274305',mpn:'MGHM4',price:4790},
+  {cat:'配件',name:'HomePod mini 2',spec:'',color:'粉紅色',pid:'274306',mpn:'MGKR4',price:4790},
   {cat:'配件',name:'HomePod',spec:'',color:'白色',pid:'264479',mpn:'MDEY4',price:10990},
   {cat:'配件',name:'HomePod',spec:'',color:'午夜色',pid:'264478',mpn:'MDEW4',price:10990},
   // ── AirTag ──
@@ -676,6 +704,8 @@ const PRODUCTS = [
   {cat:'配件',name:'AirTag 2 1件裝',spec:'',color:'',pid:'266323',mpn:'MFE94',price:990},
   {cat:'配件',name:'AirTag 2 4件裝',spec:'',color:'',pid:'266324',mpn:'MFEA4',price:3390},
   // ── iPad 聰穎系列 & 巧控鍵盤 ──
+  {cat:'配件',name:'iPad mini A20 Pro 聰穎雙面夾',spec:'',color:'海軍藍',pid:'274724',mpn:'MKR44',price:2590},
+  {cat:'配件',name:'iPad mini A20 Pro 聰穎雙面夾',spec:'',color:'淺褐色',pid:'274725',mpn:'MKR54',price:2590},
   {cat:'配件',name:'iPad mini 聰穎雙面夾',spec:'',color:'丹寧藍',pid:'253209',mpn:'MC2U4',price:1940},
   {cat:'配件',name:'iPad mini 聰穎雙面夾',spec:'',color:'鼠尾草',pid:'253211',mpn:'MC2V4',price:1940},
   {cat:'配件',name:'iPad A16 聰穎雙面夾',spec:'',color:'白',pid:'256582',mpn:'MDEJ4',price:2590},
