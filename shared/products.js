@@ -1,4 +1,4 @@
-const PRODUCTS_VERSION = '1019-1105操盤+1027新品v6';
+const PRODUCTS_VERSION = '1019-1105操盤+1028新品v7';
 const PRODUCTS = [
   // ── MacBook Neo ──
   {cat:'Mac',name:'MacBook Neo',spec:'A18 Pro/6CPU/5GPU/8GB/256GB',color:'胭粉',pid:'267442',mpn:'MHFH4',price:22900},
@@ -35,6 +35,13 @@ const PRODUCTS = [
   {cat:'Mac',name:'MacBook Air 15.3" M5 2026',spec:'M5/10CPU/10GPU/24GB/1TB',color:'銀',pid:'267390',mpn:'MDVC4',price:67400},
   {cat:'Mac',name:'MacBook Air 15.3" M5 2026',spec:'M5/10CPU/10GPU/24GB/1TB',color:'天藍',pid:'267391',mpn:'MDVU4',price:67400},
   {cat:'Mac',name:'MacBook Air 15.3" M5 2026',spec:'M5/10CPU/10GPU/24GB/1TB',color:'星光',pid:'267392',mpn:'MDVF4',price:67400},
+  // ── MacBook Pro 14.2" M6 2026 ──
+  {cat:'Mac',name:'MacBook Pro 14.2" M6 2026',spec:'M6/12CPU/12GPU/16GB/1TB',color:'黑',pid:'274746',mpn:'MHWT4',price:64900},
+  {cat:'Mac',name:'MacBook Pro 14.2" M6 2026',spec:'M6/12CPU/12GPU/16GB/1TB',color:'銀',pid:'274747',mpn:'MHWW4',price:64900},
+  {cat:'Mac',name:'MacBook Pro 14.2" M6 2026',spec:'M6/12CPU/12GPU/24GB/1TB',color:'黑',pid:'274748',mpn:'MHWU4',price:71900},
+  {cat:'Mac',name:'MacBook Pro 14.2" M6 2026',spec:'M6/12CPU/12GPU/24GB/1TB',color:'銀',pid:'274749',mpn:'MHWX4',price:71900},
+  {cat:'Mac',name:'MacBook Pro 14.2" M6 2026',spec:'M6/12CPU/12GPU/32GB/1TB',color:'黑',pid:'274750',mpn:'MHWV4',price:78900},
+  {cat:'Mac',name:'MacBook Pro 14.2" M6 2026',spec:'M6/12CPU/12GPU/32GB/1TB',color:'銀',pid:'274751',mpn:'MHWY4',price:78900},
   // ── MacBook Pro 14.2" M5 2025/2026 ──
   {cat:'Mac',name:'MacBook Pro 14.2" M5 2025/2026',spec:'M5/10CPU/10GPU/16GB/1TB',color:'黑',pid:'263627',mpn:'MDE14',price:64900},
   {cat:'Mac',name:'MacBook Pro 14.2" M5 2025/2026',spec:'M5/10CPU/10GPU/16GB/1TB',color:'銀',pid:'263628',mpn:'MDE54',price:64900},
@@ -69,6 +76,24 @@ const PRODUCTS = [
   {cat:'Mac',name:'Mac Mini M6 2026',spec:'M6/12CPU/12GPU/16GB/512GB',color:'銀',pid:'272712',mpn:'MHQL4',price:36900},
   {cat:'Mac',name:'Mac Mini M6 2026',spec:'M6/12CPU/12GPU/24GB/512GB',color:'銀',pid:'272713',mpn:'MHQM4',price:43900},
   {cat:'Mac',name:'Mac Mini M6 2026',spec:'M5 Pro/15CPU/16GPU/24GB/512GB',color:'銀',pid:'272714',mpn:'MHQN4',price:59900},
+  // ── iMac 24" M6 2026 ──
+  {cat:'Mac',name:'iMac 24" M6 2026',spec:'M6/10CPU/10GPU/16GB/256GB',color:'銀',pid:'274752',mpn:'MH064',price:49900},
+  {cat:'Mac',name:'iMac 24" M6 2026',spec:'M6/10CPU/10GPU/16GB/256GB',color:'綠',pid:'274753',mpn:'MH084',price:49900},
+  {cat:'Mac',name:'iMac 24" M6 2026',spec:'M6/10CPU/10GPU/16GB/256GB',color:'藍',pid:'274754',mpn:'MH094',price:49900},
+  {cat:'Mac',name:'iMac 24" M6 2026',spec:'M6/10CPU/10GPU/16GB/256GB',color:'粉紅',pid:'274755',mpn:'MH0A4',price:49900},
+  {cat:'Mac',name:'iMac 24" M6 2026',spec:'M6/12CPU/12GPU/16GB/256GB',color:'銀',pid:'274756',mpn:'MH114',price:57900},
+  {cat:'Mac',name:'iMac 24" M6 2026',spec:'M6/12CPU/12GPU/16GB/256GB',color:'綠',pid:'274757',mpn:'MH1D4',price:57900},
+  {cat:'Mac',name:'iMac 24" M6 2026',spec:'M6/12CPU/12GPU/16GB/256GB',color:'藍',pid:'274758',mpn:'MH1H4',price:57900},
+  {cat:'Mac',name:'iMac 24" M6 2026',spec:'M6/12CPU/12GPU/16GB/256GB',color:'粉紅',pid:'274759',mpn:'MH1P4',price:57900},
+  {cat:'Mac',name:'iMac 24" M6 2026',spec:'M6/12CPU/12GPU/16GB/512GB',color:'銀',pid:'274760',mpn:'MH154',price:64900},
+  {cat:'Mac',name:'iMac 24" M6 2026',spec:'M6/12CPU/12GPU/16GB/512GB',color:'綠',pid:'274761',mpn:'MH1F4',price:64900},
+  {cat:'Mac',name:'iMac 24" M6 2026',spec:'M6/12CPU/12GPU/16GB/512GB',color:'藍',pid:'274762',mpn:'MH1J4',price:64900},
+  {cat:'Mac',name:'iMac 24" M6 2026',spec:'M6/12CPU/12GPU/16GB/512GB',color:'粉紅',pid:'274763',mpn:'MH1Q4',price:64900},
+  {cat:'Mac',name:'iMac 24" M6 2026',spec:'M6/12CPU/12GPU/24GB/512GB',color:'銀',pid:'274764',mpn:'MH164',price:71900},
+  {cat:'Mac',name:'iMac 24" M6 2026',spec:'M6/12CPU/12GPU/24GB/512GB',color:'綠',pid:'274765',mpn:'MH1G4',price:71900},
+  {cat:'Mac',name:'iMac 24" M6 2026',spec:'M6/12CPU/12GPU/24GB/512GB',color:'藍',pid:'274766',mpn:'MH1N4',price:71900},
+  {cat:'Mac',name:'iMac 24" M6 2026',spec:'M6/12CPU/12GPU/24GB/512GB',color:'粉紅',pid:'274767',mpn:'MH1R4',price:71900},
+  {cat:'Mac',name:'iMac 24" M6 2026',spec:'M6/12CPU/12GPU/16GB/256GB Nano',color:'銀',pid:'274768',mpn:'MH2U4',price:64900},
   // ── iMac 24" 2024 ──
   {cat:'Mac',name:'iMac 24" M4 2024',spec:'M4/8CPU/8GPU/16GB/256GB',color:'銀',pid:'253474',mpn:'MWUC3',price:49900},
   {cat:'Mac',name:'iMac 24" M4 2024',spec:'M4/8CPU/8GPU/16GB/256GB',color:'藍',pid:'253475',mpn:'MWUF3',price:49900},
