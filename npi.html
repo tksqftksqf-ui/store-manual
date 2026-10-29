@@ -489,8 +489,30 @@ function duoQaBody(){
   `;
 }
 
+// 排序：未發售的在前（依發售日由近到遠）→ 已發售的在後（最近發售的在前）→ 台灣未上市（沒填 launch）最後；同組維持上方陣列原順序
+function npiSortedTimeline(){
+  const now = new Date(); now.setHours(0,0,0,0);
+  const d = s => { const [y,m,dd] = s.split('-').map(Number); return new Date(y, m-1, dd).getTime(); };
+  const grp = t => !t.launch ? 2 : (now >= d(t.launch) ? 1 : 0);
+  return NPI_TIMELINE.map((t,i) => ({t,i}))
+    .sort((a,b) => {
+      const ga = grp(a.t), gb = grp(b.t);
+      if(ga !== gb) return ga - gb;
+      if(ga === 0) return d(a.t.launch) - d(b.t.launch) || a.i - b.i;
+      if(ga === 1) return d(b.t.launch) - d(a.t.launch) || a.i - b.i;
+      return a.i - b.i;
+    }).map(x => x.t);
+}
+function npiSortedProducts(sortedTl){
+  const order = {}; let n = 0;
+  sortedTl.forEach(t => t.keys.forEach(k => { order[k] = n++; }));
+  return NPI_PRODUCTS.map((p,i) => ({p,i}))
+    .sort((a,b) => (order[a.p.key] ?? 999) - (order[b.p.key] ?? 999) || a.i - b.i).map(x => x.p);
+}
+
 function renderNpi(){
-  const timeline = NPI_TIMELINE.map(t => `
+  const sortedTl = npiSortedTimeline();
+  const timeline = sortedTl.map(t => `
     <div class="npi-time-item npi-time-link" data-keys="${t.keys.join(',')}" onclick='gotoNpi(${JSON.stringify(t.keys)})'>
       <div class="t-name">${t.name}</div>
       <div class="t-date"><span class="badge ${npiStatus(t).cls}" style="margin-right:6px">${npiStatus(t).text}</span>${t.date}</div>
@@ -498,7 +520,7 @@ function renderNpi(){
     </div>
   `).join('');
 
-  const cards = NPI_PRODUCTS.map(p => {
+  const cards = npiSortedProducts(sortedTl).map(p => {
     const priceBadges = (p.prices || []).map(pr => `<span class="badge badge-blue">${pr}</span>`).join('');
     const dateBadge = p.date ? `<span class="badge badge-orange">${p.date}</span>` : '';
     const st = NPI_STATUS_BY_KEY[p.key];
