@@ -54,6 +54,10 @@ const NPI_TIMELINE = [
   {keys:['duo'], name:'iPhone Duo 摺疊機', date:'10/16 晚間8點預購・10/23 發售', pre:'2026-10-16', launch:'2026-10-23'},
   {keys:['homepod'], name:'HomePod mini 2', date:'10/15 預購・10/30 發售', pre:'2026-10-15', launch:'2026-10-30'},
   {keys:['appletv'], name:'Apple TV 4K（第 4 代）', date:'10/15 預購・11/13 發售', pre:'2026-10-15', launch:'2026-11-13'},
+  {keys:['mbp14m6'], name:'MacBook Pro 14吋 M6', date:'10/29 01:10 預購・11/6 發售', pre:'2026-10-29', launch:'2026-11-06'},
+  {keys:['imacm6'], name:'iMac 24吋 M6', date:'10/29 01:10 預購・11/6 發售', pre:'2026-10-29', launch:'2026-11-06'},
+  {keys:['ipadmini8'], name:'iPad mini 8（2026）', date:'10/29 01:10 預購・11/6 發售', pre:'2026-10-29', launch:'2026-11-06'},
+  {keys:['mbpproled'], name:'MacBook Pro PROLED XDR（14.2吋／16.3吋）', date:'10/30 09:00 預購・11/6 發售', pre:'2026-10-30', launch:'2026-11-06'},
   {keys:['homeview','homecoll'], name:'Apple HomeView／Home Collection', date:'台灣上市時間未定（無台幣價）'},
 ];
 
@@ -233,6 +237,128 @@ const NPI_PRODUCTS = [
     ],
   },
   {
+    key: 'mbp14m6',
+    icon: '💻',
+    name: 'MacBook Pro 14吋 M6',
+    prices: ['14吋 M6 NT$64,900 起（16GB／1TB）'],
+    date: '11/6 發售（10/29 01:10 預購）',
+    highlights: [
+      '<b>⚠️ 預購時間：</b>台灣官網 10/29（四）凌晨 01:10 開放預購，11/6（五）門市發售；與 PROLED XDR 款（10/30 09:00 預購）時間不同，不要講混',
+      '<b>機型與售價：</b>只有 14 吋（16 吋沒有 M6）；M6｜12 核心 CPU／12 核心 GPU，標配 16GB／1TB SSD，NT$64,900 起；SSD 可選 1TB／2TB／4TB（M5 起跳也是 1TB，M4 為 512GB）',
+      '<b>CPU／GPU：</b>12 核 CPU（2 超級＋4 效能＋6 節能核心）、12 核 GPU（前代 M5：10 核 CPU 為 4 超級＋6 節能、10 核 GPU）；神經網路加速器＋雙 16 核心神經網路引擎（M5 為單 16 核），官方：GPU 比 M5 快約 30%、AI 工作負載快 1.9 倍',
+      '<b>記憶體隱藏門檻：</b>16GB／24GB／32GB；<u>16GB 入門配置頻寬 153GB/s（與 M5 相同），24GB 與 32GB 才是 170GB/s</u>——想要頻寬升級要加價選 24GB 以上',
+      '<b>顯示器：</b>14.2 吋 Liquid Retina XDR（Mini-LED，3024×1964、254 ppi），全螢幕持續亮度 1000 尼特、HDR 峰值 1600 尼特、SDR 1000 尼特（室外），對比 1,000,000:1，P3 廣色域，ProMotion 最高 120Hz；<u>可選配奈米紋理顯示器</u>（與 M5／M4 顯示規格相同）',
+      '<b>無線：</b>Wi-Fi 7（802.11be）、藍牙 6（前代 M5／M4 為 Wi-Fi 6E、藍牙 5.3）',
+      '<b>連接埠：</b>3 個 Thunderbolt 4（USB-C，40Gb/s）、HDMI、SDXC 卡槽、MagSafe 3、3.5mm 耳機孔；<u>Thunderbolt 5 只有 PROLED 款（M5 Pro／Max）才有</u>',
+      '<b>外接螢幕：</b>最多 2 部：兩部 6K 60Hz／4K 165Hz，或一部 8K 60Hz／5K 120Hz／4K 240Hz（M5 Pro 最多 3 部、M5 Max 最多 4 部）',
+      '<b>電池與充電：</b>72.4Wh，影片串流最長 24 小時、無線上網最長 16 小時（M5、M4 同為 24 小時）；盒內 70W USB-C 電源轉接器，使用 140W 以上 USB PD 電源可快速充電',
+      '<b>機身：</b>14 吋 1.55 公斤、厚 1.55 公分（與 M5、M4 同尺寸重量）；顏色太空黑色、銀色（M5、M4 同為太空黑色）',
+      '<b>兩代相同：</b>1200 萬像素 Center Stage 相機（桌上視角）、六揚聲器（空間音訊＋杜比全景聲）、三麥克風、Touch ID 巧控鍵盤、macOS 27、Apple Intelligence 與 Siri AI',
+    ],
+    images: [
+      {label: 'MacBook Pro 14吋 M6 規格速查', img: 'npi-img/mbp14-m6-spec.jpg'},
+    ],
+    imagesTitle: '規格速查',
+    upgrade: [
+      '<b>M4／M5 用戶：</b>機身、螢幕、相機、喇叭都沒變，升級點是 M6 的 CPU／GPU 核心數與 AI 效能、Wi-Fi 7／藍牙 6，以及可選配奈米紋理顯示器；一般文書或輕度剪輯的使用者，現有機型仍夠用，可視預算再評估',
+      '<b>M1／Intel 用戶或第一次買 MacBook Pro：</b>直接選 M6 最划算，起步即 16GB／1TB',
+      '<b>想要觸控螢幕＋動態島＋OLED 或 Thunderbolt 5 的客人：</b>引導看 PROLED XDR 款（NT$97,900 起，搭 M5 Pro／Max），不是這台',
+    ],
+    quotes: [
+      '⚠️ 交機叮嚀：選配奈米紋理顯示器者，只能用盒裝隨附原廠拋光布乾擦，切勿噴酒精或用紙巾猛擦以免傷到微結構。',
+    ],
+  },
+  {
+    key: 'imacm6',
+    icon: '🖥️',
+    name: 'iMac 24吋 M6',
+    prices: ['兩個連接埠 NT$49,900 起', '四個連接埠 NT$57,900 起'],
+    date: '11/6 發售（10/29 01:10 預購）',
+    highlights: [
+      '<b>⚠️ 預購時間：</b>台灣官網 10/29（四）凌晨 01:10 開放預購，11/6（五）發售',
+      '<b>⚠️ 兩種機型要分清楚：</b>M6 分「兩個連接埠」與「四個連接埠」兩款，價格、CPU／GPU 核心、鍵盤、乙太網路都不同（見下方對照）；前代 M4 為四個連接埠款，官網已不販售',
+      '<b>兩個連接埠款（NT$49,900 起）：</b>10 核 CPU（2 超級＋3 效能＋5 節能）／10 核 GPU；記憶體 16GB／24GB；SSD 256GB／512GB／1TB；兩個 Thunderbolt／USB 4 埠；2.5Gb 乙太網路為<u>選配</u>；附「含鎖定鍵的巧控鍵盤」（<u>沒有 Touch ID</u>，可選配含 Touch ID 和數字鍵盤的款式）；重量 4.42 公斤',
+      '<b>四個連接埠款（NT$57,900 起）：</b>12 核 CPU（2 超級＋4 效能＋6 節能）／12 核 GPU；記憶體 16GB／24GB／32GB；SSD 256GB～2TB；四個 Thunderbolt 4 埠；2.5Gb 乙太網路<u>標配</u>；附 Touch ID 巧控鍵盤（可選配數字鍵盤）；重量 4.44 公斤',
+      '<b>晶片共通：</b>M6，神經網路加速器＋雙 16 核心神經網路引擎、硬體加速光追，記憶體頻寬最高 170GB/s（前代 M4：10 核 CPU／10 核 GPU、單 16 核神經網路引擎、120GB/s）；官方：CPU 比 M4 快 1.5 倍、GPU 快 2 倍、AI 算力比 M4 快 2 倍',
+      '<b>顯示器：</b>24 吋 4.5K Retina（4480×2520、218 ppi、500 尼特、P3 廣色域、原彩顯示），實際對角 23.5 吋；規格與 M4 相同',
+      '<b>視訊相機：</b>1200 萬像素 Center Stage 相機（支援桌上視角）、1080p HD 錄影',
+      '<b>連線：</b>Wi-Fi 7（802.11be）、藍牙 6（前代 M4 為 Wi-Fi 6E、藍牙 5.3）',
+      '<b>隨機配件：</b>巧控鍵盤與滑鼠／巧控板；規格圖標示配件全面換成 USB-C 充電，不再附 Lightning 線',
+      '<b>顏色：</b>7 色（藍、綠、粉紅、黃、紫、橙、銀），配件同色系',
+      '<b>兩代相同：</b>高傳真六揚聲器（空間音訊＋杜比全景聲）、錄音室級三麥克風、3.5mm 耳機孔、Apple Intelligence 與 Siri AI、macOS 27',
+    ],
+    upgrade: [
+      '<b>iMac M1／Intel 用戶：</b>升級感強烈（官方：AI 算力比 M1 最高 12 倍、Intel 用戶最高快 18 倍）',
+      '<b>iMac M4 用戶：</b>螢幕、相機、喇叭、麥克風都與 M4 相同，主要差在 M6 晶片、Wi-Fi 7／藍牙 6 與 2.5Gb 乙太網路，一般用途可視預算再評估',
+    ],
+    quotes: [
+      '⚠️ 對客提醒：入門的兩個連接埠款鍵盤<u>沒有 Touch ID</u>（Apple Pay 需 Touch ID 鍵盤）；要 Touch ID、四個 Thunderbolt 4 或標配 2.5Gb 乙太網路，就要看 NT$57,900 起的四個連接埠款。',
+    ],
+  },
+  {
+    key: 'ipadmini8',
+    icon: '📱',
+    name: 'iPad mini 8（2026）',
+    prices: ['Wi-Fi NT$22,900 起', 'Wi-Fi＋行動網路 NT$27,900 起', '教育價 NT$21,290 起'],
+    date: '11/6 發售（10/29 01:10 預購）',
+    highlights: [
+      '<b>⚠️ 預購時間：</b>台灣官網 10/29（四）凌晨 01:10 開放預訂，11/6（五）門市發售',
+      '<b>螢幕：</b>8.5 吋 OLED 超 Retina XDR（2316×1512、326 ppi、P3、原彩顯示），SDR 600 尼特、XDR 全螢幕 600／峰值 1200 尼特（僅 HDR 內容），對比 2,000,000:1；256GB／512GB 機型可選配奈米紋理玻璃（前代 mini 7 為 8.3 吋 LCD，SDR 500 尼特）',
+      '<b>晶片：</b>A20 Pro（前代 A17 Pro），含神經網路加速器、硬體加速光追；128GB／256GB 機型 5 核 CPU／7 核 GPU／16 核神經網路引擎，<u>512GB 機型 6 核 CPU／雙 16 核神經網路引擎</u>；支援 Apple Intelligence 與 Siri AI',
+      '<b>無線：</b>Apple N1 無線晶片，Wi-Fi 7、藍牙 6、支援 Thread（前代 mini 7 為 Wi-Fi 6E／藍牙 5.3）；行動網路款為 Apple C2 數據機，5G（sub-6）＋Gigabit LTE，<u>僅支援 eSIM</u>（不相容實體 SIM 卡）',
+      '<b>機身：</b>厚 5.4mm、寬 132.6mm，重 255g（Wi-Fi）／263g（行動網路）；前代 6.3mm／293g。新增 IP67 防潑、抗水與防塵（水深 1 公尺最長 30 分鐘）',
+      '<b>充電：</b>支援快速充電，約 30 分鐘充至 50%，<u>須使用 35W 或更高功率的 USB-C 電源轉接器（另售）</u>；盒內只有 20W 轉接器與 1 公尺 USB-C 充電連接線，結帳可主動推薦',
+      '<b>音訊：</b>Acoustic Display 系統（立體聲音訊，前代為橫向立體聲揚聲器）',
+      '<b>前置相機：</b>橫向 1200 萬像素 Center Stage 相機（f/2.0），支援人物居中；後置 1200 萬廣角',
+      '<b>儲存容量：</b>128GB／256GB／512GB',
+      '<b>顏色：</b>午夜色、星光色',
+      '<b>手寫筆：</b>支援 Apple Pencil Pro 與 Apple Pencil（USB-C），含懸浮功能；<u>不支援第 2 代 Apple Pencil</u>（mini 6 才是第 2 代）',
+      '<b>兩代相同：</b>頂端 Touch ID、USB-C（最高 10Gb/s，可外接 4K 60Hz 螢幕）、續航 Wi-Fi 最長 10 小時／行動網路 9 小時、iPadOS 27',
+    ],
+    quotes: [
+      '���️ 門市必記：新機僅支援 Pencil Pro 與 USB-C 款；持第 2 代 Apple Pencil 的 mini 6 用戶筆無法沿用，結帳要主動提醒。',
+      '⚠️ 教育優惠（NT$21,290 起）需審查學生／教職證件。',
+    ],
+  },
+  {
+    key: 'mbpproled',
+    icon: '✨',
+    name: 'MacBook Pro 配備 PROLED XDR 顯示器（14.2吋／16.3吋）',
+    tag: '旗艦機皇',
+    prices: ['14.2吋 M5 Pro NT$97,900 起', '14.2吋 M5 Max NT$152,900 起', '16.3吋 M5 Pro NT$114,900 起', '16.3吋 M5 Max NT$159,900 起'],
+    date: '11/6 發售（10/30 09:00 預購）',
+    highlights: [
+      '<b>⚠️ 預購時間：</b>台灣官網 10/30（五）<u>上午 09:00</u> 開放預訂，11/6（五）門市發售——與 M6 款（10/29 01:10）不同，不要講混。教育價 NT$92,900 起（現折 $5,000），需查驗學生／教職證件',
+      '<b>機型與售價（起）：</b>14.2 吋 M5 Pro NT$97,900｜14.2 吋 M5 Max NT$152,900｜16.3 吋 M5 Pro NT$114,900｜16.3 吋 M5 Max NT$159,900；太空黑色、銀色',
+      '<b>14.2 吋 M5 Pro 起步配置：</b>15 核 CPU／16 核 GPU，24GB，1TB（可選 18 核 CPU／20 核 GPU；記憶體 24／48／64GB；SSD 1／2／4TB）；<b>14.2 吋 M5 Max 起步：</b>18 核 CPU／32 核 GPU，36GB，2TB（40 核 GPU 可選配 48／64／128GB；SSD 2／4／8TB，M5 Max 最高可達 16TB）',
+      '<b>16.3 吋 M5 Pro 起步配置：</b>18 核 CPU／20 核 GPU，24GB，1TB；<b>16.3 吋 M5 Max 起步：</b>18 核 CPU／32 核 GPU，36GB，2TB（同樣可升 40 核 GPU、最高 128GB 記憶體）',
+      '<b>顯示面板：</b>串聯式 OLED（Tandem OLED，每個像素疊兩層發光層），取代 Mini-LED；<u>MacBook 首度採用</u>。14.2 吋 3024×1986、16.3 吋 3472×2266（標準款 16.2 吋為 3456×2234）',
+      '<b>觸控：</b>內建多點觸控（Mac 首度支援觸控），感測器直接做進面板、延遲更低；14 吋、16 吋都有',
+      '<b>動態島：</b>Dynamic Island 首度登陸 Mac（整合 Spotlight／即時動態／Siri AI），取代傳統相機凹口',
+      '<b>亮度與對比：</b>全螢幕持續亮度 1000 尼特（與標準款相同），但<u>HDR 與 SDR 峰值都可達 2000 尼特</u>（標準款 HDR 峰值 1600、SDR 1000）；對比度 10,000,000:1（標準款 1,000,000:1），無 Mini-LED 溢光',
+      '<b>色域與校色：</b>P3 ＋ Adobe RGB 廣色域，Rec. 2020 涵蓋率超過 80%；每片面板逐一原廠校準亮度、白點與色域；提供參考模式、Pro Display Calibrator、DICOM 醫療影像模式、Genlock',
+      '<b>連接埠：</b>3 個 Thunderbolt 5（USB-C，120Gb/s，標準 M6 款為 Thunderbolt 4）、HDMI、SDXC、MagSafe 3、3.5mm 耳機孔；Wi-Fi 7、藍牙 6',
+      '<b>記憶體頻寬：</b>M5 Pro 307GB/s；M5 Max 460GB/s（32 核 GPU）／614GB/s（40 核 GPU）',
+      '<b>重量：</b>14.2 吋 M5 Pro 1.38 公斤、M5 Max 1.40 公斤（M6 款 14 吋 1.55 公斤，約輕 150～170g；標準 14 吋 M5 Pro 機型 1.60 公斤）；16.3 吋 M5 Pro 1.82 公斤、M5 Max 1.84 公斤（前代 16 吋 M4 Pro 2.14 公斤）。厚度 14 吋 1.50 公分、16 吋 1.60 公分',
+      '<b>續航（官方影片串流最長）：</b>14.2 吋 M5 Pro 22 小時、M5 Max 20 小時；16.3 吋 M5 Pro 24 小時、M5 Max 22 小時——<u>不是每台都 24 小時</u>，對客別直接講「24 小時」',
+      '<b>電源轉接器：</b>14 吋 M5 Pro 15 核款隨附 70W（18 核款與 M5 Max 隨附 140W，15 核款可選配 140W）；16 吋隨附 140W；使用 140W 以上 USB PD 可快速充電',
+      '<b>共同特色：</b>ProMotion 10–120Hz、1200 萬像素 Center Stage 相機（含先進視訊穩定功能）、六揚聲器、可選配奈米紋理玻璃（直接蝕刻在蓋板玻璃上）',
+    ],
+    prosCons: {
+      pros: '串聯式 OLED 純黑零光暈、HDR／SDR 峰值 2000 尼特、Adobe RGB＋逐片原廠校色、Mac 首款多點觸控與動態島、3 個 Thunderbolt 5、機身較輕',
+      cons: '售價高（NT$97,900 起，標準 14 吋 M6 款為 NT$64,900 起）、搭載的是 M5 Pro／Max 而不是 M6、續航 20～24 小時依機型而異、與 M6 款預購時間不同',
+    },
+    audience: '影像／調色／印刷設計、醫療影像、需要參考級螢幕且要隨身帶著走的專業創作者；一般文書或輕度剪輯建議看 14 吋 M6 款',
+    upgrade: [
+      '<b>與 iPad Pro（M5）串聯式 OLED 的差別：</b>同為串聯式 OLED 基礎，PROLED XDR 再加強——峰值亮度 1600→2000 nits（1.25 倍）、SDR 1000→2000 nits（2 倍）、對比 2,000,000:1→10,000,000:1（5 倍）；加入 Adobe RGB、逐片原廠校色、參考模式與面板內嵌觸控；Mac 的奈米紋理改成蝕刻在蓋板玻璃上',
+      '<b>與 M6 款怎麼選：</b>預算與一般效能需求 → 14 吋 M6（NT$64,900 起）；螢幕品質、觸控、Thunderbolt 5 與專業色彩 → PROLED XDR（NT$97,900 起，搭 M5 Pro／Max）',
+    ],
+    quotes: [
+      '⚠️ 選配奈米紋理玻璃只能用盒裝隨附原廠拋光布乾擦。',
+      '⚠️ 部分顯示技術細節來自 Apple 內部資料（Apple Confidential），對客說明請只講官方新聞稿與官網公開的內容。',
+    ],
+  },
+  {
     key: 'homeview',
     icon: '🖥️',
     name: 'Apple HomeView（桌上／壁掛）',
@@ -409,7 +535,7 @@ function renderNpi(){
         bodyHtml += `<div class="section-tag" style="margin-top:14px">客人常見疑問應對（可以講 vs 不要保證）</div>${duoQaBody()}`;
       }
       if (p.images) {
-        bodyHtml += `<div class="section-tag" style="margin-top:14px">配色速查</div>`;
+        bodyHtml += `<div class="section-tag" style="margin-top:14px">${p.imagesTitle || '配色速查'}</div>`;
         bodyHtml += p.images.map((im, idx) => {
           const id = `${p.key}-${idx}`;
           return `
@@ -447,7 +573,7 @@ function renderNpi(){
     <div class="sec-hdr">
       <div>
         <div class="sec-title">2026 Apple 秋季發表會・新品快學</div>
-        <div class="sec-sub">「智慧個人中心」主題發表 · 涵蓋 18 Pro系列／AW S12＆Ultra 4／AirPods 5／Mac mini M6＆M5 Pro／HomePod mini 2／Apple TV 4K 第 4 代／HomeView／Home Collection／iPhone Duo</div>
+        <div class="sec-sub">「智慧個人中心」主題發表 · 涵蓋 18 Pro系列／AW S12＆Ultra 4／AirPods 5／Mac mini M6＆M5 Pro／HomePod mini 2／Apple TV 4K 第 4 代／HomeView／Home Collection／iPhone Duo／MacBook Pro 14吋 M6／iMac M6／iPad mini 8／MacBook Pro PROLED XDR</div>
       </div>
     </div>
     <div class="card" style="padding:14px 18px;margin-bottom:12px">
