@@ -6,13 +6,6 @@
 <title>2026 NPI 新品快學</title>
 <link rel="stylesheet" href="shared/style.css">
 <style>
-.npi-timeline{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px}
-.npi-time-item{flex:1;min-width:200px;background:var(--white);border-radius:12px;padding:14px 16px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
-.npi-time-item .t-name{font-size:13px;font-weight:700;margin-bottom:6px}
-.npi-time-item .t-date{font-size:12px;color:var(--gray)}
-.npi-time-link{cursor:pointer;transition:box-shadow .15s,transform .15s}
-.npi-time-link:hover{box-shadow:0 3px 10px rgba(0,0,0,.12);transform:translateY(-1px)}
-.npi-time-item .t-go{font-size:11.5px;color:var(--blue);margin-top:6px;font-weight:600}
 .plan-card[id^=ncard-]{scroll-margin-top:72px}
 .npi-flash{animation:npiflash 1.4s ease}
 @keyframes npiflash{0%,60%{box-shadow:0 0 0 3px var(--blue)}100%{box-shadow:none}}
@@ -30,6 +23,29 @@
 .npi-qa .a-no{font-size:13px;color:var(--red)}
 .npi-mark{background:#fde68a;color:inherit;border-radius:3px;padding:0 1px}
 .section-tag{font-size:11px;font-weight:700;color:var(--gray);margin:2px 0 10px;letter-spacing:.3px}
+.npi-sched{background:var(--white);border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.06);padding:6px 16px 10px;margin-bottom:14px}
+.npi-sched-grp .section-tag{margin:12px 0 4px}
+.npi-sched-row{display:grid;grid-template-columns:76px minmax(0,1fr) auto 14px;gap:10px;align-items:center;padding:9px 6px;border-bottom:1px solid var(--light);border-radius:8px;font-size:13.5px;cursor:pointer}
+.npi-sched-row:last-child{border-bottom:none}
+.npi-sched-row:hover{background:var(--blue-bg)}
+.npi-sched-row .s-name{font-weight:700}
+.npi-sched-row .s-date{font-size:12px;color:var(--gray);text-align:right}
+.npi-sched-row .s-go{color:var(--blue);font-weight:700}
+.npi-tabs{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px;border-bottom:1.5px solid var(--border);padding-bottom:10px}
+.npi-tab{padding:7px 14px;border-radius:999px;border:1.5px solid var(--border);background:var(--white);font-size:13px;font-weight:600;color:var(--gray);cursor:pointer;font-family:inherit}
+.npi-tab.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.npi-panel{display:none}
+.npi-panel.on{display:block}
+.npi-row{display:grid;grid-template-columns:128px minmax(0,1fr);gap:4px 14px;padding:9px 0;border-bottom:1px solid var(--light);font-size:13.5px;line-height:1.6}
+.npi-row:last-child{border-bottom:none}
+.npi-row .k{font-weight:700;color:var(--gray);font-size:12.5px;padding-top:1px}
+.npi-row.warn{background:var(--orange-bg);border-radius:8px;padding:9px 10px;margin:4px 0;border-bottom:none}
+.npi-row.warn .k{color:var(--orange)}
+@media(max-width:700px){
+  .npi-sched-row{grid-template-columns:70px minmax(0,1fr) 14px}
+  .npi-sched-row .s-date{grid-column:2 / 4;text-align:left}
+  .npi-row{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
@@ -510,15 +526,71 @@ function npiSortedProducts(sortedTl){
     .sort((a,b) => (order[a.p.key] ?? 999) - (order[b.p.key] ?? 999) || a.i - b.i).map(x => x.p);
 }
 
+function npiRows(items){
+  // 「<b>標題：</b>內容」拆成左右兩欄；標題含 ⚠️ 的整列標橘底
+  return items.map(h => {
+    const m = h.match(/^<b>([\s\S]*?)<\/b>([\s\S]*)$/);
+    if(!m) return `<div class="npi-row" style="grid-template-columns:1fr">${h}</div>`;
+    const k = m[1].replace(/[：:]\s*$/, '');
+    return `<div class="npi-row${k.includes('⚠️') ? ' warn' : ''}"><div class="k">${k}</div><div>${m[2]}</div></div>`;
+  }).join('');
+}
+
+function npiPanels(p){
+  const panels = [];
+  if(p.highlights) panels.push({label:'重點規格', html: npiRows(p.highlights)});
+  let fit = '';
+  if(p.prosCons) fit += `<div class="npi-box"><div class="npi-box-title">優點</div>${p.prosCons.pros}</div><div class="npi-box"><div class="npi-box-title">缺點／限制</div>${p.prosCons.cons}</div>`;
+  if(p.audience) fit += `<div class="npi-box"><div class="npi-box-title">適合族群</div>${p.audience}</div>`;
+  if(p.upgrade) fit += `<div class="npi-box"><div class="npi-box-title">換機評估建議</div>${npiRows(p.upgrade.map(u => /^<b>/.test(u) ? u : '<b>建議</b>' + u))}</div>`;
+  if(fit) panels.push({label:'適合誰・換機建議', html: fit});
+  let talk = '';
+  if(p.quotes) talk += `<div class="npi-box"><div class="npi-box-title">對客話術／提醒</div>${p.quotes.map(q => `<div class="npi-quote">${q}</div>`).join('')}</div>`;
+  if(p.extraBody === 'aperture') talk += `<div class="section-tag" style="margin-top:14px">可變光圈｜門市話術</div>${apertureTalkBody()}`;
+  if(p.body === 'duoqa') talk += `<div class="section-tag" style="margin-top:14px">客人常見疑問應對（可以講 vs 不要保證）</div>${duoQaBody()}`;
+  if(talk) panels.push({label:'話術・提醒', html: talk});
+  if(p.images){
+    const imgs = p.images.map((im, idx) => {
+      const id = `${p.key}-${idx}`;
+      return `
+        <div class="plan-card" style="margin-bottom:8px">
+          <div class="plan-hdr" onclick="toggleNpiImg('${id}')">
+            <span class="plan-label" style="font-size:13px">${im.label}</span>
+            <span class="plan-toggle" id="nimg-tog-${id}">▼</span>
+          </div>
+          <div class="plan-body" id="nimg-body-${id}" style="display:none">
+            <img src="${im.img}" style="width:100%;display:block" loading="lazy">
+          </div>
+        </div>`;
+    }).join('');
+    panels.push({label: p.imagesTitle || '配色速查', html: imgs});
+  }
+  return panels;
+}
+
+function npiTab(key, i){
+  document.querySelectorAll(`#nbody-${key} .npi-tab`).forEach((t, n) => t.classList.toggle('on', n === i));
+  document.querySelectorAll(`#nbody-${key} .npi-panel`).forEach((t, n) => t.classList.toggle('on', n === i));
+}
+
 function renderNpi(){
   const sortedTl = npiSortedTimeline();
-  const timeline = sortedTl.map(t => `
-    <div class="npi-time-item npi-time-link" data-keys="${t.keys.join(',')}" onclick='gotoNpi(${JSON.stringify(t.keys)})'>
-      <div class="t-name">${t.name}</div>
-      <div class="t-date"><span class="badge ${npiStatus(t).cls}" style="margin-right:6px">${npiStatus(t).text}</span>${t.date}</div>
-      <div class="t-go">點擊查看 ▸</div>
-    </div>
-  `).join('');
+  const groups = [
+    {title:'未發售／預購中', items: sortedTl.filter(t => t.launch && npiStatus(t).text !== '已發售')},
+    {title:'已發售', items: sortedTl.filter(t => t.launch && npiStatus(t).text === '已發售')},
+    {title:'台灣未上市', items: sortedTl.filter(t => !t.launch)},
+  ].filter(g => g.items.length);
+  const timeline = `<div class="npi-sched">` + groups.map(g => `
+    <div class="npi-sched-grp">
+      <div class="section-tag">${g.title}</div>
+      ${g.items.map(t => `
+        <div class="npi-sched-row" data-keys="${t.keys.join(',')}" onclick='gotoNpi(${JSON.stringify(t.keys)})'>
+          <span class="badge ${npiStatus(t).cls}" style="justify-self:start">${npiStatus(t).text}</span>
+          <span class="s-name">${t.name}</span>
+          <span class="s-date">${t.date}</span>
+          <span class="s-go">▸</span>
+        </div>`).join('')}
+    </div>`).join('') + `</div>`;
 
   const cards = npiSortedProducts(sortedTl).map(p => {
     const priceBadges = (p.prices || []).map(pr => `<span class="badge badge-blue">${pr}</span>`).join('');
@@ -527,53 +599,10 @@ function renderNpi(){
     const statusBadge = st ? `<span class="badge ${st.cls}">${st.text}</span>` : '';
     const tagBadge = p.tag ? `<span class="badge badge-green">${p.tag}</span>` : '';
 
-    let bodyHtml = '';
-    {
-      if (p.highlights) {
-        bodyHtml += `<ul class="npi-hl">${p.highlights.map(h => `<li>${h}</li>`).join('')}</ul>`;
-      }
-      if (p.prosCons) {
-        bodyHtml += `
-          <div class="npi-box">
-            <div class="npi-box-title">優點</div>${p.prosCons.pros}
-          </div>
-          <div class="npi-box">
-            <div class="npi-box-title">缺點／限制</div>${p.prosCons.cons}
-          </div>`;
-      }
-      if (p.audience) {
-        bodyHtml += `<div class="npi-box"><div class="npi-box-title">適合族群</div>${p.audience}</div>`;
-      }
-      if (p.upgrade) {
-        bodyHtml += `<div class="npi-box"><div class="npi-box-title">換機評估建議</div><ul class="npi-hl">${p.upgrade.map(u => `<li>${u}</li>`).join('')}</ul></div>`;
-      }
-      if (p.quotes) {
-        bodyHtml += `<div class="npi-box"><div class="npi-box-title">對客話術／提醒</div>${p.quotes.map(q => `<div class="npi-quote">${q}</div>`).join('')}</div>`;
-      }
-      if (p.extraBody === 'aperture') {
-        bodyHtml += `<div class="section-tag" style="margin-top:14px">可變光圈｜門市話術</div>${apertureTalkBody()}`;
-      }
-      if (p.body === 'duoqa') {
-        bodyHtml += `<div class="section-tag" style="margin-top:14px">客人常見疑問應對（可以講 vs 不要保證）</div>${duoQaBody()}`;
-      }
-      if (p.images) {
-        bodyHtml += `<div class="section-tag" style="margin-top:14px">${p.imagesTitle || '配色速查'}</div>`;
-        bodyHtml += p.images.map((im, idx) => {
-          const id = `${p.key}-${idx}`;
-          return `
-            <div class="plan-card" style="margin-bottom:8px">
-              <div class="plan-hdr" onclick="toggleNpiImg('${id}')">
-                <span class="plan-label" style="font-size:13px">${im.label}</span>
-                <span class="plan-toggle" id="nimg-tog-${id}">▼</span>
-              </div>
-              <div class="plan-body" id="nimg-body-${id}" style="display:none">
-                <img src="${im.img}" style="width:100%;display:block" loading="lazy">
-              </div>
-            </div>
-          `;
-        }).join('');
-      }
-    }
+    const panels = npiPanels(p);
+    const bodyHtml = (panels.length > 1
+      ? `<div class="npi-tabs">${panels.map((pn, i) => `<button class="npi-tab${i === 0 ? ' on' : ''}" onclick="npiTab('${p.key}',${i})">${pn.label}</button>`).join('')}</div>`
+      : '') + panels.map((pn, i) => `<div class="npi-panel${i === 0 ? ' on' : ''}">${pn.html}</div>`).join('');
 
     return `
       <div class="plan-card" id="ncard-${p.key}">
@@ -607,7 +636,9 @@ function renderNpi(){
       </div>
       <div id="npi-count" style="font-size:12px;color:var(--gray);font-weight:600;margin-top:8px;display:none"></div>
     </div>
-    <div class="npi-timeline">${timeline}</div>
+    <div class="section-tag">發售時程（點一下跳到該產品）</div>
+    ${timeline}
+    <div class="section-tag">產品詳細</div>
     ${cards}
   `;
 }
@@ -648,7 +679,7 @@ function npiSearch(v){
   npiAutoOpened = new Set();
   if(!terms.length){
     cards.forEach(c => c.style.display = '');
-    document.querySelectorAll('.npi-time-item').forEach(t => t.style.display = '');
+    document.querySelectorAll('.npi-sched-row, .npi-sched-grp').forEach(t => t.style.display = '');
     countEl.style.display = 'none';
     return;
   }
@@ -664,10 +695,19 @@ function npiSearch(v){
       if(body.style.display === 'none'){ body.style.display = 'block'; document.getElementById('ntog-' + key).textContent = '▲'; npiAutoOpened.add(key); }
       // 配色圖片折疊區不展開，只標示文字
       npiMark(c, terms);
+      // 目前分頁沒有命中時，切到第一個有命中的分頁
+      const panels = [...c.querySelectorAll('.npi-panel')];
+      if(panels.length > 1 && !panels.some(pn => pn.classList.contains('on') && pn.querySelector('mark.npi-mark'))){
+        const i = panels.findIndex(pn => pn.querySelector('mark.npi-mark'));
+        if(i >= 0) npiTab(key, i);
+      }
     }
   });
-  document.querySelectorAll('.npi-time-item').forEach(t => {
+  document.querySelectorAll('.npi-sched-row').forEach(t => {
     t.style.display = t.dataset.keys.split(',').some(k => shown.has(k)) ? '' : 'none';
+  });
+  document.querySelectorAll('.npi-sched-grp').forEach(g => {
+    g.style.display = [...g.querySelectorAll('.npi-sched-row')].some(r => r.style.display !== 'none') ? '' : 'none';
   });
   countEl.style.display = 'block';
   countEl.textContent = shown.size ? `找到 ${shown.size} 張符合的產品卡片` : '找不到符合的內容';
