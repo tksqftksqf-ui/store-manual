@@ -62,7 +62,7 @@
     <a class="entry-card" href="npi.html">
       <div class="entry-icon">🚀</div>
       <div class="entry-title">2026 NPI 新品快學</div>
-      <div class="entry-desc">18 Pro系列／AW S12＆Ultra4／AirPods 5／Mac mini／HomePod mini 2／Apple TV 4K／HomeView／iPhone Duo 賣點話術速覽</div>
+      <div class="entry-desc" id="npi-desc">HomePod mini 2／MacBook Pro M6／iMac M6／iPad mini 8／MacBook Pro PROLED／Apple TV 4K 等新品賣點話術速覽</div>
       <div class="entry-date">最後更新：2026-10-15</div>
     </a>
     <!-- 優惠活動入口已隱藏（內容已整合進檔期活動查詢），activity.html 與資料保留；要恢復把下面註解拿掉
@@ -141,7 +141,19 @@
   </div>
 </div>
 
+<script src="shared/npi-timeline.js?v=20261029"></script>
 <script>
+// 新品快學卡片說明：依 shared/npi-timeline.js 的發售順序，只列還沒發售的（全部都已發售就列全部；讀不到就沿用上面寫死的文字）
+try {
+  var npiEl = document.getElementById('npi-desc');
+  if (npiEl && typeof npiSortedTimeline === 'function')
+    (function(){
+      var all = npiSortedTimeline();
+      var soon = all.filter(function(t){ return t.launch && npiStatus(t).text !== '已發售'; });  // 只列還沒發售的
+      var list = soon.length ? soon : all;
+      npiEl.textContent = list.map(function(t){ return t.short || t.name; }).join('／') + (soon.length ? ' 等新品賣點話術速覽' : ' 賣點話術速覽');
+    })();
+} catch(e) {}
 document.getElementById('today-date').textContent =
   new Date().toLocaleDateString('zh-TW', {year:'numeric', month:'long', day:'numeric'});
 
