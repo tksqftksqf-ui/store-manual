@@ -1,4 +1,4 @@
-const PRODUCTS_VERSION = '1019-1105操盤+1030新品v4';
+const PRODUCTS_VERSION = '1019-1105操盤+1030新品v5';
 const PRODUCTS = [
   // ── MacBook Neo ──
   {cat:'Mac',name:'MacBook Neo',spec:'A18 Pro/6CPU/5GPU/8GB/256GB',color:'胭粉',pid:'267442',mpn:'MHFH4',price:23900},
@@ -132,12 +132,14 @@ const PRODUCTS = [
   {cat:'Mac',name:'iMac 24" M4',spec:'M4/10CPU/10GPU/24GB/512GB',color:'綠',pid:'253488',mpn:'MD2Q4',price:67900},
   {cat:'Mac',name:'iMac 24" M4',spec:'M4/10CPU/10GPU/24GB/512GB',color:'粉紅',pid:'253489',mpn:'MD2U4',price:67900},
   {cat:'Mac',name:'iMac 24" M4',spec:'M4/10CPU/10GPU/16GB/256GB Nano',color:'銀',pid:'253490',mpn:'MD3H4',price:64900},
-  // ── Mac Studio M5 ──
-  {cat:'Mac',name:'Mac Studio M5',spec:'M5 Max/18CPU/32GPU/36GB/512GB',color:'銀',pid:'272715',mpn:'MHL64',price:84900},
-  {cat:'Mac',name:'Mac Studio M5',spec:'M5 Ultra/30CPU/64GPU/96GB/1TB',color:'銀',pid:'272716',mpn:'MHL74',price:199900},
-  // ── Mac Studio M4 Max/M3 Ultra ──
-  {cat:'Mac',name:'Mac Studio M4 Max/M3 Ultra',spec:'M4 Max/14CPU/32GPU/36GB/512GB',color:'銀',pid:'256657',mpn:'MU963',price:84900},
-  {cat:'Mac',name:'Mac Studio M4 Max/M3 Ultra',spec:'M3 Ultra/28CPU/60GPU/96GB/1TB',color:'銀',pid:'256658',mpn:'MU973',price:184900},
+  // ── Mac Studio M5 Max ──
+  {cat:'Mac',name:'Mac Studio M5 Max',spec:'M5 Max/18CPU/32GPU/36GB/512GB',color:'銀',pid:'272715',mpn:'MHL64',price:84900},
+  // ── Mac Studio M5 Ultra ──
+  {cat:'Mac',name:'Mac Studio M5 Ultra',spec:'M5 Ultra/30CPU/64GPU/96GB/1TB',color:'銀',pid:'272716',mpn:'MHL74',price:199900},
+  // ── Mac Studio M4 Max ──
+  {cat:'Mac',name:'Mac Studio M4 Max',spec:'M4 Max/14CPU/32GPU/36GB/512GB',color:'銀',pid:'256657',mpn:'MU963',price:84900},
+  // ── Mac Studio M3 Ultra ──
+  {cat:'Mac',name:'Mac Studio M3 Ultra',spec:'M3 Ultra/28CPU/60GPU/96GB/1TB',color:'銀',pid:'256658',mpn:'MU973',price:184900},
   // ── iPad mini 8.3" 第7代 ──
   {cat:'iPad',name:'iPad mini 8.3" 第7代',spec:'Wi-Fi 128GB',color:'藍',pid:'253160',mpn:'MXN73',price:19900},
   {cat:'iPad',name:'iPad mini 8.3" 第7代',spec:'Wi-Fi 128GB',color:'紫',pid:'253161',mpn:'MXN93',price:19900},
