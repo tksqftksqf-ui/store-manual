@@ -1,4 +1,4 @@
-const PRODUCTS_VERSION = '1019-1105操盤+1030新品v1';
+const PRODUCTS_VERSION = '1019-1105操盤+1030新品v2';
 const PRODUCTS = [
   // ── MacBook Neo ──
   {cat:'Mac',name:'MacBook Neo',spec:'A18 Pro/6CPU/5GPU/8GB/256GB',color:'胭粉',pid:'267442',mpn:'MHFH4',price:23900},
@@ -42,24 +42,6 @@ const PRODUCTS = [
   {cat:'Mac',name:'MacBook Pro 14.2" M6 2026',spec:'M6/12CPU/12GPU/24GB/1TB',color:'銀',pid:'274749',mpn:'MHWX4',price:71900},
   {cat:'Mac',name:'MacBook Pro 14.2" M6 2026',spec:'M6/12CPU/12GPU/32GB/1TB',color:'黑',pid:'274750',mpn:'MHWV4',price:78900},
   {cat:'Mac',name:'MacBook Pro 14.2" M6 2026',spec:'M6/12CPU/12GPU/32GB/1TB',color:'銀',pid:'274751',mpn:'MHWY4',price:78900},
-  // ── MacBook Pro 14.2" M5 Pro OLED 2026 ──
-  {cat:'Mac',name:'MacBook Pro 14.2" M5 Pro OLED 2026',spec:'M5 Pro/15CPU/16GPU/24GB/1TB',color:'銀',pid:'274783',mpn:'MJ2G4',price:97900},
-  {cat:'Mac',name:'MacBook Pro 14.2" M5 Pro OLED 2026',spec:'M5 Pro/15CPU/16GPU/24GB/1TB',color:'黑',pid:'274784',mpn:'MJ2K4',price:97900},
-  {cat:'Mac',name:'MacBook Pro 14.2" M5 Pro OLED 2026',spec:'M5 Pro/18CPU/20GPU/48GB/1TB',color:'銀',pid:'274785',mpn:'MMF54',price:125900},
-  {cat:'Mac',name:'MacBook Pro 14.2" M5 Pro OLED 2026',spec:'M5 Pro/18CPU/20GPU/48GB/1TB',color:'黑',pid:'274786',mpn:'MMF64',price:125900},
-  // ── MacBook Pro 14.2" M5 Max OLED 2026 ──
-  {cat:'Mac',name:'MacBook Pro 14.2" M5 Max OLED 2026',spec:'M5 Max/18CPU/32GPU/36GB/2TB',color:'銀',pid:'274787',mpn:'MJ2J4',price:152900},
-  {cat:'Mac',name:'MacBook Pro 14.2" M5 Max OLED 2026',spec:'M5 Max/18CPU/32GPU/36GB/2TB',color:'黑',pid:'274788',mpn:'MJ2M4',price:152900},
-  // ── MacBook Pro 16.3" M5 Pro OLED 2026 ──
-  {cat:'Mac',name:'MacBook Pro 16.3" M5 Pro OLED 2026',spec:'M5 Pro/18CPU/20GPU/24GB/1TB',color:'銀',pid:'274789',mpn:'MJ2W4',price:114900},
-  {cat:'Mac',name:'MacBook Pro 16.3" M5 Pro OLED 2026',spec:'M5 Pro/18CPU/20GPU/24GB/1TB',color:'黑',pid:'274790',mpn:'MJ304',price:114900},
-  {cat:'Mac',name:'MacBook Pro 16.3" M5 Pro OLED 2026',spec:'M5 Pro/18CPU/20GPU/48GB/1TB',color:'銀',pid:'274791',mpn:'MMF94',price:135900},
-  {cat:'Mac',name:'MacBook Pro 16.3" M5 Pro OLED 2026',spec:'M5 Pro/18CPU/20GPU/48GB/1TB',color:'黑',pid:'274792',mpn:'MMFA4',price:135900},
-  // ── MacBook Pro 16.3" M5 Max OLED 2026 ──
-  {cat:'Mac',name:'MacBook Pro 16.3" M5 Max OLED 2026',spec:'M5 Max/18CPU/32GPU/36GB/2TB',color:'銀',pid:'274793',mpn:'MJ2X4',price:159900},
-  {cat:'Mac',name:'MacBook Pro 16.3" M5 Max OLED 2026',spec:'M5 Max/18CPU/32GPU/36GB/2TB',color:'黑',pid:'274794',mpn:'MJ314',price:159900},
-  {cat:'Mac',name:'MacBook Pro 16.3" M5 Max OLED 2026',spec:'M5 Max/18CPU/40GPU/48GB/2TB',color:'銀',pid:'274795',mpn:'MJ2Y4',price:184900},
-  {cat:'Mac',name:'MacBook Pro 16.3" M5 Max OLED 2026',spec:'M5 Max/18CPU/40GPU/48GB/2TB',color:'黑',pid:'274796',mpn:'MJ334',price:184900},
   // ── MacBook Pro 14.2" M5 2025/2026 ──
   {cat:'Mac',name:'MacBook Pro 14.2" M5 2025/2026',spec:'M5/10CPU/10GPU/16GB/1TB',color:'黑',pid:'263627',mpn:'MDE14',price:61900},
   {cat:'Mac',name:'MacBook Pro 14.2" M5 2025/2026',spec:'M5/10CPU/10GPU/16GB/1TB',color:'銀',pid:'263628',mpn:'MDE54',price:61900},
@@ -84,6 +66,24 @@ const PRODUCTS = [
   {cat:'Mac',name:'MacBook Pro 16.2" M5 Max 2026',spec:'M5 Max/18CPU/32GPU/36GB/2TB',color:'黑',pid:'267408',mpn:'MGED4',price:144900},
   {cat:'Mac',name:'MacBook Pro 16.2" M5 Max 2026',spec:'M5 Max/18CPU/40GPU/48GB/2TB',color:'銀',pid:'267409',mpn:'MGE94',price:169900},
   {cat:'Mac',name:'MacBook Pro 16.2" M5 Max 2026',spec:'M5 Max/18CPU/40GPU/48GB/2TB',color:'黑',pid:'267410',mpn:'MGEE4',price:169900},
+  // ── MacBook Pro 14.2" M5 Pro OLED 2026 ──
+  {cat:'Mac',name:'MacBook Pro 14.2" M5 Pro OLED 2026',spec:'M5 Pro/15CPU/16GPU/24GB/1TB',color:'銀',pid:'274783',mpn:'MJ2G4',price:97900},
+  {cat:'Mac',name:'MacBook Pro 14.2" M5 Pro OLED 2026',spec:'M5 Pro/15CPU/16GPU/24GB/1TB',color:'黑',pid:'274784',mpn:'MJ2K4',price:97900},
+  {cat:'Mac',name:'MacBook Pro 14.2" M5 Pro OLED 2026',spec:'M5 Pro/18CPU/20GPU/48GB/1TB',color:'銀',pid:'274785',mpn:'MMF54',price:125900},
+  {cat:'Mac',name:'MacBook Pro 14.2" M5 Pro OLED 2026',spec:'M5 Pro/18CPU/20GPU/48GB/1TB',color:'黑',pid:'274786',mpn:'MMF64',price:125900},
+  // ── MacBook Pro 14.2" M5 Max OLED 2026 ──
+  {cat:'Mac',name:'MacBook Pro 14.2" M5 Max OLED 2026',spec:'M5 Max/18CPU/32GPU/36GB/2TB',color:'銀',pid:'274787',mpn:'MJ2J4',price:152900},
+  {cat:'Mac',name:'MacBook Pro 14.2" M5 Max OLED 2026',spec:'M5 Max/18CPU/32GPU/36GB/2TB',color:'黑',pid:'274788',mpn:'MJ2M4',price:152900},
+  // ── MacBook Pro 16.3" M5 Pro OLED 2026 ──
+  {cat:'Mac',name:'MacBook Pro 16.3" M5 Pro OLED 2026',spec:'M5 Pro/18CPU/20GPU/24GB/1TB',color:'銀',pid:'274789',mpn:'MJ2W4',price:114900},
+  {cat:'Mac',name:'MacBook Pro 16.3" M5 Pro OLED 2026',spec:'M5 Pro/18CPU/20GPU/24GB/1TB',color:'黑',pid:'274790',mpn:'MJ304',price:114900},
+  {cat:'Mac',name:'MacBook Pro 16.3" M5 Pro OLED 2026',spec:'M5 Pro/18CPU/20GPU/48GB/1TB',color:'銀',pid:'274791',mpn:'MMF94',price:135900},
+  {cat:'Mac',name:'MacBook Pro 16.3" M5 Pro OLED 2026',spec:'M5 Pro/18CPU/20GPU/48GB/1TB',color:'黑',pid:'274792',mpn:'MMFA4',price:135900},
+  // ── MacBook Pro 16.3" M5 Max OLED 2026 ──
+  {cat:'Mac',name:'MacBook Pro 16.3" M5 Max OLED 2026',spec:'M5 Max/18CPU/32GPU/36GB/2TB',color:'銀',pid:'274793',mpn:'MJ2X4',price:159900},
+  {cat:'Mac',name:'MacBook Pro 16.3" M5 Max OLED 2026',spec:'M5 Max/18CPU/32GPU/36GB/2TB',color:'黑',pid:'274794',mpn:'MJ314',price:159900},
+  {cat:'Mac',name:'MacBook Pro 16.3" M5 Max OLED 2026',spec:'M5 Max/18CPU/40GPU/48GB/2TB',color:'銀',pid:'274795',mpn:'MJ2Y4',price:184900},
+  {cat:'Mac',name:'MacBook Pro 16.3" M5 Max OLED 2026',spec:'M5 Max/18CPU/40GPU/48GB/2TB',color:'黑',pid:'274796',mpn:'MJ334',price:184900},
   // ── Mac Mini M6 2026 ──
   {cat:'Mac',name:'Mac Mini M6 2026',spec:'M6/12CPU/12GPU/16GB/256GB',color:'銀',pid:'272711',mpn:'MHQK4',price:29900},
   {cat:'Mac',name:'Mac Mini M6 2026',spec:'M6/12CPU/12GPU/16GB/512GB',color:'銀',pid:'272712',mpn:'MHQL4',price:36900},

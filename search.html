@@ -78,7 +78,7 @@
 
 <div class="main" id="mc"></div>
 
-<script src="shared/products.js?v=1019-1105操盤+1030新品v1"></script>
+<script src="shared/products.js?v=1019-1105操盤+1030新品v2"></script>
 <script src="shared/arrivals-data.js?v=20261027v1"></script>
 <script>
 document.getElementById('products-updated').textContent = '貨號表版本：' + (typeof PRODUCTS_VERSION !== 'undefined' ? PRODUCTS_VERSION : '—');
@@ -136,7 +136,7 @@ function capSortKey(c){ const n = parseInt(c,10); return c.endsWith('TB') ? n*10
 const searchToggled = new Set();
 
 const SERIES_ORDER = {
-  'Mac': ['MacBook Neo','MacBook Air','MacBook Pro','Mac mini','iMac','Mac Studio'],
+  'Mac': ['MacBook Neo','MacBook Air','MacBook Pro','MacBook Pro OLED','Mac mini','iMac','Mac Studio'],
   'iPad': ['iPad mini','iPad A16','iPad Air','iPad Pro'],
   'iPhone': ['iPhone Duo','iPhone 18 Pro','iPhone 18 Pro Max','iPhone 17 Pro','iPhone 17 Pro Max','iPhone 17','iPhone 17e','iPhone Air'],
   'Watch': ['Apple Watch S12','Apple Watch S11','Apple Watch Ultra 4','Apple Watch Ultra 3','Apple Watch SE3'],
@@ -146,6 +146,7 @@ const HIDDEN_SERIES = new Set(['iPhone 16e','iPhone 16','iPhone 16 Plus']);
 function getSeries(cat, name){
   if(cat==='Mac'){
     if(name.startsWith('MacBook Air')) return 'MacBook Air';
+    if(name.startsWith('MacBook Pro') && name.includes('OLED')) return 'MacBook Pro OLED';
     if(name.startsWith('MacBook Pro')) return 'MacBook Pro';
     if(name.startsWith('MacBook Neo')) return 'MacBook Neo';
     if(name.startsWith('Mac Mini')) return 'Mac mini';

@@ -24,7 +24,7 @@
 
 <div class="main" id="mc"></div>
 
-<script src="shared/products.js?v=1019-1105操盤+1030新品v1"></script>
+<script src="shared/products.js?v=1019-1105操盤+1030新品v2"></script>
 <script src="shared/arrivals-data.js?v=20261027v1"></script>
 <script>
 let arrivalQuery = '';
@@ -48,7 +48,7 @@ function clearArrivalFocus(){
 
 // 系列順序比照「檔期活動查詢」，iPhone 16e 雖在該頁隱藏，但到貨頁有貨所以保留（排最後）
 const ARR_SERIES_ORDER = {
-  'Mac': ['MacBook Neo','MacBook Air','MacBook Pro','Mac mini','iMac','Mac Studio'],
+  'Mac': ['MacBook Neo','MacBook Air','MacBook Pro','MacBook Pro OLED','Mac mini','iMac','Mac Studio'],
   'iPad': ['iPad mini','iPad A16','iPad Air','iPad Pro'],
   'iPhone': ['iPhone Duo','iPhone 18 Pro','iPhone 18 Pro Max','iPhone 17 Pro','iPhone 17 Pro Max','iPhone 17','iPhone 17e','iPhone Air','iPhone 16e'],
   'Watch': ['Apple Watch S12','Apple Watch S11','Apple Watch Ultra 4','Apple Watch Ultra 3','Apple Watch SE3'],
@@ -57,6 +57,7 @@ function arrSeriesOf(a){
   const n = a.name;
   if(a.cat==='Mac'){
     if(n.startsWith('MacBook Air')) return 'MacBook Air';
+    if(n.startsWith('MacBook Pro') && n.includes('OLED')) return 'MacBook Pro OLED';
     if(n.startsWith('MacBook Pro')) return 'MacBook Pro';
     if(n.startsWith('MacBook Neo')) return 'MacBook Neo';
     if(n.startsWith('Mac Mini')) return 'Mac mini';
