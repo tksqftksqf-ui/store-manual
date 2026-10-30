@@ -280,6 +280,7 @@ const NPI_PRODUCTS = [
       '<b>連線：</b>Wi-Fi 7（802.11be）、藍牙 6（前代 M4 為 Wi-Fi 6E、藍牙 5.3）',
       '<b>隨機配件：</b>巧控鍵盤與滑鼠／巧控板；規格圖標示配件全面換成 USB-C 充電，不再附 Lightning 線',
       '<b>顏色：</b>7 色（藍、綠、粉紅、黃、紫、橙、銀），配件同色系',
+      '<b>奈米紋理顯示器：</b>四個連接埠款（12 核 CPU／16GB／256GB）有奈米紋理顯示器選配，銀色，NT$64,900（貨號 274768）',
       '<b>兩代相同：</b>高傳真六揚聲器（空間音訊＋杜比全景聲）、錄音室級三麥克風、3.5mm 耳機孔、Apple Intelligence 與 Siri AI、macOS 27',
     ],
     upgrade: [
@@ -325,6 +326,7 @@ const NPI_PRODUCTS = [
     highlights: [
       '<b>⚠️ 預購時間：</b>台灣官網 10/30（五）<u>上午 09:00</u> 開放預訂，11/6（五）門市發售——與 M6 款（10/29 01:10）不同，不要講混。教育價 NT$92,900 起（現折 $5,000），需查驗學生／教職證件',
       '<b>機型與售價（起）：</b>14.2 吋 M5 Pro NT$97,900｜14.2 吋 M5 Max NT$152,900｜16.3 吋 M5 Pro NT$114,900｜16.3 吋 M5 Max NT$159,900；太空黑色、銀色',
+      '<b>現貨配置與售價（貨號清單）：</b>14.2 吋 M5 Pro 15 核 CPU／16 核 GPU／24GB／1TB NT$97,900、18 核 CPU／20 核 GPU／48GB／1TB NT$125,900；14.2 吋 M5 Max 18 核 CPU／32 核 GPU／36GB／2TB NT$152,900｜16.3 吋 M5 Pro 18 核 CPU／20 核 GPU／24GB／1TB NT$114,900、48GB／1TB NT$135,900；16.3 吋 M5 Max 32 核 GPU／36GB／2TB NT$159,900、40 核 GPU／48GB／2TB NT$184,900',
       '<b>14.2 吋 M5 Pro 起步配置：</b>15 核 CPU／16 核 GPU，24GB，1TB（可選 18 核 CPU／20 核 GPU；記憶體 24／48／64GB；SSD 1／2／4TB）；<b>14.2 吋 M5 Max 起步：</b>18 核 CPU／32 核 GPU，36GB，2TB（40 核 GPU 可選配 48／64／128GB；SSD 2／4／8／16TB）',
       '<b>16.3 吋 M5 Pro 起步配置：</b>18 核 CPU／20 核 GPU，24GB，1TB；<b>16.3 吋 M5 Max 起步：</b>18 核 CPU／32 核 GPU，36GB，2TB（同樣可升 40 核 GPU、最高 128GB 記憶體）',
       '<b>顯示面板：</b>串聯式 OLED（Tandem OLED，每個像素疊兩層發光層），取代 Mini-LED；<u>MacBook 首度採用</u>。14.2 吋 3024×1986、16.3 吋 3472×2266（標準款 16.2 吋為 3456×2234）',
@@ -551,7 +553,7 @@ function renderNpi(){
         <div class="npi-sched-row" data-keys="${t.keys.join(',')}" onclick='gotoNpi(${JSON.stringify(t.keys)})'>
           <span class="badge ${npiStatus(t).cls}" style="justify-self:start">${npiStatus(t).text}</span>
           <span class="s-name">${t.name}</span>
-          <span class="s-date">${t.date}</span>
+          <span class="s-date">${npiStatus(t).text === '已發售' ? '' : t.date}</span>
           <span class="s-go">▸</span>
         </div>`).join('')}
     </div>`).join('') + `</div>`;

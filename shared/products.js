@@ -1,4 +1,4 @@
-const PRODUCTS_VERSION = '1019-1105操盤+1028新品v9';
+const PRODUCTS_VERSION = '1019-1105操盤+1030新品v1';
 const PRODUCTS = [
   // ── MacBook Neo ──
   {cat:'Mac',name:'MacBook Neo',spec:'A18 Pro/6CPU/5GPU/8GB/256GB',color:'胭粉',pid:'267442',mpn:'MHFH4',price:23900},
@@ -42,6 +42,24 @@ const PRODUCTS = [
   {cat:'Mac',name:'MacBook Pro 14.2" M6 2026',spec:'M6/12CPU/12GPU/24GB/1TB',color:'銀',pid:'274749',mpn:'MHWX4',price:71900},
   {cat:'Mac',name:'MacBook Pro 14.2" M6 2026',spec:'M6/12CPU/12GPU/32GB/1TB',color:'黑',pid:'274750',mpn:'MHWV4',price:78900},
   {cat:'Mac',name:'MacBook Pro 14.2" M6 2026',spec:'M6/12CPU/12GPU/32GB/1TB',color:'銀',pid:'274751',mpn:'MHWY4',price:78900},
+  // ── MacBook Pro 14.2" M5 Pro OLED 2026 ──
+  {cat:'Mac',name:'MacBook Pro 14.2" M5 Pro OLED 2026',spec:'M5 Pro/15CPU/16GPU/24GB/1TB',color:'銀',pid:'274783',mpn:'MJ2G4',price:97900},
+  {cat:'Mac',name:'MacBook Pro 14.2" M5 Pro OLED 2026',spec:'M5 Pro/15CPU/16GPU/24GB/1TB',color:'黑',pid:'274784',mpn:'MJ2K4',price:97900},
+  {cat:'Mac',name:'MacBook Pro 14.2" M5 Pro OLED 2026',spec:'M5 Pro/18CPU/20GPU/48GB/1TB',color:'銀',pid:'274785',mpn:'MMF54',price:125900},
+  {cat:'Mac',name:'MacBook Pro 14.2" M5 Pro OLED 2026',spec:'M5 Pro/18CPU/20GPU/48GB/1TB',color:'黑',pid:'274786',mpn:'MMF64',price:125900},
+  // ── MacBook Pro 14.2" M5 Max OLED 2026 ──
+  {cat:'Mac',name:'MacBook Pro 14.2" M5 Max OLED 2026',spec:'M5 Max/18CPU/32GPU/36GB/2TB',color:'銀',pid:'274787',mpn:'MJ2J4',price:152900},
+  {cat:'Mac',name:'MacBook Pro 14.2" M5 Max OLED 2026',spec:'M5 Max/18CPU/32GPU/36GB/2TB',color:'黑',pid:'274788',mpn:'MJ2M4',price:152900},
+  // ── MacBook Pro 16.3" M5 Pro OLED 2026 ──
+  {cat:'Mac',name:'MacBook Pro 16.3" M5 Pro OLED 2026',spec:'M5 Pro/18CPU/20GPU/24GB/1TB',color:'銀',pid:'274789',mpn:'MJ2W4',price:114900},
+  {cat:'Mac',name:'MacBook Pro 16.3" M5 Pro OLED 2026',spec:'M5 Pro/18CPU/20GPU/24GB/1TB',color:'黑',pid:'274790',mpn:'MJ304',price:114900},
+  {cat:'Mac',name:'MacBook Pro 16.3" M5 Pro OLED 2026',spec:'M5 Pro/18CPU/20GPU/48GB/1TB',color:'銀',pid:'274791',mpn:'MMF94',price:135900},
+  {cat:'Mac',name:'MacBook Pro 16.3" M5 Pro OLED 2026',spec:'M5 Pro/18CPU/20GPU/48GB/1TB',color:'黑',pid:'274792',mpn:'MMFA4',price:135900},
+  // ── MacBook Pro 16.3" M5 Max OLED 2026 ──
+  {cat:'Mac',name:'MacBook Pro 16.3" M5 Max OLED 2026',spec:'M5 Max/18CPU/32GPU/36GB/2TB',color:'銀',pid:'274793',mpn:'MJ2X4',price:159900},
+  {cat:'Mac',name:'MacBook Pro 16.3" M5 Max OLED 2026',spec:'M5 Max/18CPU/32GPU/36GB/2TB',color:'黑',pid:'274794',mpn:'MJ314',price:159900},
+  {cat:'Mac',name:'MacBook Pro 16.3" M5 Max OLED 2026',spec:'M5 Max/18CPU/40GPU/48GB/2TB',color:'銀',pid:'274795',mpn:'MJ2Y4',price:184900},
+  {cat:'Mac',name:'MacBook Pro 16.3" M5 Max OLED 2026',spec:'M5 Max/18CPU/40GPU/48GB/2TB',color:'黑',pid:'274796',mpn:'MJ334',price:184900},
   // ── MacBook Pro 14.2" M5 2025/2026 ──
   {cat:'Mac',name:'MacBook Pro 14.2" M5 2025/2026',spec:'M5/10CPU/10GPU/16GB/1TB',color:'黑',pid:'263627',mpn:'MDE14',price:61900},
   {cat:'Mac',name:'MacBook Pro 14.2" M5 2025/2026',spec:'M5/10CPU/10GPU/16GB/1TB',color:'銀',pid:'263628',mpn:'MDE54',price:61900},
@@ -674,6 +692,8 @@ const PRODUCTS = [
   {cat:'配件',name:'Lightning 數位 AV 轉接器',spec:'',color:'',pid:'250060',mpn:'MW2P3',price:1690},
   {cat:'配件',name:'Lightning 對 USB 連接線 (1m)',spec:'',color:'',pid:'246574',mpn:'MUQW3',price:590},
   // ── USB-C 電源轉接器 ──
+  {cat:'配件',name:'140W USB-C 電源轉接器 (新款)',spec:'',color:'',pid:'274798',mpn:'MKFQ4',price:2990},
+  {cat:'配件',name:'70W USB-C 電源轉接器 (新款)',spec:'',color:'',pid:'274797',mpn:'MKFP4',price:1790},
   {cat:'配件',name:'140W USB-C 電源轉接器',spec:'',color:'',pid:'267420',mpn:'MHY14',price:2990},
   {cat:'配件',name:'70W USB-C 電源轉接器',spec:'',color:'',pid:'267419',mpn:'MHXY4',price:1790},
   {cat:'配件',name:'40W 動態電源轉接器',spec:'',color:'',pid:'262382',mpn:'MGKQ4',price:1190},
@@ -681,6 +701,8 @@ const PRODUCTS = [
   {cat:'配件',name:'96W USB-C 電源轉接器',spec:'',color:'',pid:'250810',mpn:'MW2L3',price:2290},
   {cat:'配件',name:'35W 雙 USB-C 埠電源轉接器',spec:'',color:'',pid:'246571',mpn:'MW2K3',price:1790},
   {cat:'配件',name:'20W USB-C 電源轉接器',spec:'',color:'',pid:'246569',mpn:'MWVV3',price:590},
+  {cat:'配件',name:'電源轉接器延長線 (AC連接器 2)',spec:'',color:'',pid:'274799',mpn:'MKFR4',price:590},
+  {cat:'配件',name:'全球旅行轉接器套件',spec:'',color:'',pid:'274800',mpn:'MLFR4',price:1190},
   // ── MagSafe ──
   {cat:'配件',name:'iPhone Air MagSafe電池',spec:'',color:'',pid:'262383',mpn:'MGPG4',price:3290},
   {cat:'配件',name:'MagSafe 充電器 (1m)',spec:'',color:'',pid:'262380',mpn:'MGD74',price:1290},
