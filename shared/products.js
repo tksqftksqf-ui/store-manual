@@ -1,4 +1,4 @@
-const PRODUCTS_VERSION = '1019-1105操盤+1030新品v3';
+const PRODUCTS_VERSION = '1019-1105操盤+1030新品v4';
 const PRODUCTS = [
   // ── MacBook Neo ──
   {cat:'Mac',name:'MacBook Neo',spec:'A18 Pro/6CPU/5GPU/8GB/256GB',color:'胭粉',pid:'267442',mpn:'MHFH4',price:23900},
@@ -88,12 +88,14 @@ const PRODUCTS = [
   {cat:'Mac',name:'Mac Mini M6',spec:'M6/12CPU/12GPU/16GB/256GB',color:'銀',pid:'272711',mpn:'MHQK4',price:29900},
   {cat:'Mac',name:'Mac Mini M6',spec:'M6/12CPU/12GPU/16GB/512GB',color:'銀',pid:'272712',mpn:'MHQL4',price:36900},
   {cat:'Mac',name:'Mac Mini M6',spec:'M6/12CPU/12GPU/24GB/512GB',color:'銀',pid:'272713',mpn:'MHQM4',price:43900},
-  {cat:'Mac',name:'Mac Mini M6',spec:'M5 Pro/15CPU/16GPU/24GB/512GB',color:'銀',pid:'272714',mpn:'MHQN4',price:59900},
+  // ── Mac Mini M5 Pro ──
+  {cat:'Mac',name:'Mac Mini M5 Pro',spec:'M5 Pro/15CPU/16GPU/24GB/512GB',color:'銀',pid:'272714',mpn:'MHQN4',price:59900},
   // ── Mac Mini M4 ──
   {cat:'Mac',name:'Mac Mini M4',spec:'M4/10CPU/10GPU/16GB/256GB',color:'銀',pid:'253544',mpn:'MU9D3',price:26900},
   {cat:'Mac',name:'Mac Mini M4',spec:'M4/10CPU/10GPU/16GB/512GB',color:'銀',pid:'253545',mpn:'MU9E3',price:33900},
   {cat:'Mac',name:'Mac Mini M4',spec:'M4/10CPU/10GPU/24GB/512GB',color:'銀',pid:'253546',mpn:'MCYT4',price:40900},
-  {cat:'Mac',name:'Mac Mini M4',spec:'M4 Pro/12CPU/16GPU/24GB/512GB',color:'銀',pid:'253547',mpn:'MCX44',price:54900},
+  // ── Mac Mini M4 Pro ──
+  {cat:'Mac',name:'Mac Mini M4 Pro',spec:'M4 Pro/12CPU/16GPU/24GB/512GB',color:'銀',pid:'253547',mpn:'MCX44',price:54900},
   // ── iMac 24" M6 ──
   {cat:'Mac',name:'iMac 24" M6',spec:'M6/10CPU/10GPU/16GB/256GB',color:'銀',pid:'274752',mpn:'MH064',price:49900},
   {cat:'Mac',name:'iMac 24" M6',spec:'M6/10CPU/10GPU/16GB/256GB',color:'綠',pid:'274753',mpn:'MH084',price:49900},
