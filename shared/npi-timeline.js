@@ -9,7 +9,7 @@ const NPI_TIMELINE = [
   {keys:['mbp14m6'], short:'MacBook Pro M6', name:'MacBook Pro 14吋 M6', date:'10/29 01:10 預購・11/6 發售', pre:'2026-10-29', launch:'2026-11-06'},
   {keys:['imacm6'], short:'iMac M6', name:'iMac 24吋 M6', date:'10/29 01:10 預購・11/6 發售', pre:'2026-10-29', launch:'2026-11-06'},
   {keys:['ipadmini8'], short:'iPad mini 8', name:'iPad mini 8（2026）', date:'10/29 01:10 預購・11/6 發售', pre:'2026-10-29', launch:'2026-11-06'},
-  {keys:['mbpproled'], short:'MacBook Pro PROLED', name:'MacBook Pro PROLED XDR（14.2吋／16.3吋）', date:'10/30 09:00 預購・11/6 發售', pre:'2026-10-30', launch:'2026-11-06'},
+  {keys:['mbpproled'], short:'MacBook Pro PROLED', name:'MacBook Pro PROLED XDR（14.2吋／16.2吋）', date:'10/30 09:00 預購・11/6 發售', pre:'2026-10-30', launch:'2026-11-06'},
   {keys:['homeview','homecoll'], short:'HomeView', name:'Apple HomeView／Home Collection', date:'台灣上市時間未定（無台幣價）'},
 ];
 
