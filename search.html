@@ -78,7 +78,7 @@
 
 <div class="main" id="mc"></div>
 
-<script src="shared/products.js?v=1019-1105操盤+1030新品v5"></script>
+<script src="shared/products.js?v=20261030"></script>
 <script src="shared/arrivals-data.js?v=20261030v1"></script>
 <script>
 document.getElementById('products-updated').textContent = '貨號表版本：' + (typeof PRODUCTS_VERSION !== 'undefined' ? PRODUCTS_VERSION : '—');
@@ -142,7 +142,7 @@ const SERIES_ORDER = {
   'Watch': ['Apple Watch S12','Apple Watch S11','Apple Watch Ultra 4','Apple Watch Ultra 3','Apple Watch SE3'],
 };
 // 檔期活動查詢頁不顯示的系列（資料仍保留在 products.js，其他頁面照常使用）
-const HIDDEN_SERIES = new Set(['iPhone 16e','iPhone 16','iPhone 16 Plus']);
+const HIDDEN_SERIES = new Set(['iPhone 16e','iPhone 16']);
 function getSeries(cat, name){
   if(cat==='Mac'){
     if(name.startsWith('MacBook Air')) return 'MacBook Air';
@@ -166,7 +166,6 @@ function getSeries(cat, name){
     if(name.startsWith('iPhone 17')) return 'iPhone 17';
     if(name.startsWith('iPhone Air')) return 'iPhone Air';
     if(name.startsWith('iPhone 16e')) return 'iPhone 16e';
-    if(name.startsWith('iPhone 16 Plus')) return 'iPhone 16 Plus';
     if(name.startsWith('iPhone 16')) return 'iPhone 16';
     if(name.startsWith('iPhone 18 Pro Max')) return 'iPhone 18 Pro Max';
     if(name.startsWith('iPhone 18 Pro')) return 'iPhone 18 Pro';
@@ -179,26 +178,39 @@ function getSeries(cat, name){
     if(name.includes('S12')) return 'Apple Watch S12';
     if(name.includes('S11')) return 'Apple Watch S11';
   }
+  if(cat==='配件') return ACCESSORY_GROUP[name]||'其他';
+  if(cat==='軟體') return getSoftwareGroup(name);
   return null;
+}
+const SOFTWARE_GROUP_ORDER = ['Office 2024','Office 365','Windows 11','Parallels'];
+function getSoftwareGroup(name){
+  if(name.startsWith('Office 2024')) return 'Office 2024';
+  if(name.startsWith('Office 365')) return 'Office 365';
+  if(name.startsWith('Windows 11')) return 'Windows 11';
+  if(name.startsWith('Parallels')) return 'Parallels';
+  return '其他';
 }
 
 const ACCESSORY_GROUP_ORDER = ['AirPods/耳機','Apple TV/週邊','Apple Pencil','Studio Display','滑鼠鍵盤','耳機轉接/連接線','充電器/電源','HomePod','AirTag','iPad鍵盤/保護','iPhone保護殼/卡套'];
+// 配件、軟體也走「類別 → 分類 → 品名」三層選單：分類沿用系列列（series-row）
+SERIES_ORDER['配件'] = ACCESSORY_GROUP_ORDER;
+SERIES_ORDER['軟體'] = SOFTWARE_GROUP_ORDER;
+if(searchCat==='配件' && searchSeries==='all' && ACCESSORY_GROUP_ORDER.includes(searchSub)){ searchSeries = searchSub; searchSub = 'all'; } // 舊網址 sub=分類 → 改成 series
 const ACCESSORY_GROUP = {
   'Apple Magic Mouse':'滑鼠鍵盤','Magic Trackpad':'滑鼠鍵盤','Magic Keyboard 繁中':'滑鼠鍵盤','Magic Keyboard 繁中 含數字鍵':'滑鼠鍵盤','Magic Keyboard 含TouchID與數字鍵盤 繁中':'滑鼠鍵盤','Magic Keyboard 含Touch ID 繁中':'滑鼠鍵盤',
   'Studio Display 標準玻璃 可調斜度支架':'Studio Display','Studio Display 標準玻璃 可調斜度高度支架':'Studio Display','Studio Display 標準玻璃 VESA吊架':'Studio Display','Studio Display Nano texture 可調斜度支架 CTO':'Studio Display','Studio Display Nano texture 可調斜度高度支架 CTO':'Studio Display','Studio Display Nano texture VESA吊架 CTO':'Studio Display','Studio Display XDR 標準玻璃 可調斜度高度支架 CTO':'Studio Display','Studio Display XDR 標準玻璃 VESA吊架 CTO':'Studio Display',
   'EarPods (3.5mm耳機接頭)':'耳機轉接/連接線','EarPods (Lightning 連接器)':'耳機轉接/連接線','EarPods (USB-C)':'耳機轉接/連接線','Lightning 對 USB 連接線 (1m)':'耳機轉接/連接線','Lightning 數位 AV 轉接器':'耳機轉接/連接線','Lightning 對 USB 3 相機轉接器':'耳機轉接/連接線','USB-C 對 3.5mm耳機插孔轉接器':'耳機轉接/連接線','USB-C 對 3.5mm 音訊連接線 (1.2m)':'耳機轉接/連接線','USB-C 對 USB 轉接器':'耳機轉接/連接線','USB-C 對 SD 卡讀卡機':'耳機轉接/連接線','USB-C Digital AV 多埠轉接器':'耳機轉接/連接線','Thunderbolt 4 Pro連接線 (3m)':'耳機轉接/連接線','Thunderbolt 5 Pro連接線 (1m)':'耳機轉接/連接線',
-  'Apple TV 4K 64GB (2022)':'Apple TV/週邊','Apple TV 4K 128GB (2022)':'Apple TV/週邊','Siri Remote':'Apple TV/週邊','Siri Remote (新款)':'Apple TV/週邊','Apple TV 4K (新款)':'Apple TV/週邊',
+  'Apple TV 4K 64GB (2022)':'Apple TV/週邊','Apple TV 4K 128GB (2022)':'Apple TV/週邊','Siri Remote':'Apple TV/週邊','Siri Remote (2026)':'Apple TV/週邊','Apple TV 4K 128GB (2026)':'Apple TV/週邊',
   'Beats USB-C對USB-C編織線 1.5M':'充電器/電源','Beats USB-C對Lightning編織線 1.5M':'充電器/電源','磁性充電器對 USB-C線 (1m)':'充電器/電源','60W USB-C 充電連接線 (1m)':'充電器/電源','240W USB-C 充電連接線 (2m)':'充電器/電源','USB-C 對 Lightning 線 (1m)':'充電器/電源','USB-C 對 Lightning 線 (2m)':'充電器/電源','iPhone Air MagSafe電池':'充電器/電源','MagSafe 充電器 (1m)':'充電器/電源','MagSafe 充電器 (2m)':'充電器/電源','85W MagSafe 2 電源轉換器':'充電器/電源','USB-C對MagSafe 3 連接線 (2m)':'充電器/電源','20W USB-C 電源轉接器':'充電器/電源','140W USB-C 電源轉接器 (新款)':'充電器/電源','70W USB-C 電源轉接器 (新款)':'充電器/電源','電源轉接器延長線 (AC連接器 2)':'充電器/電源','全球旅行轉接器套件':'充電器/電源','35W 雙 USB-C 埠小型電源轉接器':'充電器/電源','35W 雙 USB-C 埠電源轉接器':'充電器/電源','40W 動態電源轉接器':'充電器/電源','70W USB-C 電源轉接器':'充電器/電源','96W USB-C 電源轉接器':'充電器/電源','140W USB-C 電源轉接器':'充電器/電源',
   'Apple Pencil 筆尖4件裝':'Apple Pencil','Apple Pencil (USB-C)':'Apple Pencil','Apple Pencil 第一代':'Apple Pencil','Apple Pencil 第二代':'Apple Pencil','Apple Pencil Pro':'Apple Pencil',
   'AirPods 4':'AirPods/耳機','AirPods 4 主動式降噪':'AirPods/耳機','AirPods 5':'AirPods/耳機','AirPods 5（配備無線充電盒）':'AirPods/耳機','AirPods Pro 第三代':'AirPods/耳機','AirPods Max':'AirPods/耳機','AirPods Max 2':'AirPods/耳機','PowerBeats Pro 2':'AirPods/耳機',
   'HomePod mini':'HomePod','HomePod mini 2':'HomePod','HomePod (2023)':'HomePod','HomePod':'HomePod',
   'AirTag 1件裝':'AirTag','AirTag 4件裝':'AirTag','AirTag 2 1件裝':'AirTag','AirTag 2 4件裝':'AirTag',
   'iPad mini 聰穎雙面夾':'iPad鍵盤/保護','iPad mini A20 Pro 聰穎雙面夾':'iPad鍵盤/保護','iPad A16 聰穎雙面夾':'iPad鍵盤/保護','iPad A16 巧控鍵盤雙面夾':'iPad鍵盤/保護','iPad Air 11吋 M3 巧控鍵盤':'iPad鍵盤/保護','iPad Air 13吋 M3 巧控鍵盤':'iPad鍵盤/保護','iPad Pro 11吋 M4 巧控鍵盤':'iPad鍵盤/保護','iPad Pro 13吋 M4 巧控鍵盤':'iPad鍵盤/保護','iPad Air 13吋 M2 聰穎雙面夾':'iPad鍵盤/保護','iPad Pro 11吋 M4 聰穎雙面夾':'iPad鍵盤/保護','iPad Pro 13吋 M4 聰穎雙面夾':'iPad鍵盤/保護',
-  '斜背掛繩':'iPhone保護殼/卡套','iPhone 18 Pro MagSafe 透明保護殼':'iPhone保護殼/卡套','iPhone 18 Pro MagSafe 矽膠保護殼':'iPhone保護殼/卡套','iPhone 18 Pro MagSafe 織紋保護殼':'iPhone保護殼/卡套','iPhone 18 Pro Max MagSafe 透明保護殼':'iPhone保護殼/卡套','iPhone 18 Pro Max MagSafe 矽膠保護殼':'iPhone保護殼/卡套','iPhone 18 Pro Max MagSafe 織紋保護殼':'iPhone保護殼/卡套','iPhone 16e 矽膠保護殼':'iPhone保護殼/卡套','iPhone 16e MagSafe 透明保護殼':'iPhone保護殼/卡套','iPhone 17e 矽膠保護殼':'iPhone保護殼/卡套','iPhone Air MagSafe保護殼':'iPhone保護殼/卡套','iPhone Air 防護邊框':'iPhone保護殼/卡套','iPhone 17 MagSafe 透明保護殼':'iPhone保護殼/卡套','iPhone 17 MagSafe 矽膠保護殼':'iPhone保護殼/卡套','iPhone 17 Pro MagSafe 透明保護殼':'iPhone保護殼/卡套','iPhone 17 Pro MagSafe 矽膠保護殼':'iPhone保護殼/卡套','iPhone 17 Pro MagSafe 科技織紋':'iPhone保護殼/卡套','iPhone 17 Pro Max MagSafe 透明保護殼':'iPhone保護殼/卡套','iPhone 17 Pro Max MagSafe 矽膠保護殼':'iPhone保護殼/卡套','iPhone 17 Pro Max MagSafe 科技織紋':'iPhone保護殼/卡套','精細織紋卡套':'iPhone保護殼/卡套',
+  '斜背掛繩':'iPhone保護殼/卡套','iPhone Duo 保護殼':'iPhone保護殼/卡套','iPhone Duo 支架雙面夾':'iPhone保護殼/卡套','iPhone 18 Pro MagSafe 透明保護殼':'iPhone保護殼/卡套','iPhone 18 Pro MagSafe 矽膠保護殼':'iPhone保護殼/卡套','iPhone 18 Pro MagSafe 織紋保護殼':'iPhone保護殼/卡套','iPhone 18 Pro Max MagSafe 透明保護殼':'iPhone保護殼/卡套','iPhone 18 Pro Max MagSafe 矽膠保護殼':'iPhone保護殼/卡套','iPhone 18 Pro Max MagSafe 織紋保護殼':'iPhone保護殼/卡套','iPhone 17e MagSafe 透明保護殼':'iPhone保護殼/卡套','iPhone 17e 矽膠保護殼':'iPhone保護殼/卡套','iPhone Air MagSafe保護殼':'iPhone保護殼/卡套','iPhone Air 防護邊框':'iPhone保護殼/卡套','iPhone 17 MagSafe 透明保護殼':'iPhone保護殼/卡套','iPhone 17 MagSafe 矽膠保護殼':'iPhone保護殼/卡套','iPhone 17 Pro MagSafe 透明保護殼':'iPhone保護殼/卡套','iPhone 17 Pro MagSafe 矽膠保護殼':'iPhone保護殼/卡套','iPhone 17 Pro MagSafe 科技織紋':'iPhone保護殼/卡套','iPhone 17 Pro Max MagSafe 透明保護殼':'iPhone保護殼/卡套','iPhone 17 Pro Max MagSafe 矽膠保護殼':'iPhone保護殼/卡套','iPhone 17 Pro Max MagSafe 科技織紋':'iPhone保護殼/卡套','精細織紋卡套':'iPhone保護殼/卡套',
 };
 function getSubOptions(cat){
-  if(cat==='配件') return ACCESSORY_GROUP_ORDER;
-  if(cat==='Mac'||cat==='iPad'||cat==='iPhone'||cat==='Watch'){
+  if(cat==='Mac'||cat==='iPad'||cat==='iPhone'||cat==='Watch'||cat==='配件'||cat==='軟體'){
     if(searchSeries==='all') return null; // 先選系列，機型選項才展開
     const seen = new Set(), out = [];
     for(const p of PRODUCTS){
@@ -216,7 +228,6 @@ function matchesSeries(p){
 }
 function matchesSub(p){
   if(searchSub==='all') return true;
-  if(p.cat==='配件') return (ACCESSORY_GROUP[p.name]||'其他') === searchSub;
   return p.name === searchSub;
 }
 function selectCat(c){
@@ -269,7 +280,7 @@ function renderSeriesMenu(){
   for(const s of opts){
     const btn = document.createElement('button');
     btn.className = 'series-btn';
-    btn.textContent = s === 'all' ? '全部系列' : s;
+    btn.textContent = s === 'all' ? (searchCat==='配件'||searchCat==='軟體' ? '全部分類' : '全部系列') : s;
     const on = s === searchSeries;
     btn.style.cssText = `padding:4px 12px;border-radius:16px;border:1.5px solid ${on?'var(--blue)':'var(--border)'};background:${on?'var(--blue-bg)':'var(--white)'};color:${on?'var(--blue)':'var(--gray)'};font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .13s`;
     btn.addEventListener('click', () => selectSeries(s));
@@ -287,7 +298,7 @@ function renderSubMenu(){
   for(const s of opts){
     const btn = document.createElement('button');
     btn.className = 'sub-cat-btn';
-    btn.textContent = s === 'all' ? '全部' : s;
+    btn.textContent = s === 'all' ? (searchCat==='配件'||searchCat==='軟體' ? '全部品名' : '全部') : s;
     const on = s === searchSub;
     btn.style.cssText = `padding:4px 12px;border-radius:16px;border:1.5px solid ${on?'var(--green)':'var(--border)'};background:${on?'var(--green-bg)':'var(--white)'};color:${on?'var(--green)':'var(--gray)'};font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .13s`;
     btn.addEventListener('click', () => selectSub(s));
@@ -346,22 +357,22 @@ const EDU_DISCOUNT = {
   '253181': 1700,
   '253182': 1700,
   '253183': 1700,
-  '253474': 1710,
-  '253475': 1710,
-  '253476': 1710,
-  '253477': 1710,
-  '253478': 3410,
-  '253479': 3410,
-  '253480': 3410,
-  '253481': 3410,
-  '253482': 3410,
-  '253483': 3410,
-  '253484': 3410,
-  '253485': 3410,
-  '253486': 3410,
-  '253487': 3410,
-  '253488': 3410,
-  '253489': 3410,
+  '253474': 1750,
+  '253475': 1750,
+  '253476': 1750,
+  '253477': 1750,
+  '253478': 3500,
+  '253479': 3500,
+  '253480': 3500,
+  '253481': 3500,
+  '253482': 3500,
+  '253483': 3500,
+  '253484': 3500,
+  '253485': 3500,
+  '253486': 3500,
+  '253487': 3500,
+  '253488': 3500,
+  '253489': 3500,
   '253544': 3410, // Mac mini M4 256GB：Emily 10/14 確認折 $3,410，使用貨號待查
   '253545': 3410,
   '253546': 3410,
@@ -842,8 +853,9 @@ const EDU_CODE_GROUPS = {
   '269618':['262300','262301','262302','262303','262304','262305','262306','262307','273260','273261','273262','273263','273264','273265','273266','273267'],
   '269619':['262324','262325','262326','262327','262328','262329','262330','262331','262341','262342','262343','262344','262345','262346','262347','262348'],
   '269620':['262332','262333','262334','262335','262336','262337','262338','262339','262340','262349','262350','262351','262352','262353','262354','262355','262356','262357','262358','262359','262360','273299','273300','273301','273302','273304','273305','273318','273319','273322','273323','273324','273325','273326','273327'],
-  '270806':['253474','253475','253476','253477'],
-  '270807':['253478','253479','253480','253481','253482','253483','253484','253485','253486','253487','253488','253489','253545','253546','253547'],
+  '253560':['253474','253475','253476','253477'],
+  '253561':['253478','253479','253480','253481','253482','253483','253484','253485','253486','253487','253488','253489'],
+  '270807':['253545','253546','253547'],
   '270808':['256657','272715'],
   '270809':['256658'],
   '270810':['267397','267398'],
