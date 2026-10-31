@@ -78,7 +78,7 @@
 
 <div class="main" id="mc"></div>
 
-<script src="shared/products.js?v=20261030"></script>
+<script src="shared/products.js?v=20261030v2"></script>
 <script src="shared/arrivals-data.js?v=20261030v1"></script>
 <script>
 document.getElementById('products-updated').textContent = '貨號表版本：' + (typeof PRODUCTS_VERSION !== 'undefined' ? PRODUCTS_VERSION : '—');
@@ -182,6 +182,8 @@ function getSeries(cat, name){
   if(cat==='軟體') return getSoftwareGroup(name);
   return null;
 }
+// 檔期活動查詢頁不顯示的配件分類（資料仍保留在 products.js）
+const HIDDEN_ACC_GROUP = new Set(['iPhone 17 Pro 系列殼(已隱藏)']);
 const SOFTWARE_GROUP_ORDER = ['Office 2024','Office 365','Windows 11','Parallels'];
 function getSoftwareGroup(name){
   if(name.startsWith('Office 2024')) return 'Office 2024';
@@ -191,7 +193,7 @@ function getSoftwareGroup(name){
   return '其他';
 }
 
-const ACCESSORY_GROUP_ORDER = ['AirPods/耳機','Apple TV/週邊','Apple Pencil','Studio Display','滑鼠鍵盤','耳機轉接/連接線','充電器/電源','HomePod','AirTag','iPad鍵盤/保護','iPhone保護殼/卡套'];
+const ACCESSORY_GROUP_ORDER = ['AirPods/耳機','Apple TV/週邊','Apple Pencil','Studio Display','滑鼠鍵盤','耳機轉接/連接線','充電器/電源','HomePod','AirTag','iPad鍵盤/保護','iPhone Duo 殼/夾', 'iPhone 18 系列殼', 'iPhone 17/17e/Air 殼', '卡套/掛繩'];
 // 配件、軟體也走「類別 → 分類 → 品名」三層選單：分類沿用系列列（series-row）
 SERIES_ORDER['配件'] = ACCESSORY_GROUP_ORDER;
 SERIES_ORDER['軟體'] = SOFTWARE_GROUP_ORDER;
@@ -207,7 +209,7 @@ const ACCESSORY_GROUP = {
   'HomePod mini':'HomePod','HomePod mini 2':'HomePod','HomePod (2023)':'HomePod','HomePod':'HomePod',
   'AirTag 1件裝':'AirTag','AirTag 4件裝':'AirTag','AirTag 2 1件裝':'AirTag','AirTag 2 4件裝':'AirTag',
   'iPad mini 聰穎雙面夾':'iPad鍵盤/保護','iPad mini A20 Pro 聰穎雙面夾':'iPad鍵盤/保護','iPad A16 聰穎雙面夾':'iPad鍵盤/保護','iPad A16 巧控鍵盤雙面夾':'iPad鍵盤/保護','iPad Air 11吋 M3 巧控鍵盤':'iPad鍵盤/保護','iPad Air 13吋 M3 巧控鍵盤':'iPad鍵盤/保護','iPad Pro 11吋 M4 巧控鍵盤':'iPad鍵盤/保護','iPad Pro 13吋 M4 巧控鍵盤':'iPad鍵盤/保護','iPad Air 13吋 M2 聰穎雙面夾':'iPad鍵盤/保護','iPad Pro 11吋 M4 聰穎雙面夾':'iPad鍵盤/保護','iPad Pro 13吋 M4 聰穎雙面夾':'iPad鍵盤/保護',
-  '斜背掛繩':'iPhone保護殼/卡套','iPhone Duo 保護殼':'iPhone保護殼/卡套','iPhone Duo 支架雙面夾':'iPhone保護殼/卡套','iPhone 18 Pro MagSafe 透明保護殼':'iPhone保護殼/卡套','iPhone 18 Pro MagSafe 矽膠保護殼':'iPhone保護殼/卡套','iPhone 18 Pro MagSafe 織紋保護殼':'iPhone保護殼/卡套','iPhone 18 Pro Max MagSafe 透明保護殼':'iPhone保護殼/卡套','iPhone 18 Pro Max MagSafe 矽膠保護殼':'iPhone保護殼/卡套','iPhone 18 Pro Max MagSafe 織紋保護殼':'iPhone保護殼/卡套','iPhone 17e MagSafe 透明保護殼':'iPhone保護殼/卡套','iPhone 17e 矽膠保護殼':'iPhone保護殼/卡套','iPhone Air MagSafe保護殼':'iPhone保護殼/卡套','iPhone Air 防護邊框':'iPhone保護殼/卡套','iPhone 17 MagSafe 透明保護殼':'iPhone保護殼/卡套','iPhone 17 MagSafe 矽膠保護殼':'iPhone保護殼/卡套','iPhone 17 Pro MagSafe 透明保護殼':'iPhone保護殼/卡套','iPhone 17 Pro MagSafe 矽膠保護殼':'iPhone保護殼/卡套','iPhone 17 Pro MagSafe 科技織紋':'iPhone保護殼/卡套','iPhone 17 Pro Max MagSafe 透明保護殼':'iPhone保護殼/卡套','iPhone 17 Pro Max MagSafe 矽膠保護殼':'iPhone保護殼/卡套','iPhone 17 Pro Max MagSafe 科技織紋':'iPhone保護殼/卡套','精細織紋卡套':'iPhone保護殼/卡套',
+  '斜背掛繩':'卡套/掛繩','精細織紋卡套 (18)':'卡套/掛繩','iPhone Duo 保護殼':'iPhone Duo 殼/夾','iPhone Duo 支架雙面夾':'iPhone Duo 殼/夾','iPhone 18 Pro MagSafe 透明保護殼':'iPhone 18 系列殼','iPhone 18 Pro MagSafe 矽膠保護殼':'iPhone 18 系列殼','iPhone 18 Pro MagSafe 織紋保護殼':'iPhone 18 系列殼','iPhone 18 Pro Max MagSafe 透明保護殼':'iPhone 18 系列殼','iPhone 18 Pro Max MagSafe 矽膠保護殼':'iPhone 18 系列殼','iPhone 18 Pro Max MagSafe 織紋保護殼':'iPhone 18 系列殼','iPhone 17e MagSafe 透明保護殼':'iPhone 17/17e/Air 殼','iPhone 17e 矽膠保護殼':'iPhone 17/17e/Air 殼','iPhone Air MagSafe保護殼':'iPhone 17/17e/Air 殼','iPhone Air 防護邊框':'iPhone 17/17e/Air 殼','iPhone 17 MagSafe 透明保護殼':'iPhone 17/17e/Air 殼','iPhone 17 MagSafe 矽膠保護殼':'iPhone 17/17e/Air 殼','iPhone 17 Pro MagSafe 透明保護殼':'iPhone 17 Pro 系列殼(已隱藏)','iPhone 17 Pro MagSafe 矽膠保護殼':'iPhone 17 Pro 系列殼(已隱藏)','iPhone 17 Pro MagSafe 科技織紋':'iPhone 17 Pro 系列殼(已隱藏)','iPhone 17 Pro Max MagSafe 透明保護殼':'iPhone 17 Pro 系列殼(已隱藏)','iPhone 17 Pro Max MagSafe 矽膠保護殼':'iPhone 17 Pro 系列殼(已隱藏)','iPhone 17 Pro Max MagSafe 科技織紋':'iPhone 17 Pro 系列殼(已隱藏)','精細織紋卡套':'卡套/掛繩',
 };
 function getSubOptions(cat){
   if(cat==='Mac'||cat==='iPad'||cat==='iPhone'||cat==='Watch'||cat==='配件'||cat==='軟體'){
@@ -1405,6 +1407,7 @@ function updateSearchResults(){
     const matchCat = searchCat === 'all' || p.cat === searchCat;
     if(!matchCat) return false;
     if(p.cat==='iPhone' && HIDDEN_SERIES.has(getSeries(p.cat,p.name))) return false;
+    if(p.cat==='配件' && HIDDEN_ACC_GROUP.has(ACCESSORY_GROUP[p.name])) return false;
     if(!matchesSeries(p)) return false;
     if(!matchesSub(p)) return false;
     if(searchCap !== 'all' && getCap(p) !== searchCap) return false;

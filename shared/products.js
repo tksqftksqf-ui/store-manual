@@ -1,4 +1,4 @@
-const PRODUCTS_VERSION = '20261030';
+const PRODUCTS_VERSION = '20261030v2';
 const PRODUCTS = [
   // ── MacBook Neo ──
   {cat:'Mac',name:'MacBook Neo',spec:'A18 Pro/6CPU/5GPU/8GB/256GB',color:'胭粉',pid:'267442',mpn:'MHFH4',price:23900},
@@ -835,12 +835,12 @@ const PRODUCTS = [
   {cat:'配件',name:'iPhone Air 防護邊框',spec:'',color:'淺藍',pid:'262394',mpn:'MH024',price:1290},
   {cat:'配件',name:'iPhone Air 防護邊框',spec:'',color:'小麥',pid:'262395',mpn:'MH044',price:1290},
   {cat:'配件',name:'iPhone 17e MagSafe 透明保護殼',spec:'',color:'',pid:'267352',mpn:'MHWC4',price:1490},
-  {cat:'配件',name:'精細織紋卡套',spec:'',color:'黑色',pid:'273374',mpn:'MK9L4',price:1890},
-  {cat:'配件',name:'精細織紋卡套',spec:'',color:'野花藍',pid:'273375',mpn:'MK9J4',price:1890},
-  {cat:'配件',name:'精細織紋卡套',spec:'',color:'海軍藍',pid:'273376',mpn:'MKV64',price:1890},
-  {cat:'配件',name:'精細織紋卡套',spec:'',color:'洋紅',pid:'273377',mpn:'MK9G4',price:1890},
-  {cat:'配件',name:'精細織紋卡套',spec:'',color:'勃根地紅',pid:'273378',mpn:'MK9H4',price:1890},
-  {cat:'配件',name:'精細織紋卡套',spec:'',color:'深橄欖',pid:'273379',mpn:'MK9K4',price:1890},
+  {cat:'配件',name:'精細織紋卡套 (18)',spec:'',color:'黑色',pid:'273374',mpn:'MK9L4',price:1890},
+  {cat:'配件',name:'精細織紋卡套 (18)',spec:'',color:'野花藍',pid:'273375',mpn:'MK9J4',price:1890},
+  {cat:'配件',name:'精細織紋卡套 (18)',spec:'',color:'海軍藍',pid:'273376',mpn:'MKV64',price:1890},
+  {cat:'配件',name:'精細織紋卡套 (18)',spec:'',color:'洋紅',pid:'273377',mpn:'MK9G4',price:1890},
+  {cat:'配件',name:'精細織紋卡套 (18)',spec:'',color:'勃根地紅',pid:'273378',mpn:'MK9H4',price:1890},
+  {cat:'配件',name:'精細織紋卡套 (18)',spec:'',color:'深橄欖',pid:'273379',mpn:'MK9K4',price:1890},
   {cat:'配件',name:'精細織紋卡套',spec:'',color:'狐橙',pid:'262430',mpn:'MGH64',price:1890},
   {cat:'配件',name:'精細織紋卡套',spec:'',color:'青苔',pid:'262431',mpn:'MGH74',price:1890},
   {cat:'配件',name:'精細織紋卡套',spec:'',color:'午夜紫',pid:'262432',mpn:'MGH84',price:1890},
