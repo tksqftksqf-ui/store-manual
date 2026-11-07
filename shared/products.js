@@ -1,4 +1,4 @@
-const PRODUCTS_VERSION = '20261030v4';
+const PRODUCTS_VERSION = '20261107v1';
 const PRODUCTS = [
   // ── MacBook Neo ──
   {cat:'Mac',name:'MacBook Neo',spec:'A18 Pro/6CPU/5GPU/8GB/256GB',color:'胭粉',pid:'267442',mpn:'MHFH4',price:23900},
@@ -140,6 +140,27 @@ const PRODUCTS = [
   {cat:'Mac',name:'Mac Studio M4 Max',spec:'M4 Max/14CPU/32GPU/36GB/512GB',color:'銀',pid:'256657',mpn:'MU963',price:84900},
   // ── Mac Studio M3 Ultra ──
   {cat:'Mac',name:'Mac Studio M3 Ultra',spec:'M3 Ultra/28CPU/60GPU/96GB/1TB',color:'銀',pid:'256658',mpn:'MU973',price:184900},
+  // ── iPad mini 第8代 ──
+  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi 128GB',color:'午夜',pid:'274704',mpn:'MJ6F4',price:22900},
+  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi 128GB',color:'星光',pid:'274705',mpn:'MJ6J4',price:22900},
+  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi 256GB',color:'午夜',pid:'274706',mpn:'MJ6Q4',price:26400},
+  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi 256GB',color:'星光',pid:'274707',mpn:'MJ6R4',price:26400},
+  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi 512GB',color:'午夜',pid:'274708',mpn:'MJ6V4',price:33400},
+  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi 512GB',color:'星光',pid:'274709',mpn:'MJ6W4',price:33400},
+  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi+LTE 128GB',color:'午夜',pid:'274710',mpn:'MJ674',price:27900},
+  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi+LTE 128GB',color:'星光',pid:'274711',mpn:'MJ684',price:27900},
+  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi+LTE 256GB',color:'午夜',pid:'274712',mpn:'MJ6C4',price:31400},
+  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi+LTE 256GB',color:'星光',pid:'274713',mpn:'MJ6D4',price:31400},
+  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi+LTE 512GB',color:'午夜',pid:'274714',mpn:'MJ6H4',price:38400},
+  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi+LTE 512GB',color:'星光',pid:'274715',mpn:'MJ6K4',price:38400},
+  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi Nano 256GB',color:'午夜',pid:'274716',mpn:'ML2Q4',price:29900},
+  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi Nano 256GB',color:'星光',pid:'274717',mpn:'ML2T4',price:29900},
+  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi Nano 512GB',color:'午夜',pid:'274718',mpn:'MJ6X4',price:36900},
+  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi Nano 512GB',color:'星光',pid:'274719',mpn:'MJ6Y4',price:36900},
+  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi+LTE Nano 256GB',color:'午夜',pid:'274720',mpn:'ML2W4',price:34900},
+  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi+LTE Nano 256GB',color:'星光',pid:'274721',mpn:'ML2X4',price:34900},
+  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi+LTE Nano 512GB',color:'午夜',pid:'274722',mpn:'MJ6M4',price:41900},
+  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi+LTE Nano 512GB',color:'星光',pid:'274723',mpn:'MJ6P4',price:41900},
   // ── iPad mini 8.3" 第7代 ──
   {cat:'iPad',name:'iPad mini 8.3" 第7代',spec:'Wi-Fi 128GB',color:'藍',pid:'253160',mpn:'MXN73',price:19900},
   {cat:'iPad',name:'iPad mini 8.3" 第7代',spec:'Wi-Fi 128GB',color:'紫',pid:'253161',mpn:'MXN93',price:19900},
@@ -165,27 +186,6 @@ const PRODUCTS = [
   {cat:'iPad',name:'iPad mini 8.3" 第7代',spec:'Wi-Fi+LTE 512GB',color:'紫',pid:'253181',mpn:'MYHF3',price:35400},
   {cat:'iPad',name:'iPad mini 8.3" 第7代',spec:'Wi-Fi+LTE 512GB',color:'太空灰',pid:'253182',mpn:'MYHC3',price:35400},
   {cat:'iPad',name:'iPad mini 8.3" 第7代',spec:'Wi-Fi+LTE 512GB',color:'星光',pid:'253183',mpn:'MYHE3',price:35400},
-  // ── iPad mini 第8代 ──
-  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi 128GB',color:'午夜',pid:'274704',mpn:'MJ6F4',price:22900},
-  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi 128GB',color:'星光',pid:'274705',mpn:'MJ6J4',price:22900},
-  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi 256GB',color:'午夜',pid:'274706',mpn:'MJ6Q4',price:26400},
-  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi 256GB',color:'星光',pid:'274707',mpn:'MJ6R4',price:26400},
-  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi 512GB',color:'午夜',pid:'274708',mpn:'MJ6V4',price:33400},
-  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi 512GB',color:'星光',pid:'274709',mpn:'MJ6W4',price:33400},
-  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi+LTE 128GB',color:'午夜',pid:'274710',mpn:'MJ674',price:27900},
-  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi+LTE 128GB',color:'星光',pid:'274711',mpn:'MJ684',price:27900},
-  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi+LTE 256GB',color:'午夜',pid:'274712',mpn:'MJ6C4',price:31400},
-  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi+LTE 256GB',color:'星光',pid:'274713',mpn:'MJ6D4',price:31400},
-  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi+LTE 512GB',color:'午夜',pid:'274714',mpn:'MJ6H4',price:38400},
-  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi+LTE 512GB',color:'星光',pid:'274715',mpn:'MJ6K4',price:38400},
-  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi Nano 256GB',color:'午夜',pid:'274716',mpn:'ML2Q4',price:29900},
-  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi Nano 256GB',color:'星光',pid:'274717',mpn:'ML2T4',price:29900},
-  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi Nano 512GB',color:'午夜',pid:'274718',mpn:'MJ6X4',price:36900},
-  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi Nano 512GB',color:'星光',pid:'274719',mpn:'MJ6Y4',price:36900},
-  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi+LTE Nano 256GB',color:'午夜',pid:'274720',mpn:'ML2W4',price:34900},
-  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi+LTE Nano 256GB',color:'星光',pid:'274721',mpn:'ML2X4',price:34900},
-  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi+LTE Nano 512GB',color:'午夜',pid:'274722',mpn:'MJ6M4',price:41900},
-  {cat:'iPad',name:'iPad mini 第8代',spec:'Wi-Fi+LTE Nano 512GB',color:'星光',pid:'274723',mpn:'MJ6P4',price:41900},
   // ── iPad A16 ──
   {cat:'iPad',name:'iPad A16',spec:'Wi-Fi 128GB',color:'銀',pid:'256491',mpn:'MD3Y4',price:14900},
   {cat:'iPad',name:'iPad A16',spec:'Wi-Fi 128GB',color:'藍',pid:'256493',mpn:'MD4A4',price:14900},
