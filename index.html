@@ -26,9 +26,27 @@
 .cc-note{font-size:12px;color:var(--gray)}
 .entry-card{position:relative}
 .new-badge{position:absolute;top:14px;right:14px;padding:1px 7px;border-radius:10px;background:var(--red);color:#fff;font-size:11px;font-weight:700}
+/* 首頁背景：柔和光暈＋細線幾何（只套用在首頁，不影響其他頁） */
+body{background:linear-gradient(160deg,#f8faff,#e9f0fb) fixed}
+.bg-deco{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.bg-deco .blob{position:absolute;border-radius:50%;filter:blur(70px);will-change:transform;animation:bgBlob 26s ease-in-out infinite alternate}
+.bg-deco .b1{width:58vmin;height:58vmin;left:-8%;top:4%;background:rgba(0,113,227,.2)}
+.bg-deco .b2{width:50vmin;height:50vmin;right:-6%;top:34%;background:rgba(150,120,255,.18);animation-duration:32s;animation-delay:-9s}
+.bg-deco .b3{width:44vmin;height:44vmin;left:34%;bottom:-14%;background:rgba(60,200,170,.18);animation-duration:29s;animation-delay:-15s}
+@keyframes bgBlob{from{transform:translate(0,0) scale(1)}to{transform:translate(6vmin,-5vmin) scale(1.12)}}
+.bg-deco .shape{position:absolute;border:1.5px solid rgba(0,113,227,.16);animation:bgFloat 11s ease-in-out infinite alternate}
+.bg-deco .sh1{width:120px;height:120px;border-radius:50%;left:8%;top:62%}
+.bg-deco .sh2{width:78px;height:78px;border-radius:22%;right:12%;top:14%;animation-duration:9s;animation-delay:-4s}
+.bg-deco .sh3{width:150px;height:150px;border-radius:22%;right:6%;bottom:8%;animation-duration:13s;animation-delay:-7s}
+.bg-deco .sh4{width:56px;height:56px;border-radius:50%;left:44%;top:10%;animation-duration:8s;animation-delay:-2s}
+@keyframes bgFloat{from{transform:translateY(-12px) rotate(-6deg)}to{transform:translateY(12px) rotate(6deg)}}
+@media (prefers-reduced-motion:reduce){.bg-deco .blob,.bg-deco .shape{animation:none}}
+@media print{.bg-deco{display:none}}
 </style>
 </head>
 <body>
+
+<div class="bg-deco" aria-hidden="true"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i><i class="shape sh1"></i><i class="shape sh2"></i><i class="shape sh3"></i><i class="shape sh4"></i></div>
 
 <div class="hdr">
   <div class="hdr-left">
@@ -245,5 +263,6 @@ document.querySelector('.entry-grid').addEventListener('click',function(e){
   try{navigator.sendBeacon('https://store-click-stats.tksqftksqf.workers.dev/hit',JSON.stringify({c:c.getAttribute('href'),t:c.querySelector('.entry-title').textContent}))}catch(err){}
 });
 </script>
+<script src="shared/pet.js?v=20261126g"></script>
 </body>
 </html>

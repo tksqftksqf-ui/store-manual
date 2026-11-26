@@ -1,0 +1,448 @@
+/* 螢幕寵物（門市工具箱首頁用）
+ * 只做療癒互動：摸頭、小遊戲、換角色。心情第一次從 0 開始，之後依使用時間變化。
+ * 心情、角色、位置、收起狀態都只存在各自瀏覽器（localStorage，key 前綴 toolbox-pet-）。
+ */
+(function(){
+  if(window.__spLoaded) return; window.__spLoaded = true;
+
+  var BASE = (document.currentScript && document.currentScript.src)
+    ? document.currentScript.src.replace(/pet\.js(\?.*)?$/, '') : 'shared/';
+  var CHARS = [
+    {id:'cat1', name:'橘貓',   img:BASE+'pet/cat1.png', tail:' 喵～'},
+    {id:'cat2', name:'黑貓',   img:BASE+'pet/cat2.png', tail:' 喵。'},
+    {id:'boy',  name:'小男生', img:BASE+'pet/boy.png',  tail:''},
+    {id:'girl', name:'小女生', img:BASE+'pet/girl.png', tail:'～'}
+  ];
+  var K = {char:'toolbox-pet-char', mood:'toolbox-pet-mood', last:'toolbox-pet-last', pos:'toolbox-pet-pos', hidden:'toolbox-pet-hidden', seen:'toolbox-pet-seen', best:'toolbox-pet-best'};
+
+  /* ---------- 小工具 ---------- */
+  function get(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+  function set(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+  function clamp(v,a,b){ return Math.min(Math.max(v,a),b); }
+  function pick(a){ return a[Math.floor(Math.random()*a.length)]; }
+  function el(tag, cls, html){ var e=document.createElement(tag); if(cls) e.className=cls; if(html!=null) e.innerHTML=html; return e; }
+
+  var ci = Math.max(0, CHARS.findIndex(function(c){ return c.id === get(K.char); }));
+  function ch(){ return CHARS[ci]; }
+
+  /* ---------- 樣式 ---------- */
+  var css = [
+  '.sp-pet{position:fixed;width:var(--sp-size,84px);height:var(--sp-size,84px);z-index:9000;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}',
+  '.sp-pet.drag{cursor:grabbing}',
+  '.sp-img{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none;-webkit-user-drag:none;transform-origin:50% 100%;filter:drop-shadow(0 3px 5px rgba(0,0,0,.2));animation:sp-breathe 3.2s ease-in-out infinite}',
+  '.sp-pet.drag .sp-img{animation:none;transform:scale(1.12) rotate(-5deg)}',
+  '.sp-pet.sleep .sp-img{animation:none;transform:rotate(-12deg);opacity:.88}',
+  '.sp-shadow{position:absolute;left:50%;bottom:-2px;width:56%;height:8%;border-radius:50%;background:rgba(0,0,0,.35);transform:translateX(-50%);opacity:.2;filter:blur(2px);pointer-events:none}',
+  '.sp-zzz{position:absolute;right:-6px;top:-2px;font-size:14px;font-weight:700;font-style:italic;color:var(--gray,#64748b);display:none;animation:sp-z 1.8s ease-in-out infinite;pointer-events:none}',
+  '.sp-pet.sleep .sp-zzz{display:block}',
+  '.sp-ring{position:absolute;left:50%;top:50%;width:52px;height:52px;margin:-26px 0 0 -26px;border-radius:50%;border:2px solid var(--blue,#0071e3);z-index:-1;display:none;pointer-events:none;animation:sp-pulse 2s ease-out infinite}',
+  '.sp-ring.on{display:block}',
+  '.sp-bubble{position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);background:var(--white,#fff);color:var(--text,#1e293b);border:1px solid var(--border,#dde3ed);border-radius:14px;padding:5px 11px;font-size:13px;font-weight:600;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.12);opacity:0;transition:opacity .25s;pointer-events:none}',
+  '.sp-bubble.show{opacity:1}',
+  '.sp-joy .sp-img{animation:sp-joy .9s ease-out}',
+  '.sp-shake .sp-img{animation:sp-shake .45s ease-out}',
+  '.sp-fx{position:fixed;z-index:9001;pointer-events:none;animation:sp-rise 1.2s ease-out forwards}',
+  '.sp-fx svg{width:20px;height:20px;fill:#f0648f;display:block}',
+  '.sp-pethud{position:absolute;left:50%;bottom:calc(100% + 36px);transform:translateX(-50%);display:none;align-items:center;gap:6px;background:var(--white,#fff);border:1px solid var(--border,#dde3ed);border-radius:999px;padding:5px 11px;box-shadow:0 4px 14px rgba(0,0,0,.14);white-space:nowrap;font-size:12px;font-weight:700;color:#f0648f;pointer-events:none}',
+  '.sp-pethud.on{display:flex}',
+  '.sp-pethud svg{width:14px;height:14px;fill:currentColor;flex:none}',
+  '.sp-pethud .sp-bar{width:76px;flex:none}',
+  '.sp-num{min-width:22px;text-align:right;font-size:12px;font-weight:700}',
+  '.sp-lbl{font-size:12px;font-weight:700}',
+  '.sp-box .sp-mood{padding:10px 16px 0}',
+  /* 選單 */
+  '.sp-menu{position:fixed;z-index:9002;display:none;background:var(--white,#fff);border:1px solid var(--border,#dde3ed);border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,.18);padding:10px;width:228px}',
+  '.sp-menu.open{display:block;animation:sp-pop .18s ease-out}',
+  '.sp-mood{display:flex;align-items:center;gap:8px;padding:2px 4px 10px;color:#f0648f}',
+  '.sp-mood svg{width:14px;height:14px;fill:currentColor;flex:none}',
+  '.sp-bar{flex:1;height:5px;background:var(--light,#f1f5f9);border-radius:99px;overflow:hidden}',
+  '.sp-fill{height:100%;width:60%;background:#f0648f;border-radius:99px;transition:width .5s}',
+  '.sp-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}',
+  '.sp-btn{display:flex;flex-direction:column;align-items:center;gap:2px;border:1px solid var(--border,#dde3ed);background:var(--light,#f1f5f9);color:var(--text,#1e293b);border-radius:12px;padding:8px 2px 6px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit}',
+  '.sp-btn span{font-size:22px;line-height:1.1}',
+  '.sp-btn:active{transform:scale(.95)}',
+  '@media (hover:hover){.sp-btn:hover{border-color:var(--blue,#0071e3)}}',
+  '.sp-tab{position:fixed;right:14px;bottom:14px;z-index:9000;width:40px;height:40px;border-radius:50%;border:1px solid var(--border,#dde3ed);background:var(--white,#fff);box-shadow:0 4px 14px rgba(0,0,0,.15);font-size:20px;cursor:pointer;display:none;padding:0}',
+  /* 遊戲 */
+  '.sp-modal{position:fixed;inset:0;z-index:9100;background:rgba(15,23,42,.45);display:flex;align-items:center;justify-content:center;padding:12px}',
+  '.sp-box{width:min(360px,100%);background:var(--white,#fff);border-radius:20px;box-shadow:0 20px 50px rgba(0,0,0,.3);overflow:hidden;color:var(--text,#1e293b);font-family:inherit}',
+  '.sp-head{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;font-weight:700;font-size:15px;border-bottom:1px solid var(--border,#dde3ed)}',
+  '.sp-x{border:0;background:var(--light,#f1f5f9);border-radius:50%;width:28px;height:28px;cursor:pointer;font-size:13px;color:var(--gray,#64748b)}',
+  '.sp-body{padding:14px 16px 16px}',
+  '.sp-pick{display:grid;grid-template-columns:1fr 1fr;gap:10px}',
+  '.sp-pick button{border:1px solid var(--border,#dde3ed);background:var(--light,#f1f5f9);border-radius:16px;padding:18px 6px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;color:inherit}',
+  '.sp-pick button span{display:block;font-size:34px;margin-bottom:6px}',
+  '.sp-hud{display:flex;justify-content:space-between;font-weight:700;font-size:14px;margin-bottom:8px}',
+  '.sp-arena{position:relative;height:min(360px,56vh);background:linear-gradient(180deg,#e8f1ff,#fff7ec);border-radius:14px;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none}',
+  '.sp-player{position:absolute;bottom:4px;left:0;width:64px;height:64px;object-fit:contain;pointer-events:none;will-change:transform}',
+  '.sp-item{position:absolute;left:0;top:0;font-size:28px;line-height:34px;width:34px;text-align:center;pointer-events:none;will-change:transform}',
+  '.sp-tip{font-size:12px;color:var(--gray,#64748b);text-align:center;margin-top:8px}',
+  '.sp-result{text-align:center;padding:10px 0 2px}',
+  '.sp-result b{font-size:34px;display:block;margin:2px 0 4px}',
+  '.sp-result p{margin:0 0 12px;color:var(--gray,#64748b);font-size:13px}',
+  '.sp-acts{display:flex;gap:8px;justify-content:center}',
+  '.sp-acts button{border:1px solid var(--border,#dde3ed);background:var(--light,#f1f5f9);border-radius:10px;padding:8px 18px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;color:inherit}',
+  '.sp-acts button.main{background:var(--blue,#0071e3);border-color:var(--blue,#0071e3);color:#fff}',
+  '.sp-rps{text-align:center}',
+  '.sp-rps-pet{width:96px;height:96px;margin:0 auto}',
+  '.sp-rps-pet img{width:100%;height:100%;object-fit:contain}',
+  '.sp-rps-hand{font-size:56px;height:70px;line-height:70px}',
+  '.sp-rps-res{font-size:18px;font-weight:700;height:28px;margin:4px 0 10px}',
+  '.sp-rps-btns{display:flex;gap:10px;justify-content:center}',
+  '.sp-rps-btns button{width:78px;height:78px;border:1px solid var(--border,#dde3ed);background:var(--light,#f1f5f9);border-radius:18px;font-size:38px;cursor:pointer}',
+  '.sp-rps-btns button:active{transform:scale(.93)}',
+  '.sp-rps-score{margin-top:12px;font-size:13px;color:var(--gray,#64748b)}',
+  /* 動畫 */
+  '@keyframes sp-breathe{0%,100%{transform:scale(1,1)}50%{transform:scale(1.015,1.03)}}',
+  '@keyframes sp-joy{0%{transform:translateY(0) scale(1.08,.92)}35%{transform:translateY(-26%) scale(.95,1.08)}65%{transform:translateY(0) scale(1.08,.92)}85%{transform:translateY(-8%)}100%{transform:none}}',
+  '@keyframes sp-shake{0%,100%{transform:rotate(0)}20%{transform:rotate(-8deg)}40%{transform:rotate(8deg)}60%{transform:rotate(-6deg)}80%{transform:rotate(5deg)}}',
+  '@keyframes sp-z{0%,100%{transform:translateY(0);opacity:.7}50%{transform:translateY(-5px);opacity:1}}',
+  '@keyframes sp-pulse{0%{transform:scale(.7);opacity:.9}100%{transform:scale(2.3);opacity:0}}',
+  '@keyframes sp-rise{from{opacity:1;transform:translateY(0) scale(.8)}to{opacity:0;transform:translateY(-56px) scale(1.3)}}',
+  '@keyframes sp-pop{from{opacity:0;transform:scale(.94) translateY(6px)}to{opacity:1;transform:none}}',
+  '@media (max-width:600px){:root{--sp-size:72px}}',
+  '@media (prefers-reduced-motion:reduce){.sp-img,.sp-zzz,.sp-ring{animation:none}}',
+  '@media print{.sp-pet,.sp-menu,.sp-tab,.sp-modal{display:none!important}}',
+  'body.sp-pad{padding-bottom:104px}'
+  ].join('\n');
+  var st = el('style'); st.textContent = css; document.head.appendChild(st);
+  document.body.classList.add('sp-pad');            // 讓最底下的卡片不會被寵物蓋住
+
+  /* ---------- DOM ---------- */
+  var HEART = '<svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg>';
+  var pet = el('div','sp-pet');
+  var img = el('img','sp-img'); img.alt = ''; img.draggable = false; img.src = ch().img;
+  var bubble = el('div','sp-bubble');
+  var ring = el('div','sp-ring');
+  var hud = el('div','sp-pethud', HEART+'<span class="sp-lbl">心情</span><div class="sp-bar"><div class="sp-fill"></div></div><span class="sp-num"></span>');
+  pet.appendChild(ring); pet.appendChild(hud); pet.appendChild(bubble); pet.appendChild(el('div','sp-shadow')); pet.appendChild(img); pet.appendChild(el('div','sp-zzz','zzz'));
+
+  var menu = el('div','sp-menu',
+    '<div class="sp-mood">'+HEART+'<span class="sp-lbl">心情</span><div class="sp-bar"><div class="sp-fill"></div></div><span class="sp-num"></span></div>' +
+    '<div class="sp-grid">' +
+      '<button class="sp-btn" data-a="rub"><span>🤚</span>摸摸</button>' +
+      '<button class="sp-btn" data-a="game"><span>🎮</span>遊戲</button>' +
+      '<button class="sp-btn" data-a="char"><span>🔄</span>換角色</button>' +
+      '<button class="sp-btn" data-a="hide"><span>➖</span>收起</button>' +
+    '</div>');
+  var tab = el('button','sp-tab','🐾'); tab.type = 'button'; tab.setAttribute('aria-label','叫出螢幕寵物');
+  document.body.appendChild(pet); document.body.appendChild(menu); document.body.appendChild(tab);
+
+  /* ---------- 位置（記在瀏覽器，存比例，視窗大小改變也不會跑出畫面） ---------- */
+  function size(){ return pet.offsetWidth || 84; }
+  function place(x,y){
+    var s = size();
+    x = clamp(x, 6, Math.max(6, innerWidth - s - 6));
+    y = clamp(y, 6, Math.max(6, innerHeight - s - 6));
+    pet.style.left = x+'px'; pet.style.top = y+'px';
+    return {x:x, y:y};
+  }
+  function curPos(){ return {x:pet.offsetLeft, y:pet.offsetTop}; }
+  function savePos(){
+    var p = curPos(), s = size();
+    set(K.pos, JSON.stringify({fx:p.x/Math.max(1,innerWidth-s), fy:p.y/Math.max(1,innerHeight-s)}));
+  }
+  function loadPos(){
+    var s = size(), v = null;
+    try{ v = JSON.parse(get(K.pos)); }catch(e){}
+    if(v && typeof v.fx === 'number') place(v.fx*(innerWidth-s), v.fy*(innerHeight-s));
+    else place(innerWidth - s - 16, innerHeight - s - 16);
+  }
+
+  /* ---------- 心情：第一次從 0 開始，之後記在這台裝置，依「使用時間」變化 ----------
+   * ・離開越久心情越低（每離開 1 小時 -3，最低 0）
+   * ・停留在首頁陪牠，每 1 分鐘 +1（陪伴最多把心情養到 40）
+   * ・摸摸、遊戲可以加到滿 100
+   */
+  var moodV = 0, awayMs = null;
+  (function(){
+    var m = null; try{ m = JSON.parse(get(K.mood)); }catch(e){}
+    var last = parseInt(get(K.last) || '0', 10);
+    if(last) awayMs = Date.now() - last;                      // 距離上次使用多久（第一次使用為 null）
+    if(m && typeof m.v === 'number')
+      moodV = clamp(Math.round(m.v - 3 * (last ? (Date.now()-last)/3600000 : 0)), 0, 100);
+  })();
+  function getMood(){ return moodV; }
+  function setMood(v){
+    var was = moodV; moodV = clamp(v, 0, 100); renderMood();
+    set(K.mood, JSON.stringify({v:moodV, t:Date.now()}));
+    if(was < 100 && moodV >= 100) setTimeout(celebrate, 300);
+  }
+  function renderMood(){
+    [].forEach.call(document.querySelectorAll('.sp-fill'), function(f){ f.style.width = moodV + '%'; });
+    [].forEach.call(document.querySelectorAll('.sp-num'), function(n){ n.textContent = moodV; });
+  }
+  function celebrate(){ hearts(7); anim('sp-joy', 900); say('心情滿分'+ch().tail, 2400); }
+  function touchLast(){ set(K.last, String(Date.now())); }       // 記下「最後一次在首頁」的時間
+  setInterval(function(){
+    if(document.visibilityState !== 'visible' || pet.style.display === 'none') return;
+    touchLast();
+    if(moodV < 40) setMood(moodV + 1);                            // 陪伴：停留越久越開心（到 40 為止）
+  }, 60000);
+  document.addEventListener('visibilitychange', touchLast);
+  window.addEventListener('pagehide', touchLast);
+
+  /* ---------- 說話與特效（文字都很短） ---------- */
+  var sayT;
+  function say(t, ms){
+    bubble.textContent = t;
+    bubble.style.transform = 'translateX(-50%)';           // 先歸位再量，避免靠近畫面邊緣時被切掉
+    var r = bubble.getBoundingClientRect(), shift = 0;
+    if(r.right > innerWidth - 8) shift = r.right - (innerWidth - 8);
+    else if(r.left < 8) shift = r.left - 8;
+    if(shift) bubble.style.transform = 'translateX(calc(-50% - ' + shift + 'px))';
+    bubble.classList.add('show');
+    clearTimeout(sayT); sayT = setTimeout(function(){ bubble.classList.remove('show'); }, ms||1800);
+  }
+  function anim(cls, ms){
+    pet.classList.remove('sp-joy','sp-shake'); void pet.offsetWidth; pet.classList.add(cls);
+    setTimeout(function(){ pet.classList.remove(cls); }, ms);
+  }
+  function heart(dx,dy){
+    var p = curPos(), s = size(), f = el('div','sp-fx',HEART);
+    f.style.left = (p.x + s/2 + (dx||0) - 10)+'px'; f.style.top = (p.y + (dy||0))+'px';
+    document.body.appendChild(f); setTimeout(function(){ f.remove(); }, 1300);
+  }
+  function hearts(n){ for(var i=0;i<n;i++) (function(i){ setTimeout(function(){ heart((Math.random()-.5)*44, Math.random()*18); }, i*140); })(i); }
+
+  /* ---------- 選單 ---------- */
+  var menuOpen = false;
+  function openMenu(){
+    menuOpen = true; menu.classList.add('open'); renderMood();
+    var p = curPos(), s = size(), w = menu.offsetWidth, h = menu.offsetHeight;
+    var x = clamp(p.x + s/2 - w/2, 8, innerWidth - w - 8);
+    var y = p.y - h - 12; if(y < 8) y = p.y + s + 12;
+    menu.style.left = x+'px'; menu.style.top = clamp(y, 8, innerHeight - h - 8)+'px';
+    bubble.classList.remove('show');
+  }
+  function closeMenu(){ menuOpen = false; menu.classList.remove('open'); }
+  document.addEventListener('pointerdown', function(e){
+    if(menuOpen && !menu.contains(e.target) && !pet.contains(e.target)) closeMenu();
+    if(rubbing && !pet.contains(e.target)) stopRub(false);   // 點到別處＝離開摸摸模式（不彈選單）
+  });
+
+  var FOODS = ['🍖','🐟','🍎','🍪','🍙'];   // 接食物遊戲用
+
+  /* ---------- 摸頭：進入摸摸模式後，在角色身上來回滑動就會冒愛心 ---------- */
+  var rubbing = false, rubEnd, lastRub = 0, rubCount = 0;
+  function fitHud(){                                   // 靠近畫面邊緣時往內移，避免被切掉
+    hud.style.transform = 'translateX(-50%)';
+    var r = hud.getBoundingClientRect(), shift = 0;
+    if(r.right > innerWidth - 8) shift = r.right - (innerWidth - 8);
+    else if(r.left < 8) shift = r.left - 8;
+    if(shift) hud.style.transform = 'translateX(calc(-50% - ' + shift + 'px))';
+  }
+  function startRub(){
+    closeMenu(); rubbing = true; ring.classList.add('on'); say('摸摸我～', 1800);
+    hud.classList.add('on'); renderMood(); fitHud();
+    clearTimeout(rubEnd); rubEnd = setTimeout(function(){ stopRub(true); }, 8000);
+  }
+  function stopRub(reopen){                            // reopen=true：摸完回到選單
+    var was = rubbing;
+    rubbing = false; ring.classList.remove('on'); hud.classList.remove('on'); clearTimeout(rubEnd);
+    if(was && reopen && !modal && !dragging) openMenu();
+  }
+  function rubMove(){
+    var now = Date.now();
+    clearTimeout(rubEnd); rubEnd = setTimeout(function(){ stopRub(true); }, 5000);
+    if(now - lastRub < 260) return; lastRub = now;
+    heart((Math.random()-.5)*40, Math.random()*14);
+    if(++rubCount % 3 === 0) setMood(getMood()+1);      // 每 3 顆愛心才 +1，要摸一陣子才會明顯增加
+    if(Math.random() < .12) say(pick(['好舒服','嘿嘿','再摸再摸'])+ch().tail, 1400);
+  }
+
+  /* ---------- 拖曳與點擊 ---------- */
+  var dragging = false, moved = 0, sx, sy, ox, oy, wasOpen = false;
+  var rubDown = false, rubMoved = 0, rsx = 0, rsy = 0;      // 摸摸模式下的按壓狀態：輕點＝結束並回選單，滑動＝繼續摸
+  pet.addEventListener('pointerdown', function(e){
+    try{ pet.setPointerCapture(e.pointerId); }catch(_){}
+    ring.classList.remove('on'); set(K.seen,'1');
+    if(rubbing){ rubDown = true; rubMoved = 0; rsx = e.clientX; rsy = e.clientY; rubMove(); return; }
+    wasOpen = menuOpen; closeMenu();
+    var p = curPos(); dragging = true; moved = 0; sx = e.clientX; sy = e.clientY; ox = p.x; oy = p.y;
+    pet.classList.add('drag');
+  });
+  pet.addEventListener('pointermove', function(e){
+    if(rubbing){ if(rubDown) rubMoved = Math.max(rubMoved, Math.hypot(e.clientX-rsx, e.clientY-rsy)); rubMove(); return; }
+    if(!dragging) return;
+    var dx = e.clientX - sx, dy = e.clientY - sy;
+    moved = Math.max(moved, Math.hypot(dx,dy));
+    place(ox+dx, oy+dy);
+  });
+  function endPointer(){
+    if(rubDown){                                            // 摸摸模式：輕點一下＝結束，回到選單
+      rubDown = false;
+      if(rubMoved < 6) stopRub(true);
+      return;
+    }
+    if(!dragging) return;
+    dragging = false; pet.classList.remove('drag');
+    if(moved >= 6){ savePos(); return; }
+    if(!wasOpen) openMenu();
+  }
+  pet.addEventListener('pointerup', endPointer);
+  pet.addEventListener('pointercancel', endPointer);
+  window.addEventListener('resize', function(){ loadPos(); if(menuOpen) openMenu(); });
+
+  /* ---------- 選單動作 ---------- */
+  function setChar(i){ ci = (i + CHARS.length) % CHARS.length; set(K.char, ch().id); img.src = ch().img; }
+  function hide(){ closeMenu(); stopRub(); pet.style.display = 'none'; tab.style.display = 'block'; set(K.hidden,'1'); }
+  function show(){ pet.style.display = ''; tab.style.display = 'none'; set(K.hidden,'0'); loadPos(); }
+  tab.addEventListener('click', show);
+  menu.addEventListener('click', function(e){
+    var b = e.target.closest('.sp-btn'); if(!b) return;
+    var a = b.getAttribute('data-a');
+    if(a === 'rub') startRub();
+    else if(a === 'game'){ closeMenu(); openGames(); }
+    else if(a === 'char'){ setChar(ci+1); say(ch().name, 1200); anim('sp-joy',900); }
+    else if(a === 'hide') hide();
+  });
+
+  /* ---------- 小遊戲 ---------- */
+  var modal = null, gameStop = null;
+  function closeGames(){
+    if(gameStop){ gameStop(); gameStop = null; }
+    if(modal){ modal.remove(); modal = null; }
+  }
+  function openGames(){
+    closeGames();
+    modal = el('div','sp-modal',
+      '<div class="sp-box"><div class="sp-head"><span class="sp-title">玩遊戲</span><button class="sp-x" aria-label="關閉">✕</button></div><div class="sp-mood">'+HEART+'<span class="sp-lbl">心情</span><div class="sp-bar"><div class="sp-fill"></div></div><span class="sp-num"></span></div><div class="sp-body"></div></div>');
+    document.body.appendChild(modal); renderMood();
+    modal.addEventListener('pointerdown', function(e){ if(e.target === modal) closeGames(); });
+    modal.querySelector('.sp-x').addEventListener('click', closeGames);
+    showPicker();
+  }
+  function body(){ return modal.querySelector('.sp-body'); }
+  function setTitle(t){ modal.querySelector('.sp-title').textContent = t; }
+  function showPicker(){
+    if(gameStop){ gameStop(); gameStop = null; }
+    setTitle('玩遊戲');
+    var b = body(); b.innerHTML = '<div class="sp-pick"><button data-g="catch"><span>🍎</span>接食物</button><button data-g="rps"><span>✌️</span>猜拳</button></div>';
+    b.querySelector('[data-g=catch]').onclick = startCatch;
+    b.querySelector('[data-g=rps]').onclick = startRps;
+  }
+
+  /* 遊戲一：接食物（30 秒，拖曳或方向鍵左右移動） */
+  function startCatch(){
+    if(gameStop){ gameStop(); gameStop = null; }
+    setTitle('接食物');
+    var b = body();
+    b.innerHTML = '<div class="sp-hud"><span>剩 <b class="t">10</b> 秒</span><span>得分 <b class="s">0</b></span></div>' +
+                  '<div class="sp-arena"><img class="sp-player" alt=""></div><div class="sp-tip">拖曳或按 ← → 移動</div>';
+    var arena = b.querySelector('.sp-arena'), player = b.querySelector('.sp-player');
+    var tEl = b.querySelector('.t'), sEl = b.querySelector('.s');
+    player.src = ch().img;
+    var W = arena.clientWidth, H = arena.clientHeight, PW = 64;
+    var DUR = 10;                                   // 遊戲秒數
+    var px = W/2, score = 0, left = DUR, spawn = .3, items = [], last = performance.now(), raf = 0, over = false;
+    function movePlayer(){ player.style.transform = 'translateX('+(px-PW/2)+'px)'; }
+    movePlayer();
+    function setX(clientX){ var r = arena.getBoundingClientRect(); px = clamp(clientX - r.left, PW/2, W - PW/2); movePlayer(); }
+    function onPtr(e){ setX(e.clientX); }
+    arena.addEventListener('pointerdown', onPtr); arena.addEventListener('pointermove', onPtr);
+    function onKey(e){
+      if(e.key === 'ArrowLeft'){ px = clamp(px-28, PW/2, W-PW/2); movePlayer(); e.preventDefault(); }
+      if(e.key === 'ArrowRight'){ px = clamp(px+28, PW/2, W-PW/2); movePlayer(); e.preventDefault(); }
+    }
+    document.addEventListener('keydown', onKey);
+    function addItem(){
+      var star = Math.random() < .12, it = el('div','sp-item', star ? '⭐' : pick(FOODS));
+      var x = Math.random()*(W-34);
+      it.style.transform = 'translate('+x+'px,-40px)'; arena.appendChild(it);
+      items.push({el:it, x:x, y:-40, v:(H/2.4) + Math.random()*(H/3.2), pts:star?3:1});
+    }
+    function frame(t){
+      if(over) return;
+      var dt = Math.min(.05, (t - last)/1000); last = t;
+      left -= dt; spawn -= dt;
+      if(spawn <= 0){ addItem(); spawn = Math.max(.26, .55 - (DUR-left)*.03); }
+      for(var i=items.length-1;i>=0;i--){
+        var it = items[i]; it.y += it.v*dt;
+        it.el.style.transform = 'translate('+it.x+'px,'+it.y+'px)';
+        var cx = it.x + 17, bottom = it.y + 34;
+        if(bottom >= H-4-PW*0.8 && it.y <= H-10 && Math.abs(cx - px) < PW*0.55){
+          score += it.pts; sEl.textContent = score; it.el.remove(); items.splice(i,1);
+        } else if(it.y > H){ it.el.remove(); items.splice(i,1); }
+      }
+      tEl.textContent = Math.max(0, Math.ceil(left));
+      if(left <= 0){ finish(); return; }
+      raf = requestAnimationFrame(frame);
+    }
+    function finish(){
+      over = true; cancelAnimationFrame(raf);
+      document.removeEventListener('keydown', onKey);
+      var best = parseInt(get(K.best)||'0',10), isBest = score > best;
+      if(isBest) set(K.best, String(score));
+      var gain = Math.min(15, score); setMood(getMood() + gain);
+      b.innerHTML = '<div class="sp-result"><b>'+score+' 分</b><p>'+(isBest ? '新紀錄！' : '最高紀錄 '+best+' 分')+'</p><p style="color:#f0648f;font-weight:700">心情 +'+gain+'</p>' +
+        '<div class="sp-acts"><button class="main" id="sp-again">再玩一次</button><button id="sp-back">返回</button></div></div>';
+      b.querySelector('#sp-again').onclick = startCatch;
+      b.querySelector('#sp-back').onclick = showPicker;
+      hearts(score >= 8 ? 5 : 2);
+      gameStop = null;
+    }
+    raf = requestAnimationFrame(frame);
+    gameStop = function(){ over = true; cancelAnimationFrame(raf); document.removeEventListener('keydown', onKey); };
+  }
+
+  /* 遊戲二：猜拳 */
+  function startRps(){
+    if(gameStop){ gameStop(); gameStop = null; }
+    setTitle('猜拳');
+    var HANDS = ['✊','✌️','✋'], w = 0, l = 0, d = 0;
+    var b = body();
+    b.innerHTML = '<div class="sp-rps"><div class="sp-rps-pet"><img alt=""></div><div class="sp-rps-hand">❓</div><div class="sp-rps-res">出拳吧</div>' +
+      '<div class="sp-rps-btns"><button data-m="0">✊</button><button data-m="1">✌️</button><button data-m="2">✋</button></div>' +
+      '<div class="sp-rps-score"></div></div>';
+    b.querySelector('.sp-rps-pet img').src = ch().img;
+    var hand = b.querySelector('.sp-rps-hand'), res = b.querySelector('.sp-rps-res'), sc = b.querySelector('.sp-rps-score');
+    function renderScore(){ sc.textContent = '勝 '+w+'　負 '+l+'　平 '+d; }
+    renderScore();
+    [].forEach.call(b.querySelectorAll('.sp-rps-btns button'), function(btn){
+      btn.onclick = function(){
+        var m = +btn.getAttribute('data-m'), p = Math.floor(Math.random()*3);
+        hand.textContent = HANDS[p];
+        if(m === p){ d++; res.textContent = '平手！'; }
+        else if((p - m + 3) % 3 === 1){ w++; res.textContent = '你贏了！'; hearts(2); anim('sp-shake',450); }
+        else { l++; res.textContent = '我贏啦'+ch().tail; anim('sp-joy',900); }
+        setMood(getMood()+2); res.textContent += '　心情 +2'; renderScore();
+      };
+    });
+  }
+
+  /* ---------- 閒置：偶爾睡覺、心情好時開心跳一下、肚子餓了提醒 ---------- */
+  var lastHungry = 0;
+  setInterval(function(){
+    if(pet.style.display === 'none' || dragging || menuOpen || rubbing || modal) return;
+    var mood = getMood(), r = Math.random();
+    if(mood < 20 && Date.now() - lastHungry > 90000){ lastHungry = Date.now(); say('陪我玩嘛'+ch().tail, 2200); }
+    else if(mood >= 80 && r < .18) anim('sp-joy', 900);
+    else if(r < .15){ pet.classList.add('sleep'); setTimeout(function(){ pet.classList.remove('sleep'); }, 6000); }
+  }, 7000);
+  pet.addEventListener('pointerdown', function(){ pet.classList.remove('sleep'); });
+
+  /* ---------- 招呼語（第一次見面／好久不見／剛離開又回來／依台灣時間） ---------- */
+  function greeting(){
+    var tail = ch().tail;
+    if(awayMs === null) return '第一次見面，請多指教' + tail;
+    if(awayMs >= 86400000) return '好久不見！好想你' + tail;
+    if(awayMs < 600000) return '歡迎回來' + tail;
+    var h = +new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Taipei', hourCycle:'h23', hour:'2-digit'}).format(new Date());
+    var t = h >= 5 && h < 11 ? '早安！今天也請多指教'
+          : h >= 11 && h < 14 ? '午安！吃飽了嗎'
+          : h >= 14 && h < 18 ? '下午好！加油加油'
+          : h >= 18 && h < 23 ? '辛苦了！今天也很棒'
+          : '還在忙嗎？記得休息';
+    return t + tail;
+  }
+
+  /* ---------- 啟動 ---------- */
+  CHARS.forEach(function(c){ new Image().src = c.img; });
+  renderMood(); touchLast();
+  if(get(K.hidden) === '1'){ pet.style.display = 'none'; tab.style.display = 'block'; }
+  else {
+    loadPos(); if(!get(K.seen)) ring.classList.add('on');             // 第一次來：光圈提示可以點
+    setTimeout(function(){ say(greeting(), 3500); }, 700);            // 招呼語
+  }
+})();
