@@ -8,15 +8,15 @@
   var BASE = (document.currentScript && document.currentScript.src)
     ? document.currentScript.src.replace(/pet\.js(\?.*)?$/, '') : 'shared/';
   var CHARS = [
-    {id:'cat1', name:'小橘',   img:BASE+'pet/cat1.png', tail:' 喵～',
-      poses:{joy:BASE+'pet/cat1_joy.png', sleep:BASE+'pet/cat1_sleep.png', pet:BASE+'pet/cat1_pet.png', sad:BASE+'pet/cat1_sad.png'}},
-    {id:'cat2', name:'小黑',   img:BASE+'pet/cat2.png', tail:' 喵。',
-      poses:{joy:BASE+'pet/cat2_joy.png', sleep:BASE+'pet/cat2_sleep.png', pet:BASE+'pet/cat2_pet.png', sad:BASE+'pet/cat2_sad.png'}},
-    {id:'jing', name:'驚驚',   img:BASE+'pet/jing.png', tail:' 喵？',
-      poses:{joy:BASE+'pet/jing_joy.png', sleep:BASE+'pet/jing_sleep.png', pet:BASE+'pet/jing_pet.png', sad:BASE+'pet/jing_sad.png'}},
-    {id:'hua',  name:'花花',   img:BASE+'pet/hua.png',  tail:' 喵～'},
-    {id:'boy',  name:'小男生', img:BASE+'pet/boy.png',  tail:''},
-    {id:'girl', name:'小女生', img:BASE+'pet/girl.png', tail:'～'}
+    {id:'cat1', name:'小橘',   img:BASE+'pet/cat1.webp', tail:' 喵～',
+      poses:{joy:BASE+'pet/cat1_joy.webp', sleep:BASE+'pet/cat1_sleep.webp', pet:BASE+'pet/cat1_pet.webp', sad:BASE+'pet/cat1_sad.webp'}},
+    {id:'cat2', name:'小黑',   img:BASE+'pet/cat2.webp', tail:' 喵。',
+      poses:{joy:BASE+'pet/cat2_joy.webp', sleep:BASE+'pet/cat2_sleep.webp', pet:BASE+'pet/cat2_pet.webp', sad:BASE+'pet/cat2_sad.webp'}},
+    {id:'jing', name:'驚驚',   img:BASE+'pet/jing.webp', tail:' 喵？',
+      poses:{joy:BASE+'pet/jing_joy.webp', sleep:BASE+'pet/jing_sleep.webp', pet:BASE+'pet/jing_pet.webp', sad:BASE+'pet/jing_sad.webp'}},
+    {id:'hua',  name:'花花',   img:BASE+'pet/hua.webp',  tail:' 喵～'},
+    {id:'boy',  name:'小男生', img:BASE+'pet/boy.webp',  tail:''},
+    {id:'girl', name:'小女生', img:BASE+'pet/girl.webp', tail:'～'}
   ];
   var K = {char:'toolbox-pet-char', mood:'toolbox-pet-mood', last:'toolbox-pet-last', pos:'toolbox-pet-pos', hidden:'toolbox-pet-hidden', seen:'toolbox-pet-seen', best:'toolbox-pet-best'};
 
@@ -236,7 +236,7 @@
   /* ---------- DOM ---------- */
   var HEART = '<svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg>';
   var pet = el('div','sp-pet');
-  var img = el('img','sp-img'); img.alt = ''; img.draggable = false; img.src = ch().img;
+  var img = el('img','sp-img'); img.alt = ''; img.draggable = false; img.decoding = 'async'; img.src = ch().img;
   /* 姿勢：joy 開心／sleep 睡覺／pet 享受被摸／sad 低心情；角色沒有該姿勢圖就用基本圖 */
   var curSrc = img.getAttribute('src'), joyUntil = 0, poseT = 0;
   function poseSrc(name){ var c = ch(); return (name !== 'base' && c.poses && c.poses[name]) || c.img; }
@@ -870,8 +870,10 @@
   }
 
   /* ---------- 啟動 ---------- */
-  CHARS.forEach(function(c){ new Image().src = c.img; });
-  preloadPoses();
+  /* 先讓畫面上的那張圖載入，其餘角色與姿勢圖等頁面載完、瀏覽器閒下來再預載，避免搶頻寬 */
+  function warm(){ CHARS.forEach(function(c){ new Image().src = c.img; }); preloadPoses(); }
+  function whenIdle(){ (window.requestIdleCallback || function(f){ setTimeout(f, 1500); })(warm, {timeout: 4000}); }
+  if(document.readyState === 'complete') whenIdle(); else window.addEventListener('load', whenIdle);
   renderMood(); touchLast(); syncPose();
   if(get(K.hidden) === '1'){ pet.style.display = 'none'; tab.style.display = 'block'; }
   else {
