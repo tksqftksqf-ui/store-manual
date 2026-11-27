@@ -236,9 +236,9 @@
   /* ---------- DOM ---------- */
   var HEART = '<svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg>';
   var pet = el('div','sp-pet');
-  var img = el('img','sp-img'); img.alt = ''; img.draggable = false; img.decoding = 'async'; img.src = ch().img;
+  var img = el('img','sp-img'); img.alt = ''; img.draggable = false; img.decoding = 'async';   // 圖片等寵物展開才載入（預設收起，不拖慢首頁）
   /* 姿勢：joy 開心／sleep 睡覺／pet 享受被摸／sad 低心情；角色沒有該姿勢圖就用基本圖 */
-  var curSrc = img.getAttribute('src'), joyUntil = 0, poseT = 0;
+  var curSrc = '', joyUntil = 0, poseT = 0;
   function poseSrc(name){ var c = ch(); return (name !== 'base' && c.poses && c.poses[name]) || c.img; }
   function setPose(name){ var u = poseSrc(name); if(u !== curSrc){ curSrc = u; img.src = u; } }
   function restPose(){ return (typeof moodV === 'number' && moodV < 20 && awayMs !== null && ch().poses && ch().poses.sad) ? 'sad' : 'base'; }   // 第一次使用（awayMs 為 null）先用正常站姿
@@ -274,7 +274,8 @@
       '<button class="sp-btn" data-a="hide"><i class="sp-ic c4">'+IC_DOWN+'</i>收起</button>' +
     '</div><div class="sp-mhint">玩遊戲、摸摸都能增加友好值</div><div class="sp-tail"></div>');
   var mavImg = menu.querySelector('.sp-mav img'), mname = menu.querySelector('.sp-mname');
-  function updateMenuHead(){ mavImg.src = ch().img; mname.textContent = ch().name; }
+  var armed = false;                                     // 寵物第一次展開後才載入圖片
+  function updateMenuHead(){ if(armed) mavImg.src = ch().img; mname.textContent = ch().name; }
   updateMenuHead();
   var tab = el('button','sp-tab','🐾'); tab.type = 'button'; tab.setAttribute('aria-label','叫出螢幕寵物');
   document.body.appendChild(pet); document.body.appendChild(menu); document.body.appendChild(tab);
@@ -452,8 +453,12 @@
 
   /* ---------- 選單動作 ---------- */
   function setChar(i){ ci = (i + CHARS.length) % CHARS.length; set(K.char, ch().id); curSrc = ''; setPose(restPose()); preloadPoses(); updateMenuHead(); }
-  function hide(){ closeMenu(); stopRub(); pet.style.display = 'none'; tab.style.display = 'block'; set(K.hidden,'1'); }
-  function show(){ pet.style.display = ''; tab.style.display = 'none'; set(K.hidden,'0'); loadPos(); }
+  /* 收起/展開狀態只記在這次瀏覽（sessionStorage）；下次重新開網頁：手機回到收起、電腦回到展開 */
+  function getHid(){ try{ return sessionStorage.getItem(K.hidden); }catch(e){ return null; } }
+  function setHid(v){ try{ sessionStorage.setItem(K.hidden, v); }catch(e){} }
+  try{ localStorage.removeItem(K.hidden); }catch(e){}                  // 清掉舊版存在 localStorage 的收起狀態
+  function hide(){ closeMenu(); stopRub(); pet.style.display = 'none'; tab.style.display = 'block'; setHid('1'); }
+  function show(){ pet.style.display = ''; tab.style.display = 'none'; setHid('0'); arm(); loadPos(); if(!introDone) intro(); }
   tab.addEventListener('click', show);
   menu.addEventListener('click', function(e){
     var b = e.target.closest('.sp-btn'); if(!b) return;
@@ -871,14 +876,20 @@
 
   /* ---------- 啟動 ---------- */
   /* 先讓畫面上的那張圖載入，其餘角色與姿勢圖等頁面載完、瀏覽器閒下來再預載，避免搶頻寬 */
-  function warm(){ CHARS.forEach(function(c){ new Image().src = c.img; }); preloadPoses(); }
-  function whenIdle(){ (window.requestIdleCallback || function(f){ setTimeout(f, 1500); })(warm, {timeout: 4000}); }
-  if(document.readyState === 'complete') whenIdle(); else window.addEventListener('load', whenIdle);
-  renderMood(); touchLast(); syncPose();
-  if(get(K.hidden) === '1'){ pet.style.display = 'none'; tab.style.display = 'block'; }
-  else {
-    loadPos(); if(!get(K.seen)) ring.classList.add('on');             // 第一次來：光圈提示可以點
+  function arm(){ if(armed) return; armed = true; updateMenuHead(); syncPose(); if(document.readyState === 'complete') whenIdle(); else window.addEventListener('load', whenIdle); }
+  var introDone = false;
+  function intro(){
+    introDone = true;
+    if(!get(K.seen)) ring.classList.add('on');                         // 第一次來：光圈提示可以點
     setTimeout(function(){ say(greeting(), 3500); }, 700);            // 招呼語
     if(awayMs === null) setTimeout(function(){ if(!menuOpen && !modal) say('點我開選單，玩遊戲、摸摸都能增加友好值', 4800); }, 4600);   // 第一次使用：教怎麼互動
   }
+  function warm(){ CHARS.forEach(function(c){ new Image().src = c.img; }); preloadPoses(); }
+  function whenIdle(){ (window.requestIdleCallback || function(f){ setTimeout(f, 1500); })(warm, {timeout: 4000}); }
+  renderMood(); touchLast();
+  var isPhone = window.matchMedia && matchMedia('(max-width:700px)').matches;
+  /* 手機預設收起（點 🐾 才展開、圖片也不載入，讓首頁更快）；電腦預設展開。同一次瀏覽內以使用者最後的選擇為準 */
+  var startHidden = isPhone ? getHid() !== '0' : getHid() === '1';
+  if(startHidden){ pet.style.display = 'none'; tab.style.display = 'block'; }
+  else { arm(); loadPos(); intro(); }
 })();
