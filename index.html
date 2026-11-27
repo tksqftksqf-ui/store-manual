@@ -42,6 +42,20 @@ body{background:linear-gradient(160deg,#f8faff,#e9f0fb) fixed}
 @keyframes bgFloat{from{transform:translateY(-12px) rotate(-6deg)}to{transform:translateY(12px) rotate(6deg)}}
 @media (prefers-reduced-motion:reduce){.bg-deco .blob,.bg-deco .shape{animation:none}}
 @media print{.bg-deco{display:none}}
+/* 首頁卡片：霧面玻璃質感（手機退回輕量版，維持捲動順暢） */
+.entry-card{background:rgba(255,255,255,.66);-webkit-backdrop-filter:blur(14px) saturate(170%);backdrop-filter:blur(14px) saturate(170%);border:1px solid rgba(255,255,255,.9);border-radius:22px;box-shadow:0 10px 30px rgba(30,60,120,.08),0 1px 3px rgba(30,60,120,.05);transition:transform .2s,box-shadow .2s,background .2s,border-color .2s}
+@media (hover:hover){.entry-card:hover{background:rgba(255,255,255,.84);border-color:rgba(0,113,227,.35);transform:translateY(-3px);box-shadow:0 16px 38px rgba(0,113,227,.14),0 2px 6px rgba(30,60,120,.06)}}
+.entry-card:active{transform:translateY(-1px) scale(.99)}
+.entry-icon{width:50px;height:50px;display:grid;place-items:center;font-size:26px;margin-bottom:14px;border-radius:15px;background:linear-gradient(145deg,rgba(255,255,255,.95),rgba(225,238,255,.75));box-shadow:inset 0 0 0 1px rgba(255,255,255,.9),0 4px 12px rgba(0,113,227,.12)}
+.entry-title{letter-spacing:.02em}
+.entry-date{opacity:.7}
+.cc-tip,.cc-panel{background:rgba(255,255,255,.66);-webkit-backdrop-filter:blur(14px) saturate(170%);backdrop-filter:blur(14px) saturate(170%);border:1px solid rgba(255,255,255,.9);border-radius:18px;box-shadow:0 8px 24px rgba(30,60,120,.06)}
+.cc-btn{background:rgba(255,255,255,.66);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-color:rgba(255,255,255,.9)}
+.new-badge{box-shadow:0 2px 8px rgba(225,29,72,.3)}
+@media (max-width:700px){
+  .entry-card,.cc-tip,.cc-panel,.cc-btn{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(255,255,255,.92)}
+  .bg-deco .blob,.bg-deco .shape{animation:none}
+}
 </style>
 </head>
 <body>
