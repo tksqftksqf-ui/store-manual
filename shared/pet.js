@@ -8,9 +8,12 @@
   var BASE = (document.currentScript && document.currentScript.src)
     ? document.currentScript.src.replace(/pet\.js(\?.*)?$/, '') : 'shared/';
   var CHARS = [
-    {id:'cat1', name:'小橘',   img:BASE+'pet/cat1.png', tail:' 喵～'},
-    {id:'cat2', name:'小黑',   img:BASE+'pet/cat2.png', tail:' 喵。'},
-    {id:'jing', name:'驚驚',   img:BASE+'pet/jing.png', tail:' 喵？'},
+    {id:'cat1', name:'小橘',   img:BASE+'pet/cat1.png', tail:' 喵～',
+      poses:{joy:BASE+'pet/cat1_joy.png', sleep:BASE+'pet/cat1_sleep.png', pet:BASE+'pet/cat1_pet.png', sad:BASE+'pet/cat1_sad.png'}},
+    {id:'cat2', name:'小黑',   img:BASE+'pet/cat2.png', tail:' 喵。',
+      poses:{joy:BASE+'pet/cat2_joy.png', sleep:BASE+'pet/cat2_sleep.png', pet:BASE+'pet/cat2_pet.png', sad:BASE+'pet/cat2_sad.png'}},
+    {id:'jing', name:'驚驚',   img:BASE+'pet/jing.png', tail:' 喵？',
+      poses:{joy:BASE+'pet/jing_joy.png', sleep:BASE+'pet/jing_sleep.png', pet:BASE+'pet/jing_pet.png', sad:BASE+'pet/jing_sad.png'}},
     {id:'hua',  name:'花花',   img:BASE+'pet/hua.png',  tail:' 喵～'},
     {id:'boy',  name:'小男生', img:BASE+'pet/boy.png',  tail:''},
     {id:'girl', name:'小女生', img:BASE+'pet/girl.png', tail:'～'}
@@ -34,6 +37,7 @@
   '.sp-img{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none;-webkit-user-drag:none;transform-origin:50% 100%;filter:drop-shadow(0 3px 5px rgba(0,0,0,.2));animation:sp-breathe 3.2s ease-in-out infinite}',
   '.sp-pet.drag .sp-img{animation:none;transform:scale(1.12) rotate(-5deg)}',
   '.sp-pet.sleep .sp-img{animation:none;transform:rotate(-12deg);opacity:.88}',
+  '.sp-pet.sleep.sp-posed .sp-img{transform:none;opacity:1;animation:sp-breathe 3.2s ease-in-out infinite}',
   '.sp-shadow{position:absolute;left:50%;bottom:-2px;width:56%;height:8%;border-radius:50%;background:rgba(0,0,0,.35);transform:translateX(-50%);opacity:.2;filter:blur(2px);pointer-events:none}',
   '.sp-zzz{position:absolute;right:-6px;top:-2px;font-size:14px;font-weight:700;font-style:italic;color:var(--gray,#64748b);display:none;animation:sp-z 1.8s ease-in-out infinite;pointer-events:none}',
   '.sp-pet.sleep .sp-zzz{display:block}',
@@ -173,6 +177,19 @@
   var HEART = '<svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg>';
   var pet = el('div','sp-pet');
   var img = el('img','sp-img'); img.alt = ''; img.draggable = false; img.src = ch().img;
+  /* 姿勢：joy 開心／sleep 睡覺／pet 享受被摸／sad 低心情；角色沒有該姿勢圖就用基本圖 */
+  var curSrc = img.getAttribute('src'), joyUntil = 0, poseT = 0;
+  function poseSrc(name){ var c = ch(); return (name !== 'base' && c.poses && c.poses[name]) || c.img; }
+  function setPose(name){ var u = poseSrc(name); if(u !== curSrc){ curSrc = u; img.src = u; } }
+  function restPose(){ return (typeof moodV === 'number' && moodV < 20 && awayMs !== null && ch().poses && ch().poses.sad) ? 'sad' : 'base'; }   // 第一次使用（awayMs 為 null）先用正常站姿
+  function syncPose(){                                   // 依目前狀態決定顯示哪張
+    if(Date.now() < joyUntil) return;
+    if(typeof rubbing !== 'undefined' && rubbing) return setPose('pet');
+    if(pet.classList.contains('sleep')) return setPose('sleep');
+    setPose(restPose());
+  }
+  img.addEventListener('error', function(){ if(curSrc !== ch().img){ curSrc = ch().img; img.src = curSrc; } });
+  function preloadPoses(){ var c = ch(); if(c.poses) Object.keys(c.poses).forEach(function(k){ new Image().src = c.poses[k]; }); }
   var bubble = el('div','sp-bubble');
   var ring = el('div','sp-ring');
   var hud = el('div','sp-pethud', HEART+'<span class="sp-lbl">心情</span><div class="sp-bar"><div class="sp-fill"></div></div><span class="sp-num"></span><button class="sp-done" type="button">完成</button>');
@@ -244,6 +261,7 @@
   function renderMood(){
     [].forEach.call(document.querySelectorAll('.sp-fill'), function(f){ f.style.width = moodV + '%'; });
     [].forEach.call(document.querySelectorAll('.sp-num'), function(n){ n.textContent = moodV; });
+    syncPose();
   }
   function celebrate(){ hearts(7); anim('sp-joy', 900); say('心情滿分'+ch().tail, 2400); }
   function touchLast(){ set(K.last, String(Date.now())); }       // 記下「最後一次在首頁」的時間
@@ -269,6 +287,7 @@
   }
   function anim(cls, ms){
     pet.classList.remove('sp-joy','sp-shake','sp-pat'); void pet.offsetWidth; pet.classList.add(cls);
+    if(cls === 'sp-joy'){ joyUntil = Date.now() + ms + 250; setPose('joy'); clearTimeout(poseT); poseT = setTimeout(syncPose, ms + 250); }
     setTimeout(function(){ pet.classList.remove(cls); }, ms);
   }
   function heart(dx,dy){
@@ -308,13 +327,13 @@
     if(shift) hud.style.transform = 'translateX(calc(-50% - ' + shift + 'px))';
   }
   function startRub(){
-    closeMenu(); rubbing = true; ring.classList.add('on'); say('摸摸我～', 1800);
+    closeMenu(); rubbing = true; setPose('pet'); ring.classList.add('on'); say('摸摸我～', 1800);
     hud.classList.add('on'); setMood(getMood()+1); fitHud();            // 每次進入摸摸只 +1
     clearTimeout(rubEnd); rubEnd = setTimeout(function(){ stopRub(true); }, 8000);
   }
   function stopRub(reopen){                            // reopen=true：摸完回到選單
     var was = rubbing;
-    rubbing = false; ring.classList.remove('on'); hud.classList.remove('on'); clearTimeout(rubEnd);
+    rubbing = false; syncPose(); ring.classList.remove('on'); hud.classList.remove('on'); clearTimeout(rubEnd);
     if(was && reopen && !modal && !dragging) openMenu();
   }
   function rubTap(){                                     // 摸摸模式：每點一下角色 +1
@@ -352,7 +371,7 @@
   window.addEventListener('resize', function(){ loadPos(); if(menuOpen) openMenu(); });
 
   /* ---------- 選單動作 ---------- */
-  function setChar(i){ ci = (i + CHARS.length) % CHARS.length; set(K.char, ch().id); img.src = ch().img; updateMenuHead(); }
+  function setChar(i){ ci = (i + CHARS.length) % CHARS.length; set(K.char, ch().id); curSrc = ''; setPose(restPose()); preloadPoses(); updateMenuHead(); }
   function hide(){ closeMenu(); stopRub(); pet.style.display = 'none'; tab.style.display = 'block'; set(K.hidden,'1'); }
   function show(){ pet.style.display = ''; tab.style.display = 'none'; set(K.hidden,'0'); loadPos(); }
   tab.addEventListener('click', show);
@@ -619,15 +638,20 @@
   }
 
   /* ---------- 閒置：偶爾睡覺、心情好時開心跳一下、肚子餓了提醒 ---------- */
+  function startSleep(){
+    pet.classList.add('sleep'); if(ch().poses && ch().poses.sleep) pet.classList.add('sp-posed');
+    syncPose(); setTimeout(wake, 6000);
+  }
+  function wake(){ pet.classList.remove('sleep','sp-posed'); syncPose(); }
   var lastHungry = 0;
   setInterval(function(){
     if(pet.style.display === 'none' || dragging || menuOpen || rubbing || modal) return;
     var mood = getMood(), r = Math.random();
     if(mood < 20 && Date.now() - lastHungry > 90000){ lastHungry = Date.now(); say('陪我玩嘛'+ch().tail, 2200); }
     else if(mood >= 80 && r < .18) anim('sp-joy', 900);
-    else if(r < .15){ pet.classList.add('sleep'); setTimeout(function(){ pet.classList.remove('sleep'); }, 6000); }
+    else if(r < .15){ startSleep(); }
   }, 7000);
-  pet.addEventListener('pointerdown', function(){ pet.classList.remove('sleep'); });
+  pet.addEventListener('pointerdown', function(){ wake(); });
 
   /* ---------- 招呼語（第一次見面／好久不見／剛離開又回來／依台灣時間） ---------- */
   function greeting(){
@@ -646,6 +670,7 @@
 
   /* ---------- 啟動 ---------- */
   CHARS.forEach(function(c){ new Image().src = c.img; });
+  preloadPoses();
   renderMood(); touchLast();
   if(get(K.hidden) === '1'){ pet.style.display = 'none'; tab.style.display = 'block'; }
   else {
