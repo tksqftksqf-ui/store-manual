@@ -38,6 +38,8 @@
   '.sp-pet.drag .sp-img{animation:none;transform:scale(1.12) rotate(-5deg)}',
   '.sp-pet.sleep .sp-img{animation:none;transform:rotate(-12deg);opacity:.88}',
   '.sp-pet.sleep.sp-posed .sp-img{transform:none;opacity:1;animation:sp-breathe 3.2s ease-in-out infinite}',
+  '.sp-low .sp-img{animation:sp-droop 4.6s ease-in-out infinite}',
+  '.sp-low .sp-shadow{opacity:.14}',
   '.sp-shadow{position:absolute;left:50%;bottom:-2px;width:56%;height:8%;border-radius:50%;background:rgba(0,0,0,.35);transform:translateX(-50%);opacity:.2;filter:blur(2px);pointer-events:none}',
   '.sp-zzz{position:absolute;right:-6px;top:-2px;font-size:14px;font-weight:700;font-style:italic;color:var(--gray,#64748b);display:none;animation:sp-z 1.8s ease-in-out infinite;pointer-events:none}',
   '.sp-pet.sleep .sp-zzz{display:block}',
@@ -53,6 +55,16 @@
   '.sp-pethud.on{display:flex}',
   '.sp-done{pointer-events:auto;border:0;background:#f0648f;color:#fff;border-radius:999px;padding:3px 11px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;margin-left:2px}',
   '.sp-pat .sp-img{animation:sp-pat .16s ease-out}',
+  '.sp-img{rotate:var(--sp-lean,0deg);transition:rotate .45s ease-out}',
+  '.sp-look .sp-img{animation:sp-look 2.2s ease-in-out}',
+  '.sp-stretch .sp-img{animation:sp-stretch 1.6s ease-in-out}',
+  '.sp-hop .sp-img{animation:sp-hop .8s ease-out}',
+  '.sp-tilt .sp-img{animation:sp-tilt 1.8s ease-in-out}',
+  '@keyframes sp-look{0%,100%{transform:rotate(0)}22%{transform:rotate(-7deg) translateX(-3%)}50%{transform:rotate(-7deg) translateX(-3%)}72%{transform:rotate(6deg) translateX(3%)}90%{transform:rotate(6deg) translateX(3%)}}',
+  '@keyframes sp-stretch{0%,100%{transform:scale(1,1)}35%{transform:scale(.94,1.1)}60%{transform:scale(.94,1.1)}80%{transform:scale(1.05,.95)}}',
+  '@keyframes sp-hop{0%{transform:translateY(0) scale(1.05,.94)}30%{transform:translateY(-14%) scale(.97,1.04)}55%{transform:translateY(0) scale(1.05,.94)}75%{transform:translateY(-6%)}100%{transform:none}}',
+  '@keyframes sp-tilt{0%,100%{transform:rotate(0)}25%,70%{transform:rotate(9deg) translateX(2%)}}',
+  '@keyframes sp-droop{0%,100%{transform:scale(1,.97) translateY(1%)}50%{transform:scale(1.01,.94) translateY(2%)}}',
   '@keyframes sp-pat{0%{transform:scale(1)}50%{transform:scale(.93,1.05)}100%{transform:scale(1)}}',
   '.sp-pethud svg{width:14px;height:14px;fill:currentColor;flex:none}',
   '.sp-pethud .sp-bar{width:76px;flex:none}',
@@ -168,7 +180,7 @@
   '@keyframes sp-rise{from{opacity:1;transform:translateY(0) scale(.8)}to{opacity:0;transform:translateY(-56px) scale(1.3)}}',
   '@keyframes sp-pop{from{opacity:0;transform:scale(.94) translateY(6px)}to{opacity:1;transform:none}}',
   '@media (max-width:600px){:root{--sp-size:72px}}',
-  '@media (prefers-reduced-motion:reduce){.sp-img,.sp-zzz,.sp-ring{animation:none}}',
+  '@media (prefers-reduced-motion:reduce){.sp-img,.sp-zzz,.sp-ring{animation:none;transition:none}}',
   '@media print{.sp-pet,.sp-menu,.sp-tab,.sp-modal{display:none!important}}',
   /* 遊戲面板改版：與寵物選單一致的霧面玻璃 */
   '.sp-modal{background:rgba(30,60,120,.3);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}',
@@ -231,6 +243,7 @@
   function setPose(name){ var u = poseSrc(name); if(u !== curSrc){ curSrc = u; img.src = u; } }
   function restPose(){ return (typeof moodV === 'number' && moodV < 20 && awayMs !== null && ch().poses && ch().poses.sad) ? 'sad' : 'base'; }   // 第一次使用（awayMs 為 null）先用正常站姿
   function syncPose(){                                   // 依目前狀態決定顯示哪張
+    pet.classList.toggle('sp-low', typeof moodV === 'number' && moodV < 20 && awayMs !== null && !pet.classList.contains('sleep'));   // 低友好值：慢慢垂下的呼吸
     if(Date.now() < joyUntil) return;
     if(typeof rubbing !== 'undefined' && rubbing) return setPose('pet');
     if(pet.classList.contains('sleep')) return setPose('sleep');
@@ -334,7 +347,7 @@
     clearTimeout(sayT); sayT = setTimeout(function(){ bubble.classList.remove('show'); }, ms||1800);
   }
   function anim(cls, ms){
-    pet.classList.remove('sp-joy','sp-shake','sp-pat'); void pet.offsetWidth; pet.classList.add(cls);
+    pet.classList.remove('sp-joy','sp-shake','sp-pat','sp-look','sp-stretch','sp-hop','sp-tilt'); void pet.offsetWidth; pet.classList.add(cls);
     if(cls === 'sp-joy'){ joyUntil = Date.now() + ms + 250; setPose('joy'); clearTimeout(poseT); poseT = setTimeout(syncPose, ms + 250); }
     setTimeout(function(){ pet.classList.remove(cls); }, ms);
   }
@@ -386,7 +399,7 @@
   }
   function startRub(){
     closeMenu(); rubbing = true; setPose('pet'); ring.classList.add('on'); say(pick(['摸摸我～','輕輕的喔','這裡這裡','好期待']), 1800);
-    hud.classList.add('on'); setMood(getMood()+1); fitHud();            // 每次進入摸摸只 +1
+    hud.classList.add('on'); fitHud();            // 進入不加分，摸的時間越久加越多
     clearTimeout(rubEnd); rubEnd = setTimeout(function(){ stopRub(true); }, 8000);
   }
   function stopRub(reopen){                            // reopen=true：摸完回到選單
@@ -394,10 +407,13 @@
     rubbing = false; syncPose(); ring.classList.remove('on'); hud.classList.remove('on'); clearTimeout(rubEnd);
     if(was && reopen && !modal && !dragging) openMenu();
   }
-  function rubTap(){                                     // 摸摸模式：每點一下角色 +1
+  var lastRub = 0, rubCount = 0;
+  function rubTap(){                                     // 摸摸模式：點或來回滑動都算；每 3 顆愛心 +1，摸越久加越多
     clearTimeout(rubEnd); rubEnd = setTimeout(function(){ stopRub(true); }, 6000);
+    var now = Date.now(); if(now - lastRub < 260) return; lastRub = now;
     heart((Math.random()-.5)*40, Math.random()*14);
     anim('sp-pat', 160);
+    if(++rubCount % 3 === 0) setMood(getMood()+1);
     if(Math.random() < .15){
       var P = ['好舒服','嘿嘿','再摸再摸','好喜歡'];
       if(ch().tail.indexOf('喵') >= 0) P = P.concat(['呼嚕嚕','喵嗚～']);      // 貓咪多一點貓的反應
@@ -406,23 +422,25 @@
   }
 
   /* ---------- 拖曳與點擊 ---------- */
+  var rubDown = false;
   var dragging = false, moved = 0, sx, sy, ox, oy, wasOpen = false;
   pet.addEventListener('pointerdown', function(e){
     try{ pet.setPointerCapture(e.pointerId); }catch(_){}
     ring.classList.remove('on'); set(K.seen,'1');
-    if(rubbing){ rubTap(); return; }
+    if(rubbing){ rubDown = true; rubTap(); return; }
     wasOpen = menuOpen; closeMenu();
     var p = curPos(); dragging = true; moved = 0; sx = e.clientX; sy = e.clientY; ox = p.x; oy = p.y;
     pet.classList.add('drag');
   });
   pet.addEventListener('pointermove', function(e){
-    if(rubbing) return;
+    if(rubbing){ if(rubDown) rubTap(); return; }
     if(!dragging) return;
     var dx = e.clientX - sx, dy = e.clientY - sy;
     moved = Math.max(moved, Math.hypot(dx,dy));
     place(ox+dx, oy+dy);
   });
   function endPointer(){
+    rubDown = false;
     if(!dragging) return;
     dragging = false; pet.classList.remove('drag');
     if(moved >= 6){ savePos(); return; }
@@ -801,7 +819,7 @@
   }
   function wake(){ pet.classList.remove('sleep','sp-posed'); syncPose(); }
   var lastTip = Date.now(), tipIdx = 0;
-  var TIPS = ['點我開選單，玩遊戲、摸摸都能增加友好值','遊戲玩得好，友好值加更多','按「摸摸」進去就加 1 點友好值','太久沒來，友好值會慢慢下降喔','情緒釋放打滿，一次加 15 點友好值','天降業績接到錢錢，一次算 3 分','換角色可以選自己喜歡的夥伴','今日運勢每天抽一次，第一次抽有友好值'];
+  var TIPS = ['點我開選單，玩遊戲、摸摸都能增加友好值','遊戲玩得好，友好值加更多','摸摸的時間越久，友好值加越多','太久沒來，友好值會慢慢下降喔','情緒釋放打滿，一次加 15 點友好值','天降業績接到錢錢，一次算 3 分','換角色可以選自己喜歡的夥伴','今日運勢每天抽一次，第一次抽有友好值'];
   var lastHungry = 0;
   setInterval(function(){
     if(pet.style.display === 'none' || dragging || menuOpen || rubbing || modal) return;
@@ -812,6 +830,28 @@
     else if(r < .15){ startSleep(); }
   }, 7000);
   pet.addEventListener('pointerdown', function(){ wake(); });
+
+  /* 待機小動作：東張西望、伸懶腰、小跳、歪頭（不加文字，只有動作） */
+  var IDLE = ['sp-look','sp-stretch','sp-hop','sp-tilt'], IDLE_MS = {'sp-look':2200,'sp-stretch':1600,'sp-hop':800,'sp-tilt':1800};
+  setInterval(function(){
+    if(pet.style.display === 'none' || document.hidden || dragging || menuOpen || rubbing || modal || pet.classList.contains('sleep') || Date.now() < joyUntil) return;
+    if(Math.random() > .4) return;
+    var a = getMood() < 20 ? pick(['sp-look','sp-tilt']) : pick(IDLE);    // 低友好值不會蹦蹦跳跳
+    anim(a, IDLE_MS[a]);
+  }, 5000);
+
+  /* 滑鼠移動時，寵物微微朝游標方向傾斜（只限滑鼠，觸控裝置不啟用） */
+  var leanRaf = 0, leanX = 0;
+  window.addEventListener('pointermove', function(e){
+    if(e.pointerType !== 'mouse') return;
+    leanX = e.clientX;
+    if(leanRaf) return;
+    leanRaf = requestAnimationFrame(function(){
+      leanRaf = 0;
+      var r = pet.getBoundingClientRect(), d = (leanX - (r.left + r.width/2)) / Math.max(window.innerWidth/2, 1);
+      pet.style.setProperty('--sp-lean', (pet.classList.contains('sleep') || rubbing ? 0 : clamp(d, -1, 1) * 5).toFixed(1) + 'deg');
+    });
+  });
 
   /* ---------- 招呼語（第一次見面／好久不見／剛離開又回來／依台灣時間） ---------- */
   function greeting(){
@@ -832,7 +872,7 @@
   /* ---------- 啟動 ---------- */
   CHARS.forEach(function(c){ new Image().src = c.img; });
   preloadPoses();
-  renderMood(); touchLast();
+  renderMood(); touchLast(); syncPose();
   if(get(K.hidden) === '1'){ pet.style.display = 'none'; tab.style.display = 'block'; }
   else {
     loadPos(); if(!get(K.seen)) ring.classList.add('on');             // 第一次來：光圈提示可以點
