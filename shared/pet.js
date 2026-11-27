@@ -92,7 +92,36 @@
   '.sp-rps-btns button{width:78px;height:78px;border:1px solid var(--border,#dde3ed);background:var(--light,#f1f5f9);border-radius:18px;font-size:38px;cursor:pointer}',
   '.sp-rps-btns button:active{transform:scale(.93)}',
   '.sp-rps-score{margin-top:12px;font-size:13px;color:var(--gray,#64748b)}',
+  '.sp-pick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}',
+  '.sp-pbar{height:8px;background:var(--light,#f1f5f9);border-radius:99px;overflow:hidden;margin-bottom:8px}',
+  '.sp-pfill{height:100%;width:100%;background:hsl(352,72%,40%);border-radius:99px;transition:width .08s,background .15s}',
+  '.sp-smash{display:grid;place-items:center;background:hsl(340,30%,18%);cursor:pointer;transition:background .15s;position:relative}',
+  '.sp-orb{position:relative;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle at 35% 30%,hsl(352,72%,62%) 0,hsl(352,72%,44%) 30%,hsl(352,72%,30%) 70%,hsl(352,72%,18%) 100%);box-shadow:0 0 36px hsla(352,72%,45%,.7),inset -8px -10px 22px hsla(352,72%,12%,.5);animation:sp-orbfloat 2.4s ease-in-out infinite;pointer-events:none;will-change:transform}',
+  '.sp-orb.pa{animation:sp-punch .16s ease}',
+  '.sp-orb.pb{animation:sp-punch2 .16s ease}',
+  '.sp-crack{position:absolute;left:50%;top:50%;width:3px;height:0;background:rgba(90,10,45,.55);transform-origin:top center;border-radius:2px;opacity:0;transition:height .15s,opacity .15s}',
+  '.sp-crack.on{opacity:1;height:62px}',
+  '.sp-orb{transition:width .15s,height .15s,box-shadow .15s}',
+  '.sp-orbtxt{position:absolute;left:0;right:0;top:0;bottom:0;display:grid;place-items:center;padding:16px;text-align:center;font-weight:800;font-size:22px;line-height:1.25;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.4);pointer-events:none;word-break:keep-all}',
+  '.sp-spark{position:absolute;font-weight:800;font-size:18px;line-height:1;pointer-events:none;text-shadow:0 1px 4px rgba(0,0,0,.35)}',
+  '.sp-vent{position:absolute;font-weight:800;font-size:17px;pointer-events:none;white-space:nowrap;text-shadow:0 1px 6px rgba(0,0,0,.35)}',
+  '.sp-q{font-weight:700;font-size:15px;margin-bottom:12px;text-align:center}',
+  '.sp-chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}',
+  '.sp-chip{border:1px solid #f1c9d2;background:#fff3f5;border-radius:999px;padding:9px 15px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;color:#7a2335}',
+  '.sp-chip:active{transform:scale(.95)}',
+  '@media (hover:hover){.sp-chip:hover{background:#ffe6eb;border-color:#e8a3b2}}',
+  '.sp-calm{background:linear-gradient(180deg,#e3f5f5,#f2fafa 60%,#fff);border-radius:16px;padding:14px 10px}',
+  '.sp-breath{position:relative;height:216px;display:grid;place-items:center;margin:0 0 6px}',
+  '.sp-bcircle{width:120px;height:120px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#c3eaea 55%,#7fcfcf);box-shadow:0 0 44px rgba(80,180,180,.6),0 0 90px rgba(80,180,180,.28);animation:sp-breath 10s ease-in-out infinite}',
+  '.sp-btext{position:absolute;font-weight:700;color:#0f5b5b;font-size:19px;letter-spacing:.15em}',
+  '@media (prefers-reduced-motion:reduce){.sp-bcircle{animation:none}}',
+  '.sp-box{max-height:calc(100vh - 24px);overflow-y:auto}',
+  '@media (max-height:660px){.sp-breath{height:164px}.sp-bcircle{width:92px;height:92px}.sp-btext{font-size:16px}}',
   /* 動畫 */
+  '@keyframes sp-breath{0%{transform:scale(.62)}40%{transform:scale(1.42)}100%{transform:scale(.62)}}',
+  '@keyframes sp-orbfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}',
+  '@keyframes sp-punch{0%{transform:scale(1)}40%{transform:scale(.85)}100%{transform:scale(1)}}',
+  '@keyframes sp-punch2{0%{transform:scale(1)}40%{transform:scale(.85)}100%{transform:scale(1)}}',
   '@keyframes sp-breathe{0%,100%{transform:scale(1,1)}50%{transform:scale(1.015,1.03)}}',
   '@keyframes sp-joy{0%{transform:translateY(0) scale(1.08,.92)}35%{transform:translateY(-26%) scale(.95,1.08)}65%{transform:translateY(0) scale(1.08,.92)}85%{transform:translateY(-8%)}100%{transform:none}}',
   '@keyframes sp-shake{0%,100%{transform:rotate(0)}20%{transform:rotate(-8deg)}40%{transform:rotate(8deg)}60%{transform:rotate(-6deg)}80%{transform:rotate(5deg)}}',
@@ -318,9 +347,10 @@
   function showPicker(){
     if(gameStop){ gameStop(); gameStop = null; }
     setTitle('玩遊戲');
-    var b = body(); b.innerHTML = '<div class="sp-pick"><button data-g="catch"><span>🍎</span>接食物</button><button data-g="rps"><span>✌️</span>猜拳</button></div>';
+    var b = body(); b.innerHTML = '<div class="sp-pick"><button data-g="catch"><span>🍎</span>接食物</button><button data-g="rps"><span>✌️</span>猜拳</button><button data-g="smash"><span>💢</span>情緒釋放</button></div>';
     b.querySelector('[data-g=catch]').onclick = startCatch;
     b.querySelector('[data-g=rps]').onclick = startRps;
+    b.querySelector('[data-g=smash]').onclick = startSmash;
   }
 
   /* 遊戲一：接食物（30 秒，拖曳或方向鍵左右移動） */
@@ -409,6 +439,145 @@
         setMood(getMood()+2); res.textContent += '　心情 +2'; renderScore();
       };
     });
+  }
+
+  /* 遊戲三：情緒釋放
+   * 目的：釋放工作壓力。球上隨機寫一個工作壓力，連點打散它；
+   * 壓力值從 100% 往下降，球與畫面從緊繃的暗紅，漸漸退成明亮平靜的青藍；10 秒內壓力歸零才算釋放成功並增加心情。
+   * 第一下點下去才開始倒數。 */
+  var SMASH_SECS = 10, SMASH_TARGET = 35, SMASH_REWARD = 15;
+  var STRESSES = ['業績壓力','奧客','系統又當機','退換貨爭議','客人殺價','盤點','排班','待辦清單','庫存對不上','電話一直響','加班'];
+  var CALM = ['辛苦了，你已經做得很好了','慢慢呼吸，壓力正在離開','放下它，你值得好好休息','一次一件事，你可以的'];
+  var VENTS = ['砰！','走開！','退散！','不理你','放下它','呼～'];
+  function startSmash(){                               // 第一步：選現在的壓力是什麼
+    if(gameStop){ gameStop(); gameStop = null; }
+    setTitle('情緒釋放');
+    var bb = body();
+    bb.innerHTML = '<div class="sp-q">現在最讓你有壓力的是？</div><div class="sp-chips"></div>';
+    var box = bb.querySelector('.sp-chips');
+    STRESSES.concat(['其他']).forEach(function(name){
+      var c = el('button','sp-chip', name); c.type = 'button';
+      c.onclick = function(){ launchSmash(name === '其他' ? '壓力' : name); };
+      box.appendChild(c);
+    });
+  }
+  function launchSmash(phrase){                        // 第二步：打散它
+    if(gameStop){ gameStop(); gameStop = null; }
+    setTitle('情緒釋放');
+    var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var b = body();
+    b.innerHTML = '<div class="sp-hud"><span>剩 <b class="t">' + SMASH_SECS + '</b> 秒</span><span>壓力值 <b class="s">100</b>%</span></div>' +
+                  '<div class="sp-pbar"><div class="sp-pfill"></div></div>' +
+                  '<div class="sp-arena sp-smash"><div class="sp-orb"><div class="sp-orbtxt"></div></div></div>';
+    var arena = b.querySelector('.sp-arena'), orb = b.querySelector('.sp-orb'), txt = b.querySelector('.sp-orbtxt');
+    var tEl = b.querySelector('.t'), sEl = b.querySelector('.s'), pf = b.querySelector('.sp-pfill');
+    txt.textContent = phrase;
+    var ANG = [18, 110, 205, 295], cracks = [];
+    ANG.forEach(function(a){ var c = el('div','sp-crack'); c.style.transform = 'translate(-50%,0) rotate(' + a + 'deg)'; orb.appendChild(c); cracks.push(c); });
+    var hits = 0, started = 0, timer = 0, over = false, toggle = false;
+
+    /* 色調：緊繃暗紅 → 平靜青藍；p = 0（滿壓力）～ 1（釋放） */
+    function hsl(h,sat,l,a){ return 'hsl' + (a != null ? 'a' : '') + '(' + h + ',' + sat + '%,' + l + '%' + (a != null ? ',' + a : '') + ')'; }
+    function tone(p){
+      var h = Math.round(352 - 162*p), sat = Math.round(72 - 22*p), l = Math.round(30 + 36*p);
+      orb.style.background = 'radial-gradient(circle at 35% 30%,' + hsl(h,sat,l+30) + ' 0,' + hsl(h,sat,l+14) + ' 30%,' + hsl(h,sat,l) + ' 70%,' + hsl(h,sat,l-12) + ' 100%)';
+      orb.style.boxShadow = '0 0 36px ' + hsl(h,sat,l+10,.7) + ',inset -8px -10px 22px ' + hsl(h,sat,l-18,.45);
+      arena.style.background = hsl(Math.round(340 - 150*p), Math.round(30 + 15*p), Math.round(18 + 74*p));
+      pf.style.background = hsl(h,sat,l+8);
+      var size = Math.round(150 - 58*p);
+      orb.style.width = size + 'px'; orb.style.height = size + 'px';
+      txt.style.opacity = String(Math.max(.15, 1 - .85*p));
+      txt.style.fontSize = Math.round(22 - 6*p) + 'px';
+      return {h:h, s:sat, l:l};
+    }
+    tone(0);
+    function fgFor(p){ return p < .5 ? '#fff' : '#0f5b5b'; }
+
+    function sparks(n, far, p){
+      var r = arena.getBoundingClientRect(), cx = r.width/2, cy = r.height/2, chars = phrase.split('');
+      var col = p < .5 ? '#ffd9c8' : '#0f6b6b';
+      for(var i=0;i<n;i++){
+        var sp = el('div','sp-spark', chars[Math.floor(Math.random()*chars.length)]), ang = Math.random()*Math.PI*2, d = (far ? 70 : 40) + Math.random()*(far ? 120 : 50);
+        sp.style.left = (cx-9)+'px'; sp.style.top = (cy-9)+'px'; sp.style.color = col;
+        arena.appendChild(sp);
+        if(sp.animate) sp.animate([{transform:'translate(0,0) rotate(0) scale(1)',opacity:1},{transform:'translate('+Math.cos(ang)*d+'px,'+Math.sin(ang)*d+'px) rotate('+(Math.random()*240-120)+'deg) scale(.4)',opacity:0}],
+                                  {duration: far ? 700 : 400, easing:'ease-out', fill:'forwards'});
+        (function(x){ setTimeout(function(){ x.remove(); }, far ? 750 : 450); })(sp);
+      }
+    }
+    function vent(e, p){                                  // 點的位置飄出發洩字眼
+      var r = arena.getBoundingClientRect(), v = el('div','sp-vent', pick(VENTS));
+      v.style.left = Math.max(4, Math.min(r.width-60, e.clientX - r.left - 20)) + 'px';
+      v.style.top = Math.max(4, e.clientY - r.top - 30) + 'px'; v.style.color = fgFor(p);
+      arena.appendChild(v);
+      if(v.animate) v.animate([{transform:'translateY(0)',opacity:1},{transform:'translateY(-46px)',opacity:0}], {duration:650, easing:'ease-out', fill:'forwards'});
+      setTimeout(function(){ v.remove(); }, 700);
+    }
+    function punch(e, p){
+      toggle = !toggle;
+      orb.classList.remove(toggle ? 'pb' : 'pa'); orb.classList.add(toggle ? 'pa' : 'pb');
+      orb.style.filter = 'brightness(1.4)'; setTimeout(function(){ orb.style.filter = ''; }, 90);
+      if(reduce) return;
+      sparks(5, false, p); vent(e, p);
+      if(arena.animate) arena.animate([{transform:'translate(0,0)'},{transform:'translate(-3px,2px)'},{transform:'translate(3px,-2px)'},{transform:'translate(0,0)'}], {duration:120});
+    }
+    function tick(){
+      var left = SMASH_SECS - (Date.now() - started)/1000;
+      tEl.textContent = Math.max(0, Math.ceil(left));
+      if(left <= 0) finish(false);
+    }
+    function onHit(e){
+      if(over) return;
+      if(e && e.preventDefault) e.preventDefault();
+      if(!started){ started = Date.now(); timer = setInterval(tick, 100); }
+      hits++;
+      var p = Math.min(1, hits/SMASH_TARGET);
+      sEl.textContent = Math.max(0, Math.round(100 - p*100));
+      pf.style.width = Math.max(0, 100 - p*100) + '%';
+      tone(p);
+      var lv = Math.min(4, Math.floor(p*4));
+      cracks.forEach(function(c, i){ if(i < lv) c.classList.add('on'); });
+      punch(e, p);
+      if(navigator.vibrate){ try{ navigator.vibrate(10); }catch(_){} }
+      if(hits >= SMASH_TARGET) finish(true);
+    }
+    function finish(win){
+      if(over) return; over = true; clearInterval(timer);
+      arena.removeEventListener('pointerdown', onHit);
+      var used = started ? Math.min(SMASH_SECS, (Date.now()-started)/1000).toFixed(1) : '0';
+      var left = Math.max(0, Math.round(100 - Math.min(1, hits/SMASH_TARGET)*100));
+      if(win){
+        tone(1); sEl.textContent = '0'; pf.style.width = '0%';
+        if(!reduce){
+          if(orb.animate) orb.animate([{transform:'scale(1)',opacity:1},{transform:'scale(1.8)',opacity:0}], {duration:380, fill:'forwards'});
+          sparks(26, true, 1);
+        } else orb.style.visibility = 'hidden';
+        setMood(getMood() + SMASH_REWARD); hearts(6); anim('sp-joy', 900);
+      }
+      setTimeout(function(){
+        b.innerHTML = '<div class="sp-result' + (win ? ' sp-calm' : '') + '"><b' + (win ? ' style="color:#0f5b5b"' : '') + '>' + (win ? '釋放成功' : '壓力還沒散完') + '</b>' +
+          (win ? '<p style="font-size:14px;color:#0f5b5b;font-weight:600">' + pick(CALM) + '</p>' +
+                 '<div class="sp-breath"><div class="sp-bcircle"></div><span class="sp-btext">吸氣</span></div>' +
+                 '<p style="font-size:16px;font-weight:700;color:#0f5b5b">今天會是Luck的一天</p>'
+               : '<p>還剩 ' + left + '%，深呼吸，再試一次吧</p>') +
+          (win ? '<p>用了 ' + used + ' 秒</p><p style="color:#f0648f;font-weight:700">心情 +' + SMASH_REWARD + '</p>' : '') +
+          '<div class="sp-acts"><button class="main" id="sp-again">再玩一次</button><button id="sp-back">返回</button></div></div>';
+        b.querySelector('#sp-again').onclick = startSmash;
+        b.querySelector('#sp-back').onclick = showPicker;
+        if(win){                                       // 呼吸引導：吸氣 4 秒、吐氣 6 秒，循環到離開為止
+          var bt = b.querySelector('.sp-btext'), btimer = 0;
+          var cycle = function(){
+            bt.textContent = '吸氣';
+            btimer = setTimeout(function(){ bt.textContent = '吐氣'; btimer = setTimeout(cycle, 6000); }, 4000);
+          };
+          cycle();
+          gameStop = function(){ clearTimeout(btimer); };
+        }
+      }, win && !reduce ? 750 : 300);
+      gameStop = null;
+    }
+    arena.addEventListener('pointerdown', onHit);
+    gameStop = function(){ over = true; clearInterval(timer); arena.removeEventListener('pointerdown', onHit); };
   }
 
   /* ---------- 閒置：偶爾睡覺、心情好時開心跳一下、肚子餓了提醒 ---------- */
