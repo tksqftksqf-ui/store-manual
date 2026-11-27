@@ -192,6 +192,30 @@
   '.sp-arena{border-radius:18px}',
   '.sp-rps-btns button{background:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.9);box-shadow:0 2px 8px rgba(30,60,120,.08)}',
   '@media (max-width:700px){.sp-box{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(255,255,255,.97)}.sp-modal{-webkit-backdrop-filter:none;backdrop-filter:none}}',
+  '.sp-mhint{margin-top:12px;text-align:center;font-size:11.5px;color:#64748b;letter-spacing:.02em}',
+  '.sp-hintline{text-align:center;font-size:12px;color:#64748b;margin-top:14px}',
+  /* 今日運勢（搖籤） */
+  '.sp-pick{grid-template-columns:repeat(2,1fr)}',
+  '.sp-ic.c7{background:linear-gradient(145deg,#c9a8ff,#8b5cf6)}',
+  '.sp-fort{text-align:center;padding:4px 0 6px}',
+  '.sp-tubewrap{position:relative;width:150px;height:190px;margin:0 auto;cursor:pointer;touch-action:none;user-select:none;-webkit-user-select:none}',
+  '.sp-tubesvg{width:100%;height:100%;display:block;filter:drop-shadow(0 8px 10px rgba(120,80,20,.25));transform-origin:50% 90%}',
+  '.sp-tubewrap.rattle .sp-tubesvg{animation:sp-rattle .32s ease-in-out}',
+  '.sp-stick{position:absolute;left:50%;top:22px;width:9px;height:64px;margin-left:-4px;border-radius:3px;background:#f8e3b5;border:2px solid #a8742c;opacity:0;pointer-events:none}',
+  '.sp-stick.go{animation:sp-stickout .9s ease-in forwards}',
+  '.sp-ftip{margin-top:6px;font-size:13px;color:#64748b}',
+  '.sp-ftip b{color:#f0648f;font-size:15px}',
+  '.sp-fres{text-align:center;animation:sp-flip .5s cubic-bezier(.2,.9,.3,1.2)}',
+  '.sp-ftier{font-size:44px;font-weight:900;letter-spacing:.08em;line-height:1.2;background:linear-gradient(135deg,var(--g1),var(--g2));-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:6px}',
+  '.sp-frow{display:flex;justify-content:space-between;align-items:center;padding:8px 14px;margin:0 0 6px;border-radius:12px;background:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.9);font-size:14px;color:#334155}',
+  '.sp-frow b{font-weight:800;display:flex;align-items:center;gap:6px}',
+  '.sp-star{color:#f5a623;letter-spacing:.1em}',
+  '.sp-fsw{display:inline-block;width:14px;height:14px;border-radius:50%;box-shadow:0 0 0 1.5px rgba(0,0,0,.15)}',
+  '.sp-fmsg{margin:10px 6px 4px;font-size:14px;font-weight:700;color:#334155;line-height:1.5}',
+  '.sp-fnote{margin:0 0 12px;font-size:12px;color:#64748b}',
+  '@keyframes sp-rattle{0%,100%{transform:rotate(0)}20%{transform:rotate(-9deg)}40%{transform:rotate(8deg)}60%{transform:rotate(-6deg)}80%{transform:rotate(4deg)}}',
+  '@keyframes sp-stickout{0%{opacity:0;transform:translateY(20px)}15%{opacity:1}60%{opacity:1;transform:translateY(-60px) rotate(8deg)}100%{opacity:0;transform:translateY(-95px) rotate(14deg) scale(1.25)}}',
+  '@keyframes sp-flip{from{opacity:0;transform:scale(.7) rotateX(60deg)}to{opacity:1;transform:none}}',
   'body.sp-pad{padding-bottom:104px}'
   ].join('\n');
   var st = el('style'); st.textContent = css; document.head.appendChild(st);
@@ -216,7 +240,7 @@
   function preloadPoses(){ var c = ch(); if(c.poses) Object.keys(c.poses).forEach(function(k){ new Image().src = c.poses[k]; }); }
   var bubble = el('div','sp-bubble');
   var ring = el('div','sp-ring');
-  var hud = el('div','sp-pethud', HEART+'<span class="sp-lbl">心情</span><div class="sp-bar"><div class="sp-fill"></div></div><span class="sp-num"></span><button class="sp-done" type="button">完成</button>');
+  var hud = el('div','sp-pethud', HEART+'<span class="sp-lbl">友好值</span><div class="sp-bar"><div class="sp-fill"></div></div><span class="sp-num"></span><button class="sp-done" type="button">完成</button>');
   hud.querySelector('.sp-done').addEventListener('pointerdown', function(e){ e.stopPropagation(); });
   hud.querySelector('.sp-done').addEventListener('click', function(){ stopRub(true); });
   pet.appendChild(ring); pet.appendChild(hud); pet.appendChild(bubble); pet.appendChild(el('div','sp-shadow')); pet.appendChild(img); pet.appendChild(el('div','sp-zzz','zzz'));
@@ -235,7 +259,7 @@
       '<button class="sp-btn" data-a="rub"><i class="sp-ic c1">'+IC_HEART+'</i>摸摸</button>' +
       '<button class="sp-btn" data-a="char"><i class="sp-ic c3">'+IC_SWAP+'</i>換角色</button>' +
       '<button class="sp-btn" data-a="hide"><i class="sp-ic c4">'+IC_DOWN+'</i>收起</button>' +
-    '</div><div class="sp-tail"></div>');
+    '</div><div class="sp-mhint">玩遊戲、摸摸都能增加友好值</div><div class="sp-tail"></div>');
   var mavImg = menu.querySelector('.sp-mav img'), mname = menu.querySelector('.sp-mname');
   function updateMenuHead(){ mavImg.src = ch().img; mname.textContent = ch().name; }
   updateMenuHead();
@@ -287,7 +311,7 @@
     [].forEach.call(document.querySelectorAll('.sp-num'), function(n){ n.textContent = moodV; });
     syncPose();
   }
-  function celebrate(){ hearts(7); anim('sp-joy', 900); say(pick(['心情滿分','最喜歡你了','太幸福了','好開心好開心'])+ch().tail, 2400); }
+  function celebrate(){ hearts(7); anim('sp-joy', 900); say(pick(['友好值滿分','最喜歡你了','太幸福了','好開心好開心'])+ch().tail, 2400); }
   function touchLast(){ set(K.last, String(Date.now())); }       // 記下「最後一次在首頁」的時間
   setInterval(function(){
     if(document.visibilityState !== 'visible' || pet.style.display === 'none') return;
@@ -325,6 +349,7 @@
   var menuOpen = false;
   function openMenu(){
     menuOpen = true; menu.classList.add('open'); renderMood();
+    menu.querySelector('.sp-mhint').style.display = getMood() < 60 ? '' : 'none';      // 心情不高才提示，高了就不囉嗦
     var p = curPos(), s = size(), w = menu.offsetWidth, h = menu.offsetHeight;
     var x = clamp(p.x + s/2 - w/2, 8, innerWidth - w - 8);
     var y = p.y - h - 12, below = false; if(y < 8){ y = p.y + s + 12; below = true; }
@@ -455,16 +480,20 @@
   var IC_BAG = ICON('<path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>');
   var IC_CUT = ICON('<circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/>');
   var IC_ZAP = ICON('<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>');
+  var IC_STAR = ICON('<polygon points="12 2 15.1 8.3 22 9.3 17 14.1 18.2 21 12 17.8 5.8 21 7 14.1 2 9.3 8.9 8.3 12 2"/>');
   function showPicker(){
     if(gameStop){ gameStop(); gameStop = null; }
     setTitle('玩遊戲');
     var b = body(); b.innerHTML = '<div class="sp-pick">' +
       '<button class="sp-btn" data-g="catch"><i class="sp-ic c5">'+IC_BAG+'</i>天降業績</button>' +
       '<button class="sp-btn" data-g="rps"><i class="sp-ic c2">'+IC_CUT+'</i>猜拳</button>' +
-      '<button class="sp-btn" data-g="smash"><i class="sp-ic c6">'+IC_ZAP+'</i>情緒釋放</button></div>';
+      '<button class="sp-btn" data-g="smash"><i class="sp-ic c6">'+IC_ZAP+'</i>情緒釋放</button>' +
+      '<button class="sp-btn" data-g="fortune"><i class="sp-ic c7">'+IC_STAR+'</i>今日運勢</button></div>' +
+      '<div class="sp-hintline">玩遊戲可以增加友好值，玩得越好加越多</div>';
     b.querySelector('[data-g=catch]').onclick = startCatch;
     b.querySelector('[data-g=rps]').onclick = startRps;
     b.querySelector('[data-g=smash]').onclick = startSmash;
+    b.querySelector('[data-g=fortune]').onclick = startFortune;
   }
 
   /* 遊戲一：天降業績（10 秒，拖曳或方向鍵左右移動，接 3C 產品與鈔票） */
@@ -521,7 +550,7 @@
       var best = parseInt(get(K.best)||'0',10), isBest = score > best;
       if(isBest) set(K.best, String(score));
       var gain = Math.min(15, score); setMood(getMood() + gain);
-      b.innerHTML = '<div class="sp-result"><b>'+score+' 分</b><p>'+(isBest ? '新紀錄！' : '最高紀錄 '+best+' 分')+'</p><p style="color:#f0648f;font-weight:700">心情 +'+gain+'</p>' +
+      b.innerHTML = '<div class="sp-result"><b>'+score+' 分</b><p>'+(isBest ? '新紀錄！' : '最高紀錄 '+best+' 分')+'</p><p style="color:#f0648f;font-weight:700">友好值 +'+gain+'</p>' +
         '<div class="sp-acts"><button class="main" id="sp-again">再玩一次</button><button id="sp-back">返回</button></div></div>';
       b.querySelector('#sp-again').onclick = startCatch;
       b.querySelector('#sp-back').onclick = showPicker;
@@ -552,7 +581,7 @@
         if(m === p){ d++; res.textContent = '平手！'; }
         else if((p - m + 3) % 3 === 1){ w++; res.textContent = '你贏了！'; hearts(2); anim('sp-shake',450); }
         else { l++; res.textContent = '我贏啦'+ch().tail; anim('sp-joy',900); }
-        gameNote = 'played'; setMood(getMood()+2); res.textContent += '　心情 +2'; renderScore();
+        gameNote = 'played'; setMood(getMood()+2); res.textContent += '　友好值 +2'; renderScore();
       };
     });
   }
@@ -677,7 +706,7 @@
                  '<div class="sp-breath"><div class="sp-bcircle"></div><span class="sp-btext">吸氣</span></div>' +
                  '<p style="font-size:16px;font-weight:700;color:#0f5b5b">今天會是Luck的一天</p>'
                : '<p>還剩 ' + left + '%，深呼吸，再試一次吧</p>') +
-          (win ? '<p>用了 ' + used + ' 秒</p><p style="color:#f0648f;font-weight:700">心情 +' + SMASH_REWARD + '</p>' : '') +
+          (win ? '<p>用了 ' + used + ' 秒</p><p style="color:#f0648f;font-weight:700">友好值 +' + SMASH_REWARD + '</p>' : '') +
           '<div class="sp-acts"><button class="main" id="sp-again">再玩一次</button><button id="sp-back">返回</button></div></div>';
         b.querySelector('#sp-again').onclick = startSmash;
         b.querySelector('#sp-back').onclick = showPicker;
@@ -697,17 +726,88 @@
     gameStop = function(){ over = true; clearInterval(timer); arena.removeEventListener('pointerdown', onHit); };
   }
 
+  /* 遊戲四：今日運勢（搖籤）
+   * 點籤筒搖 5 下掉出一支籤，翻出今天的運勢。台灣時間每天只有一個結果（存在這台裝置），
+   * 當天第一次抽 +FORTUNE_REWARD 友好值，再進來只是看結果、不再加分。內容純屬娛樂，不涉及業績承諾。 */
+  var FORTUNE_REWARD = 5, FORT_KEY = 'toolbox-pet-fort';
+  var FORT_TIERS = [
+    {t:'大吉', w:10, g:['#ffb300','#ff6b3d'], s:[5,5], m:'今天人緣特別好，說什麼客人都聽得進去。'},
+    {t:'中吉', w:25, g:['#ff8ab3','#f0648f'], s:[4,5], m:'小小的好運在身邊，留意客人的小需求。'},
+    {t:'小吉', w:30, g:['#6bb6ff','#5b7cf0'], s:[3,4], m:'穩穩做好每一件事，今天會很順。'},
+    {t:'吉',   w:25, g:['#5fd1a8','#2fb5a3'], s:[3,4], m:'多笑一點，好運自然來。'},
+    {t:'末吉', w:10, g:['#aab4c3','#7a8aa6'], s:[2,3], m:'今天慢慢來，一次處理一件事就好。'}
+  ];
+  var FORT_COLORS = [['橘色','#ff8a3d'],['粉紅色','#f58bb0'],['天空藍','#6bb6ff'],['薄荷綠','#5fd1a8'],['奶油黃','#f6d77a'],['薰衣草紫','#a98bf0'],['銀灰色','#aab4c3'],['白色','#ffffff']];
+  var TUBE_SVG = '<svg class="sp-tubesvg" viewBox="0 0 120 150">' +
+    '<g stroke="#a8742c" stroke-width="2" fill="#f8e3b5">' +
+    '<rect x="34" y="14" width="7" height="50" rx="2" transform="rotate(-14 37 60)"/>' +
+    '<rect x="46" y="8" width="7" height="54" rx="2" transform="rotate(-6 49 60)"/>' +
+    '<rect x="58" y="12" width="7" height="52" rx="2" transform="rotate(3 61 60)"/>' +
+    '<rect x="70" y="9" width="7" height="54" rx="2" transform="rotate(10 73 60)"/>' +
+    '<rect x="81" y="16" width="7" height="48" rx="2" transform="rotate(18 84 60)"/></g>' +
+    '<path d="M30 62h60l-6 80a8 8 0 0 1-8 7H44a8 8 0 0 1-8-7z" fill="#e9b872" stroke="#a8742c" stroke-width="3" stroke-linejoin="round"/>' +
+    '<rect x="26" y="54" width="68" height="13" rx="6.5" fill="#f3cf95" stroke="#a8742c" stroke-width="3"/>' +
+    '<circle cx="60" cy="104" r="17" fill="#d6453d"/><text x="60" y="111.5" text-anchor="middle" font-size="22" font-weight="800" font-family="PingFang TC,Noto Sans TC,sans-serif" fill="#fff">籤</text></svg>';
+  function todayTW(){ return new Intl.DateTimeFormat('en-CA', {timeZone:'Asia/Taipei'}).format(new Date()); }   // YYYY-MM-DD
+  function stars(n){ return '★★★★★'.slice(0, n) + '☆☆☆☆☆'.slice(0, 5 - n); }
+  function loadFortune(){ var f = null; try{ f = JSON.parse(get(FORT_KEY)); }catch(e){} return (f && f.d === todayTW()) ? f : null; }
+  function rollFortune(){
+    var tot = FORT_TIERS.reduce(function(a, x){ return a + x.w; }, 0), r = Math.random()*tot, i = 0;
+    for(; i < FORT_TIERS.length - 1; i++){ r -= FORT_TIERS[i].w; if(r < 0) break; }
+    var T = FORT_TIERS[i], rnd = function(a, b){ return a + Math.floor(Math.random()*(b - a + 1)); };
+    return { d:todayTW(), i:i, a:rnd(T.s[0], T.s[1]), b:rnd(T.s[0], T.s[1]), c:Math.floor(Math.random()*FORT_COLORS.length), n:rnd(1, 99) };
+  }
+  function showFortune(f, first){
+    var T = FORT_TIERS[f.i], C = FORT_COLORS[f.c], b = body();
+    if(first){ setMood(getMood() + FORTUNE_REWARD); hearts(f.i <= 1 ? 6 : 3); if(f.i <= 1) anim('sp-joy', 900); }
+    b.innerHTML = '<div class="sp-fres" style="--g1:' + T.g[0] + ';--g2:' + T.g[1] + '"><div class="sp-ftier">' + T.t + '</div>' +
+      '<div class="sp-frow"><span>業績運</span><b class="sp-star">' + stars(f.a) + '</b></div>' +
+      '<div class="sp-frow"><span>客緣運</span><b class="sp-star">' + stars(f.b) + '</b></div>' +
+      '<div class="sp-frow"><span>幸運色</span><b><i class="sp-fsw" style="background:' + C[1] + '"></i>' + C[0] + '</b></div>' +
+      '<div class="sp-frow"><span>幸運數字</span><b>' + f.n + '</b></div>' +
+      '<p class="sp-fmsg">' + T.m + '</p>' +
+      '<p class="sp-fnote">' + (first ? '<span style="color:#f0648f;font-weight:700">友好值 +' + FORTUNE_REWARD + '</span>　' : '今天已經抽過囉　') + '每天抽一次，運勢僅供娛樂</p>' +
+      '<div class="sp-acts"><button class="main" id="sp-back">返回</button></div></div>';
+    b.querySelector('#sp-back').onclick = showPicker;
+  }
+  function startFortune(){
+    if(gameStop){ gameStop(); gameStop = null; }
+    setTitle('今日運勢');
+    gameNote = 'played';
+    var f = loadFortune();
+    if(f){ showFortune(f, false); return; }                    // 今天抽過了：直接看結果，不再加分
+    var b = body(), taps = 0, busy = false, tm = 0;
+    b.innerHTML = '<div class="sp-fort"><div class="sp-tubewrap">' + TUBE_SVG + '<div class="sp-stick"></div></div>' +
+                  '<div class="sp-ftip">點籤筒搖一搖　<b class="n">0</b> / 5</div></div>';
+    var wrap = b.querySelector('.sp-tubewrap'), stick = b.querySelector('.sp-stick'), nEl = b.querySelector('.n');
+    wrap.addEventListener('pointerdown', function(e){
+      if(busy) return;
+      if(e.preventDefault) e.preventDefault();
+      taps++; nEl.textContent = taps;
+      wrap.classList.remove('rattle'); void wrap.offsetWidth; wrap.classList.add('rattle');
+      if(navigator.vibrate){ try{ navigator.vibrate(12); }catch(_){} }
+      if(taps >= 5){
+        busy = true; stick.classList.add('go');
+        tm = setTimeout(function(){ var nf = rollFortune(); set(FORT_KEY, JSON.stringify(nf)); showFortune(nf, true); }, 900);
+      }
+    });
+    gameStop = function(){ clearTimeout(tm); };
+  }
+
   /* ---------- 閒置：偶爾睡覺、心情好時開心跳一下、肚子餓了提醒 ---------- */
   function startSleep(){
     pet.classList.add('sleep'); if(ch().poses && ch().poses.sleep) pet.classList.add('sp-posed');
     syncPose(); setTimeout(wake, 6000);
   }
   function wake(){ pet.classList.remove('sleep','sp-posed'); syncPose(); }
+  var lastTip = Date.now(), tipIdx = 0;
+  var TIPS = ['點我開選單，玩遊戲、摸摸都能增加友好值','遊戲玩得好，友好值加更多','按「摸摸」進去就加 1 點友好值','太久沒來，友好值會慢慢下降喔','情緒釋放打滿，一次加 15 點友好值','天降業績接到錢錢，一次算 3 分','換角色可以選自己喜歡的夥伴','今日運勢每天抽一次，第一次抽有友好值'];
   var lastHungry = 0;
   setInterval(function(){
     if(pet.style.display === 'none' || dragging || menuOpen || rubbing || modal) return;
     var mood = getMood(), r = Math.random();
     if(mood < 20 && Date.now() - lastHungry > 90000){ lastHungry = Date.now(); say(pick(['陪我玩嘛','好無聊喔…','摸摸我好不好','你在忙嗎？'])+ch().tail, 2200); }
+    else if(mood < 70 && Date.now() - lastTip > 150000){ lastTip = Date.now(); say(TIPS[tipIdx++ % TIPS.length], 3800); }
     else if(mood >= 80 && r < .18){ anim('sp-joy', 900); if(Math.random() < .5) say(pick(['好開心！','有你真好','今天心情超好'])+ch().tail, 1800); }
     else if(r < .15){ startSleep(); }
   }, 7000);
@@ -718,7 +818,7 @@
     var tail = ch().tail;
     if(awayMs === null) return '第一次見面，我是' + ch().name + '，請多指教' + tail;
     if(awayMs >= 86400000) return '好久不見！好想你' + tail;
-    if(getMood() < 20) return pick(['好想你，陪我玩嘛','你終於來了，我等好久','今天可以陪陪我嗎','摸摸我好不好']) + tail;     // 心情低（正在哭臉）時撒嬌
+    if(getMood() < 20) return pick(['好想你，陪我玩嘛','你終於來了，我等好久','今天可以陪陪我嗎','摸摸我好不好','陪我玩遊戲，我就會開心起來','摸摸我或玩遊戲，我們的友好值會增加']) + tail;     // 心情低（正在哭臉）時撒嬌
     if(awayMs < 600000) return '歡迎回來' + tail;
     var h = +new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Taipei', hourCycle:'h23', hour:'2-digit'}).format(new Date());
     var t = h >= 5 && h < 11 ? '早安！今天也請多指教'
@@ -737,5 +837,6 @@
   else {
     loadPos(); if(!get(K.seen)) ring.classList.add('on');             // 第一次來：光圈提示可以點
     setTimeout(function(){ say(greeting(), 3500); }, 700);            // 招呼語
+    if(awayMs === null) setTimeout(function(){ if(!menuOpen && !modal) say('點我開選單，玩遊戲、摸摸都能增加友好值', 4800); }, 4600);   // 第一次使用：教怎麼互動
   }
 })();
