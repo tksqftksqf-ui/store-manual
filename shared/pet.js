@@ -112,6 +112,8 @@
   '.sp-arena{position:relative;height:min(360px,56vh);background:linear-gradient(180deg,#e8f1ff,#fff7ec);border-radius:14px;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none}',
   '.sp-player{position:absolute;bottom:4px;left:0;width:64px;height:64px;object-fit:contain;pointer-events:none;will-change:transform}',
   '.sp-item{position:absolute;left:0;top:0;font-size:28px;line-height:34px;width:34px;text-align:center;pointer-events:none;will-change:transform}',
+  '.sp-cap{position:absolute;left:50%;top:39px;transform:translateX(-50%);white-space:nowrap;font-size:10px;font-weight:800;line-height:1;letter-spacing:.02em;color:#475569;text-shadow:0 0 3px #fff,0 0 3px #fff,0 0 3px #fff}',
+  '.sp-item svg{width:38px;height:38px;margin:-2px 0 0 -2px;display:block;filter:drop-shadow(0 2px 3px rgba(30,60,120,.2))}',
   '.sp-tip{font-size:12px;color:var(--gray,#64748b);text-align:center;margin-top:8px}',
   '.sp-result{text-align:center;padding:10px 0 2px}',
   '.sp-result b{font-size:34px;display:block;margin:2px 0 4px}',
@@ -168,6 +170,28 @@
   '@media (max-width:600px){:root{--sp-size:72px}}',
   '@media (prefers-reduced-motion:reduce){.sp-img,.sp-zzz,.sp-ring{animation:none}}',
   '@media print{.sp-pet,.sp-menu,.sp-tab,.sp-modal{display:none!important}}',
+  /* 遊戲面板改版：與寵物選單一致的霧面玻璃 */
+  '.sp-modal{background:rgba(30,60,120,.3);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}',
+  '.sp-box{border-radius:26px;background:rgba(255,255,255,.8);-webkit-backdrop-filter:blur(20px) saturate(170%);backdrop-filter:blur(20px) saturate(170%);border:1px solid rgba(255,255,255,.92);box-shadow:0 24px 60px rgba(30,60,120,.28),0 2px 8px rgba(30,60,120,.1)}',
+  '.sp-ghead{padding:16px 16px 4px}',
+  '.sp-box .sp-mood{padding:0}',
+  '.sp-box .sp-bar{height:7px;background:rgba(30,60,120,.1)}',
+  '.sp-box .sp-fill{background:linear-gradient(90deg,#ffb0cb,#f0648f 60%,#ff8a5c)}',
+  '.sp-box .sp-num{min-width:20px;font-size:12px}',
+  '.sp-x{display:grid;place-items:center;flex:none;width:30px;height:30px;padding:0;background:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.9);box-shadow:0 2px 8px rgba(30,60,120,.1);align-self:flex-start}',
+  '.sp-xsvg{stroke:#64748b;width:14px;height:14px;stroke-width:2.4;fill:none;stroke-linecap:round}',
+  '.sp-body{padding:12px 16px 18px}',
+  '.sp-pick{gap:10px}',
+  '.sp-pick .sp-btn{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 4px 12px;border-radius:18px;border:1px solid rgba(255,255,255,.9);background:rgba(255,255,255,.62);box-shadow:0 2px 8px rgba(30,60,120,.06);font-size:13px;font-weight:700;color:#334155;cursor:pointer;font-family:inherit;transition:transform .12s,box-shadow .2s,background .2s}',
+  '@media (hover:hover){.sp-pick .sp-btn:hover{background:rgba(255,255,255,.92);box-shadow:0 8px 18px rgba(30,60,120,.12);transform:translateY(-2px)}}',
+  '.sp-pick .sp-btn:active{transform:scale(.95)}',
+  '.sp-ic.c5{background:linear-gradient(145deg,#ffd08a,#ff9a3d)}',
+  '.sp-ic.c6{background:linear-gradient(145deg,#ff9aa8,#e5484d)}',
+  '.sp-acts button{border-radius:999px;padding:9px 20px;border:1px solid rgba(255,255,255,.9);background:rgba(255,255,255,.7);box-shadow:0 2px 8px rgba(30,60,120,.08);font-weight:700}',
+  '.sp-acts button.main{background:linear-gradient(145deg,#93bbff,#5b7cf0);border-color:transparent;color:#fff;box-shadow:0 6px 14px rgba(91,124,240,.35)}',
+  '.sp-arena{border-radius:18px}',
+  '.sp-rps-btns button{background:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.9);box-shadow:0 2px 8px rgba(30,60,120,.08)}',
+  '@media (max-width:700px){.sp-box{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(255,255,255,.97)}.sp-modal{-webkit-backdrop-filter:none;backdrop-filter:none}}',
   'body.sp-pad{padding-bottom:104px}'
   ].join('\n');
   var st = el('style'); st.textContent = css; document.head.appendChild(st);
@@ -263,7 +287,7 @@
     [].forEach.call(document.querySelectorAll('.sp-num'), function(n){ n.textContent = moodV; });
     syncPose();
   }
-  function celebrate(){ hearts(7); anim('sp-joy', 900); say('心情滿分'+ch().tail, 2400); }
+  function celebrate(){ hearts(7); anim('sp-joy', 900); say(pick(['心情滿分','最喜歡你了','太幸福了','好開心好開心'])+ch().tail, 2400); }
   function touchLast(){ set(K.last, String(Date.now())); }       // 記下「最後一次在首頁」的時間
   setInterval(function(){
     if(document.visibilityState !== 'visible' || pet.style.display === 'none') return;
@@ -315,7 +339,16 @@
     if(rubbing && !pet.contains(e.target)) stopRub(false);   // 點到別處＝離開摸摸模式（不彈選單）
   });
 
-  var FOODS = ['🍖','🐟','🍎','🍪','🍙'];   // 接食物遊戲用
+  /* 天降業績的掉落物：手機、平板、筆電、iMac 各 1 分；金幣 3 分（約 12% 機率掉落） */
+  var DEVICES = [
+    '<svg viewBox="0 0 40 40"><rect x="13" y="3" width="14" height="34" rx="3.5" fill="#e7f0ff" stroke="#4b6cb7" stroke-width="2"/><rect x="15.5" y="7" width="9" height="22" rx="1.5" fill="#9ec1ff"/><circle cx="20" cy="33" r="1.4" fill="#4b6cb7"/></svg>',
+    '<svg viewBox="0 0 40 40"><rect x="5" y="7" width="30" height="26" rx="3.5" fill="#f1ecff" stroke="#6a55c9" stroke-width="2"/><rect x="8.5" y="10.5" width="23" height="19" rx="1.5" fill="#b9a8ff"/><circle cx="20" cy="31.6" r="1" fill="#6a55c9"/></svg>',
+    '<svg viewBox="0 0 40 40"><rect x="8" y="8" width="24" height="17" rx="2.5" fill="#e8fbf4" stroke="#2d9a78" stroke-width="2"/><rect x="10.5" y="10.5" width="19" height="12" rx="1" fill="#8fe3c4"/><path d="M3.5 27.5h33l-1.6 4.2a2 2 0 0 1-1.9 1.3H7a2 2 0 0 1-1.9-1.3z" fill="#cdeee0" stroke="#2d9a78" stroke-width="2" stroke-linejoin="round"/></svg>'
+  ];
+  var MONEY = '<svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="16.5" fill="#ffd75e" stroke="#d99a00" stroke-width="2.2"/><circle cx="20" cy="20" r="12" fill="#ffe596" stroke="#e3ac1c" stroke-width="1.4"/><text x="20" y="26.6" text-anchor="middle" font-size="18" font-weight="800" font-family="Arial,sans-serif" fill="#b57b00">$</text></svg>';
+  var IMAC = '<svg viewBox="0 0 40 40"><rect x="4" y="4" width="32" height="24" rx="3" fill="#fff3e6" stroke="#d9822b" stroke-width="2"/><rect x="6.5" y="6.5" width="27" height="14.5" rx="1" fill="#ffc98a"/><rect x="6.5" y="21" width="27" height="5" fill="#ffe0bd"/><path d="M17 28h6l1.2 6h-8.4z" fill="#f2c28f" stroke="#d9822b" stroke-width="1.6" stroke-linejoin="round"/><rect x="11.5" y="34" width="17" height="3" rx="1.5" fill="#f2c28f" stroke="#d9822b" stroke-width="1.6"/></svg>';
+  DEVICES.push(IMAC);
+  var DEV_LABELS = ['iPhone','iPad','筆電','iMac'];             // 和 DEVICES 順序對應
 
   /* ---------- 摸頭：進入摸摸模式後，在角色身上來回滑動就會冒愛心 ---------- */
   var rubbing = false, rubEnd;
@@ -327,7 +360,7 @@
     if(shift) hud.style.transform = 'translateX(calc(-50% - ' + shift + 'px))';
   }
   function startRub(){
-    closeMenu(); rubbing = true; setPose('pet'); ring.classList.add('on'); say('摸摸我～', 1800);
+    closeMenu(); rubbing = true; setPose('pet'); ring.classList.add('on'); say(pick(['摸摸我～','輕輕的喔','這裡這裡','好期待']), 1800);
     hud.classList.add('on'); setMood(getMood()+1); fitHud();            // 每次進入摸摸只 +1
     clearTimeout(rubEnd); rubEnd = setTimeout(function(){ stopRub(true); }, 8000);
   }
@@ -340,7 +373,11 @@
     clearTimeout(rubEnd); rubEnd = setTimeout(function(){ stopRub(true); }, 6000);
     heart((Math.random()-.5)*40, Math.random()*14);
     anim('sp-pat', 160);
-    if(Math.random() < .1) say(pick(['好舒服','嘿嘿','再摸再摸'])+ch().tail, 1400);
+    if(Math.random() < .15){
+      var P = ['好舒服','嘿嘿','再摸再摸','好喜歡'];
+      if(ch().tail.indexOf('喵') >= 0) P = P.concat(['呼嚕嚕','喵嗚～']);      // 貓咪多一點貓的反應
+      say(pick(P)+ch().tail, 1400);
+    }
   }
 
   /* ---------- 拖曳與點擊 ---------- */
@@ -380,20 +417,34 @@
     var a = b.getAttribute('data-a');
     if(a === 'rub') startRub();
     else if(a === 'game'){ closeMenu(); openGames(); }
-    else if(a === 'char'){ setChar(ci+1); say(ch().name, 1200); anim('sp-joy',900); }
+    else if(a === 'char'){ setChar(ci+1); say('我是'+ch().name+ch().tail, 1600); anim('sp-joy',900); }
     else if(a === 'hide') hide();
   });
 
   /* ---------- 小遊戲 ---------- */
   var modal = null, gameStop = null;
+  var gameNote = null;                                   // 剛玩過什麼：'played' 玩過遊戲／'smashWin' 情緒釋放成功
+  var AFTER_PLAY = ['玩得開心嗎','謝謝你陪我玩','再玩一次好不好','好好玩'];
+  var AFTER_SMASH = ['今天也辛苦了','壓力都散掉了嗎','深呼吸，你很棒'];
   function closeGames(){
+    var had = !!modal;
     if(gameStop){ gameStop(); gameStop = null; }
     if(modal){ modal.remove(); modal = null; }
+    if(had && gameNote){
+      var t = pick(gameNote === 'smashWin' ? AFTER_SMASH : AFTER_PLAY) + ch().tail;
+      gameNote = null; setTimeout(function(){ say(t, 2200); }, 250);
+    }
+    gameNote = null;
   }
   function openGames(){
     closeGames();
     modal = el('div','sp-modal',
-      '<div class="sp-box"><div class="sp-head"><span class="sp-title">玩遊戲</span><button class="sp-x" aria-label="關閉">✕</button></div><div class="sp-mood">'+HEART+'<span class="sp-lbl">心情</span><div class="sp-bar"><div class="sp-fill"></div></div><span class="sp-num"></span></div><div class="sp-body"></div></div>');
+      '<div class="sp-box"><div class="sp-mhead sp-ghead"><div class="sp-mav"><img alt=""></div>' +
+      '<div class="sp-minfo"><div class="sp-mname sp-title">玩遊戲</div>' +
+      '<div class="sp-mood">'+HEART+'<div class="sp-bar"><div class="sp-fill"></div></div><span class="sp-num"></span></div></div>' +
+      '<button class="sp-x" aria-label="關閉"><svg class="sp-xsvg" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>' +
+      '<div class="sp-body"></div></div>');
+    modal.querySelector('.sp-mav img').src = ch().img;
     document.body.appendChild(modal); renderMood();
     modal.addEventListener('pointerdown', function(e){ if(e.target === modal) closeGames(); });
     modal.querySelector('.sp-x').addEventListener('click', closeGames);
@@ -401,19 +452,25 @@
   }
   function body(){ return modal.querySelector('.sp-body'); }
   function setTitle(t){ modal.querySelector('.sp-title').textContent = t; }
+  var IC_BAG = ICON('<path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>');
+  var IC_CUT = ICON('<circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/>');
+  var IC_ZAP = ICON('<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>');
   function showPicker(){
     if(gameStop){ gameStop(); gameStop = null; }
     setTitle('玩遊戲');
-    var b = body(); b.innerHTML = '<div class="sp-pick"><button data-g="catch"><span>🍎</span>接食物</button><button data-g="rps"><span>✌️</span>猜拳</button><button data-g="smash"><span>💢</span>情緒釋放</button></div>';
+    var b = body(); b.innerHTML = '<div class="sp-pick">' +
+      '<button class="sp-btn" data-g="catch"><i class="sp-ic c5">'+IC_BAG+'</i>天降業績</button>' +
+      '<button class="sp-btn" data-g="rps"><i class="sp-ic c2">'+IC_CUT+'</i>猜拳</button>' +
+      '<button class="sp-btn" data-g="smash"><i class="sp-ic c6">'+IC_ZAP+'</i>情緒釋放</button></div>';
     b.querySelector('[data-g=catch]').onclick = startCatch;
     b.querySelector('[data-g=rps]').onclick = startRps;
     b.querySelector('[data-g=smash]').onclick = startSmash;
   }
 
-  /* 遊戲一：接食物（30 秒，拖曳或方向鍵左右移動） */
+  /* 遊戲一：天降業績（10 秒，拖曳或方向鍵左右移動，接 3C 產品與鈔票） */
   function startCatch(){
     if(gameStop){ gameStop(); gameStop = null; }
-    setTitle('接食物');
+    setTitle('天降業績');
     var b = body();
     b.innerHTML = '<div class="sp-hud"><span>剩 <b class="t">10</b> 秒</span><span>得分 <b class="s">0</b></span></div>' +
                   '<div class="sp-arena"><img class="sp-player" alt=""></div><div class="sp-tip">拖曳或按 ← → 移動</div>';
@@ -434,7 +491,8 @@
     }
     document.addEventListener('keydown', onKey);
     function addItem(){
-      var star = Math.random() < .12, it = el('div','sp-item', star ? '⭐' : pick(FOODS));
+      var star = Math.random() < .12, di = Math.floor(Math.random()*DEVICES.length),
+          it = el('div','sp-item', (star ? MONEY : DEVICES[di]) + '<span class="sp-cap">' + (star ? '錢錢' : DEV_LABELS[di]) + '</span>');       // star＝金幣（3 分）
       var x = Math.random()*(W-34);
       it.style.transform = 'translate('+x+'px,-40px)'; arena.appendChild(it);
       items.push({el:it, x:x, y:-40, v:(H/2.4) + Math.random()*(H/3.2), pts:star?3:1});
@@ -447,7 +505,7 @@
       for(var i=items.length-1;i>=0;i--){
         var it = items[i]; it.y += it.v*dt;
         it.el.style.transform = 'translate('+it.x+'px,'+it.y+'px)';
-        var cx = it.x + 17, bottom = it.y + 34;
+        var cx = it.x + 17, bottom = it.y + 50;
         if(bottom >= H-4-PW*0.8 && it.y <= H-10 && Math.abs(cx - px) < PW*0.55){
           score += it.pts; sEl.textContent = score; it.el.remove(); items.splice(i,1);
         } else if(it.y > H){ it.el.remove(); items.splice(i,1); }
@@ -459,6 +517,7 @@
     function finish(){
       over = true; cancelAnimationFrame(raf);
       document.removeEventListener('keydown', onKey);
+      gameNote = 'played';
       var best = parseInt(get(K.best)||'0',10), isBest = score > best;
       if(isBest) set(K.best, String(score));
       var gain = Math.min(15, score); setMood(getMood() + gain);
@@ -493,7 +552,7 @@
         if(m === p){ d++; res.textContent = '平手！'; }
         else if((p - m + 3) % 3 === 1){ w++; res.textContent = '你贏了！'; hearts(2); anim('sp-shake',450); }
         else { l++; res.textContent = '我贏啦'+ch().tail; anim('sp-joy',900); }
-        setMood(getMood()+2); res.textContent += '　心情 +2'; renderScore();
+        gameNote = 'played'; setMood(getMood()+2); res.textContent += '　心情 +2'; renderScore();
       };
     });
   }
@@ -600,6 +659,7 @@
     }
     function finish(win){
       if(over) return; over = true; clearInterval(timer);
+      gameNote = win ? 'smashWin' : 'played';
       arena.removeEventListener('pointerdown', onHit);
       var used = started ? Math.min(SMASH_SECS, (Date.now()-started)/1000).toFixed(1) : '0';
       var left = Math.max(0, Math.round(100 - Math.min(1, hits/SMASH_TARGET)*100));
@@ -647,8 +707,8 @@
   setInterval(function(){
     if(pet.style.display === 'none' || dragging || menuOpen || rubbing || modal) return;
     var mood = getMood(), r = Math.random();
-    if(mood < 20 && Date.now() - lastHungry > 90000){ lastHungry = Date.now(); say('陪我玩嘛'+ch().tail, 2200); }
-    else if(mood >= 80 && r < .18) anim('sp-joy', 900);
+    if(mood < 20 && Date.now() - lastHungry > 90000){ lastHungry = Date.now(); say(pick(['陪我玩嘛','好無聊喔…','摸摸我好不好','你在忙嗎？'])+ch().tail, 2200); }
+    else if(mood >= 80 && r < .18){ anim('sp-joy', 900); if(Math.random() < .5) say(pick(['好開心！','有你真好','今天心情超好'])+ch().tail, 1800); }
     else if(r < .15){ startSleep(); }
   }, 7000);
   pet.addEventListener('pointerdown', function(){ wake(); });
@@ -658,6 +718,7 @@
     var tail = ch().tail;
     if(awayMs === null) return '第一次見面，我是' + ch().name + '，請多指教' + tail;
     if(awayMs >= 86400000) return '好久不見！好想你' + tail;
+    if(getMood() < 20) return pick(['好想你，陪我玩嘛','你終於來了，我等好久','今天可以陪陪我嗎','摸摸我好不好']) + tail;     // 心情低（正在哭臉）時撒嬌
     if(awayMs < 600000) return '歡迎回來' + tail;
     var h = +new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Taipei', hourCycle:'h23', hour:'2-digit'}).format(new Date());
     var t = h >= 5 && h < 11 ? '早安！今天也請多指教'
